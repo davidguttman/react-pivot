@@ -1,0 +1,31 @@
+{
+  "name": "react-pivot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "example": "beefy example/index.jsx"
+  },
+  "author": "David Guttman <david@guttman.io> (http://davidguttman.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "cssify": "^0.6.0",
+    "envify": "^3.2.0",
+    "react": "^0.12.2",
+    "reactify": "^1.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^8.1.3",
+    "beefy": "^2.1.3",
+    "uglify-js": "^2.4.16",
+    "watchify": "^2.3.0"
+  },
+  "browser": "index.jsx",
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify",
+      "cssify"
+    ]
+  }
+}
