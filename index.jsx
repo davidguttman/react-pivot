@@ -1,5 +1,6 @@
 var _ = require('underscore')
 var React = require('react')
+var xtend = require('xtend')
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -22,8 +23,46 @@ module.exports = React.createClass({
     }
   },
 
+  getResults: function() {
+    var self = this
+    var activeDimensions = this.state.dimensions
+    var sets = {}
+    this.props.rows.forEach(function(row) {
+      var setKey = self.createSetKey(activeDimensions, row)
+      sets[setKey] = sets[setKey] || []
+      sets[setKey].push(row)
+    })
+
+    var results = []
+    _.each(sets, function(set, setKey) {
+      var result = {}
+      var calcFns = {}
+
+      self.props.calculations.forEach(function(calc) {
+        result[calc.title] = 0
+        calcFns[calc.title] = calc.value
+      })
+
+      set.forEach(function(row) {
+        Object.keys(result).forEach(function(cTitle) {
+          result[cTitle] = calcFns[cTitle](row, result[cTitle])
+        })
+      })
+
+      var dimensionVals = self.parseSetKey(setKey)
+      console.log('dimensionVals', dimensionVals)
+      result = xtend(result, dimensionVals)
+      results.push(result)
+    })
+
+    return results
+  },
+
   render: function() {
     var self = this
+
+    var results = this.getResults()
+    console.log('results', results)
 
     return (
       <div>
@@ -66,15 +105,9 @@ module.exports = React.createClass({
                 return (
                   <tr>
                     { self.state.dimensions.map(function(dTitle) {
-                      var dimension = _.find(self.props.dimensions, function(d) {
-                        return d.title === dTitle
-                      })
-                      var val
-                      if (typeof dimension.property === 'string') {
-                        val = row[dimension.property]
-                      } else {
-                        val = dimension.property(row)
-                      }
+                      var dimension = self.findDimension(dTitle)
+                      var val = getDimensionValue(dimension, row)
+
                       return(
                         <td>{val}</td>
                       )
@@ -88,5 +121,45 @@ module.exports = React.createClass({
 
       </div>
     )
+  },
+
+  findDimension: function (title) {
+    return _.find(this.props.dimensions, function(d) {
+      return d.title === title
+    })
+  },
+
+  createSetKey: function (dimensions, row) {
+    var self = this
+
+    var key = ''
+    _.sortBy(dimensions).forEach(function(dTitle) {
+      var dimension = self.findDimension(dTitle)
+      key += [dTitle, getDimensionValue(dimension, row)].join('\xff') + '\xff'
+    })
+    return key
+  },
+
+  parseSetKey: function(setKey) {
+    var parsed = {}
+    var kvPairs = setKey.split('\xff')
+    for (var i = 0; i < kvPairs.length; i += 2) {
+      var dTitle = kvPairs[i]
+      var dVal = kvPairs[i+1]
+      if (dTitle) parsed[dTitle] = dVal
+    }
+    return parsed
   }
+
+
 })
+
+function getDimensionValue (dimension, row) {
+  var val
+  if (typeof dimension.value === 'string') {
+    val = row[dimension.value]
+  } else {
+    val = dimension.value(row)
+  }
+  return val
+}
