@@ -4,7 +4,6 @@ var xtend = require('xtend')
 
 module.exports = React.createClass({
   getInitialState: function() {
-    console.log('this.props', this.props)
     return {
       dimensions: [],
       calculations: {}
@@ -21,6 +20,20 @@ module.exports = React.createClass({
       dimensions.push(dimension)
       this.setState({dimensions: dimensions})
     }
+  },
+
+  getColumns: function() {
+    var columns = []
+
+    this.state.dimensions.forEach(function(d) {
+      columns.push({type: 'dimension', title: d})
+    })
+
+    this.props.calculations.forEach(function(c) {
+      columns.push({type:'calculation', title: c.title})
+    })
+
+    return columns
   },
 
   getResults: function() {
@@ -50,7 +63,7 @@ module.exports = React.createClass({
       })
 
       var dimensionVals = self.parseSetKey(setKey)
-      console.log('dimensionVals', dimensionVals)
+
       result = xtend(result, dimensionVals)
       results.push(result)
     })
@@ -61,8 +74,8 @@ module.exports = React.createClass({
   render: function() {
     var self = this
 
+    var columns = this.getColumns()
     var results = this.getResults()
-    console.log('results', results)
 
     return (
       <div>
@@ -93,20 +106,20 @@ module.exports = React.createClass({
           <table>
             <thead>
               <tr>
-                { self.state.dimensions.map(function(dTitle) {
+                { columns.map(function(col) {
                   return (
-                    <th>{dTitle}</th>
+                    <th>{col.title}</th>
                   )
                 })}
               </tr>
             </thead>
             <tbody>
-              {this.props.rows.map(function(row) {
+              {results.map(function(row) {
                 return (
                   <tr>
-                    { self.state.dimensions.map(function(dTitle) {
-                      var dimension = self.findDimension(dTitle)
-                      var val = getDimensionValue(dimension, row)
+                    { columns.map(function(col) {
+
+                      var val = row[col.title]
 
                       return(
                         <td>{val}</td>
