@@ -2,11 +2,15 @@ var _ = require('underscore')
 var React = require('react')
 var xtend = require('xtend')
 
+var partial = require('./lib/partial')
+
 module.exports = React.createClass({
   getInitialState: function() {
     return {
       dimensions: [],
-      calculations: {}
+      calculations: {},
+      sortBy: null,
+      sortDir: 'asc'
     }
   },
 
@@ -20,6 +24,19 @@ module.exports = React.createClass({
       dimensions.push(dimension)
       this.setState({dimensions: dimensions})
     }
+  },
+
+  setSort: function(cTitle) {
+    var sortBy = this.state.sortBy
+    var sortDir = this.state.sortDir
+    if (sortBy === cTitle) {
+      sortDir = (sortDir === 'asc') ? 'desc' : 'asc'
+    } else {
+      sortBy = cTitle
+      sortDir = 'asc'
+    }
+
+    this.setState({sortBy: sortBy, sortDir: sortDir})
   },
 
   getColumns: function() {
@@ -76,6 +93,8 @@ module.exports = React.createClass({
 
     var columns = this.getColumns()
     var results = this.getResults()
+    var sorted = _.sortBy(results, this.state.sortBy)
+    if (this.state.sortDir === 'desc') sorted.reverse()
 
     return (
       <div>
@@ -102,36 +121,45 @@ module.exports = React.createClass({
           Calculations
         </div>
 
-        <div className="results">
-          <table>
-            <thead>
-              <tr>
-                { columns.map(function(col) {
-                  return (
-                    <th>{col.title}</th>
-                  )
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {results.map(function(row) {
+        {this.renderTable(columns, sorted)}
+
+      </div>
+    )
+  },
+
+  renderTable: function(columns, results) {
+    var self = this
+    return (
+      <div className="results">
+        <table>
+          <thead>
+            <tr>
+              { columns.map(function(col) {
                 return (
-                  <tr>
-                    { columns.map(function(col) {
-
-                      var val = row[col.title]
-
-                      return(
-                        <td>{val}</td>
-                      )
-                    }) }
-                  </tr>
+                  <th onClick={partial(self.setSort, col.title)}>
+                    {col.title}
+                  </th>
                 )
               })}
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </thead>
+          <tbody>
+            {results.map(function(row) {
+              return (
+                <tr>
+                  { columns.map(function(col) {
 
+                    var val = row[col.title]
+
+                    return(
+                      <td>{val}</td>
+                    )
+                  }) }
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
     )
   },
