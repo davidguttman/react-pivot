@@ -1,13 +1,19 @@
 {
   "name": "react-pivot",
+  "description": "React-Pivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration.",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "example": "beefy example/index.jsx"
-  },
   "author": "David Guttman <david@guttman.io> (http://davidguttman.com/)",
-  "license": "MIT",
+  "browser": "index.jsx",
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify",
+      "cssify"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/davidguttman/react-pivot/issues"
+  },
   "dependencies": {
     "cssify": "^0.6.0",
     "envify": "^3.2.0",
@@ -23,12 +29,27 @@
     "uglify-js": "^2.4.16",
     "watchify": "^2.3.0"
   },
-  "browser": "index.jsx",
-  "browserify": {
-    "transform": [
-      "reactify",
-      "envify",
-      "cssify"
-    ]
+  "directories": {
+    "example": "example"
+  },
+  "homepage": "https://github.com/davidguttman/react-pivot",
+  "keywords": [
+    "data",
+    "excel",
+    "grid",
+    "pagination",
+    "pivot",
+    "react",
+    "react-component",
+    "sort"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidguttman/react-pivot.git"
+  },
+  "scripts": {
+    "example": "beefy example/index.jsx"
   }
 }
