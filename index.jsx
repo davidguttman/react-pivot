@@ -129,6 +129,11 @@ module.exports = React.createClass({
 
   renderTable: function(columns, results) {
     var self = this
+
+    var sortBy = self.state.sortBy
+    var sortSym = self.state.sortDir === 'asc' ? '▲' : '▼'
+    var sortSymSpan = <span style={{fontSize: '50%'}}> {sortSym}</span>
+
     return (
       <div className="results">
         <table>
@@ -136,8 +141,11 @@ module.exports = React.createClass({
             <tr>
               { columns.map(function(col) {
                 return (
-                  <th onClick={partial(self.setSort, col.title)}>
+                  <th onClick={partial(self.setSort, col.title)}
+                      style={{cursor: 'pointer'}}
+                  >
                     {col.title}
+                    {col.title === sortBy ? sortSymSpan : ''}
                   </th>
                 )
               })}
