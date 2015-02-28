@@ -1,6 +1,5 @@
 var _ = require('underscore')
 var React = require('react')
-var xtend = require('xtend')
 
 var partial = require('./lib/partial')
 
@@ -47,7 +46,7 @@ module.exports = React.createClass({
     })
 
     this.props.calculations.forEach(function(c) {
-      columns.push({type:'calculation', title: c.title})
+      columns.push({type:'calculation', title: c.title, template: c.template})
     })
 
     return columns
@@ -90,8 +89,6 @@ module.exports = React.createClass({
         curLevel = curLevel[setKey].subDimensions
       })
     })
-
-    console.log('results', results)
 
     return results
   },
@@ -191,8 +188,6 @@ module.exports = React.createClass({
     var level = level || 0
     var rows = []
 
-    console.log('dimensions', dimensions)
-
     var sorted = _.sortBy(dimensions, function(dimension) {
       return dimension.value[self.state.sortBy]
     })
@@ -216,6 +211,7 @@ module.exports = React.createClass({
 
   renderCell: function(col, row) {
     var val = row[col.title]
+    if (col.template) val = col.template(val, row)
 
     return(
       <td>{val}</td>

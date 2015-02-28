@@ -16,12 +16,21 @@ var dimensions = [
 ]
 
 var calculations = [
-  {title: 'Count', value: function(row, memo) {
-    return memo + 1
-  }},
-  {title: 'Amount', value: function(row, memo) {
-    return memo + parseFloat(row.transaction.amount)
-  }}
+  {
+    title: 'Count',
+    value: function(row, memo) {
+      return memo + 1
+    }
+  },
+  {
+    title: 'Amount',
+    value: function(row, memo) {
+      return memo + parseFloat(row.transaction.amount)
+    },
+    template: function(val, row) {
+      return '$' + val.toFixed(2)
+    }
+  }
 ]
 
 React.render(
