@@ -7,7 +7,7 @@ var partial = require('./lib/partial')
 module.exports = React.createClass({
   getInitialState: function() {
     return {
-      dimensions: [],
+      dimensions: ['First Name'],
       calculations: {},
       sortBy: null,
       sortDir: 'asc'
@@ -56,34 +56,42 @@ module.exports = React.createClass({
   getResults: function() {
     var self = this
     var activeDimensions = this.state.dimensions
-    var sets = {}
+
+    var calcFns = {}
+    this.props.calculations.forEach(function(c) {
+      calcFns[c.title] = c.value
+    })
+
+    var results = {}
+
     this.props.rows.forEach(function(row) {
-      var setKey = self.createSetKey(activeDimensions, row)
-      sets[setKey] = sets[setKey] || []
-      sets[setKey].push(row)
-    })
+      var setKeys = self.createSetKeys(activeDimensions, row)
 
-    var results = []
-    _.each(sets, function(set, setKey) {
-      var result = {}
-      var calcFns = {}
+      var curLevel = results
 
-      self.props.calculations.forEach(function(calc) {
-        result[calc.title] = 0
-        calcFns[calc.title] = calc.value
-      })
+      setKeys.forEach(function(setKey, iLevel) {
+        if (!curLevel[setKey]) {
+          curLevel[setKey] = {value: {}, subDimensions: {}}
 
-      set.forEach(function(row) {
+          self.props.calculations.forEach(function(calc) {
+            curLevel[setKey].value[calc.title] = 0
+          })
+        }
+
+        var result = curLevel[setKey].value
         Object.keys(result).forEach(function(cTitle) {
-          result[cTitle] = calcFns[cTitle](row, result[cTitle])
+          var cfn = calcFns[cTitle]
+          if (cfn) result[cTitle] = cfn(row, result[cTitle])
         })
+
+        var dimensionVals = self.parseSetKey(setKey)
+        _.extend(result, dimensionVals)
+
+        curLevel = curLevel[setKey].subDimensions
       })
-
-      var dimensionVals = self.parseSetKey(setKey)
-
-      result = xtend(result, dimensionVals)
-      results.push(result)
     })
+
+    console.log('results', results)
 
     return results
   },
@@ -93,8 +101,6 @@ module.exports = React.createClass({
 
     var columns = this.getColumns()
     var results = this.getResults()
-    var sorted = _.sortBy(results, this.state.sortBy)
-    if (this.state.sortDir === 'desc') sorted.reverse()
 
     return (
       <div>
@@ -121,7 +127,7 @@ module.exports = React.createClass({
           Calculations
         </div>
 
-        {this.renderTable(columns, sorted)}
+        {this.renderTable(columns, results)}
 
       </div>
     )
@@ -133,6 +139,8 @@ module.exports = React.createClass({
     var sortBy = self.state.sortBy
     var sortSym = self.state.sortDir === 'asc' ? '▲' : '▼'
     var sortSymSpan = <span style={{fontSize: '50%'}}> {sortSym}</span>
+
+    var tBody = this.renderTableBody(columns, results)
 
     return (
       <div className="results">
@@ -151,24 +159,66 @@ module.exports = React.createClass({
               })}
             </tr>
           </thead>
-          <tbody>
-            {results.map(function(row) {
-              return (
-                <tr>
-                  { columns.map(function(col) {
-
-                    var val = row[col.title]
-
-                    return(
-                      <td>{val}</td>
-                    )
-                  }) }
-                </tr>
-              )
-            })}
-          </tbody>
+          {tBody}
         </table>
       </div>
+    )
+  },
+
+  renderTableBody: function(columns, results) {
+    var self = this
+
+    var rows = this.renderRows(results)
+
+    return (
+      <tbody>
+        {rows.map(function(row) {
+          return (
+            <tr>
+              {columns.map(function(col) {
+                return self.renderCell(col, row)
+              })}
+            </tr>
+          )
+
+        })}
+      </tbody>
+    )
+  },
+
+  renderRows: function(dimensions, level) {
+    self = this
+    var level = level || 0
+    var rows = []
+
+    console.log('dimensions', dimensions)
+
+    var sorted = _.sortBy(dimensions, function(dimension) {
+      return dimension.value[self.state.sortBy]
+    })
+    if (self.state.sortDir === 'desc') sorted.reverse()
+
+    _.each(sorted, function(dimension) {
+      var total = dimension.value
+      total._level = level
+      rows.push(total)
+
+      if (Object.keys(dimension.subDimensions).length) {
+        var subLevel = level + 1
+        var subRows = self.renderRows(dimension.subDimensions, subLevel)
+
+        subRows.forEach(function(subRow) {rows.push(subRow)})
+      }
+    })
+
+    return rows
+  },
+
+  renderCell: function(col, row) {
+    var val = row[col.title]
+
+    return(
+      <td>{val}</td>
     )
   },
 
@@ -176,6 +226,17 @@ module.exports = React.createClass({
     return _.find(this.props.dimensions, function(d) {
       return d.title === title
     })
+  },
+
+  createSetKeys: function(dimensions, row) {
+    var keys = []
+
+    for (var i = 0; i < dimensions.length; i++) {
+      var sds = dimensions.slice(0, i+1)
+      keys.push(this.createSetKey(sds, row))
+    }
+
+    return keys
   },
 
   createSetKey: function (dimensions, row) {
