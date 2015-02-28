@@ -41,10 +41,7 @@ React.render(
 ```
 
 TODO:
-* Sorting
-* Calculations for sub-dimensions
 * Calculation toggle
-* Template/formatting
 * Pagination
 * Split out dataframe
 * hide/solo

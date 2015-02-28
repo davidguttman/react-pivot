@@ -4,9 +4,11 @@ var React = require('react')
 var partial = require('./lib/partial')
 
 module.exports = React.createClass({
+  cache: {},
+
   getInitialState: function() {
     return {
-      dimensions: ['First Name'],
+      dimensions: ['First Name', 'Last Name'],
       calculations: {},
       sortBy: null,
       sortDir: 'asc'
@@ -62,6 +64,7 @@ module.exports = React.createClass({
     })
 
     var results = {}
+    var setKeyCache = {}
 
     this.props.rows.forEach(function(row) {
       var setKeys = self.createSetKeys(activeDimensions, row)
@@ -70,7 +73,7 @@ module.exports = React.createClass({
 
       setKeys.forEach(function(setKey, iLevel) {
         if (!curLevel[setKey]) {
-          curLevel[setKey] = {value: {}, subDimensions: {}}
+          curLevel[setKey] = {value: {}, subDimensions: {}, key: setKey}
 
           self.props.calculations.forEach(function(calc) {
             curLevel[setKey].value[calc.title] = 0
@@ -78,16 +81,27 @@ module.exports = React.createClass({
         }
 
         var result = curLevel[setKey].value
-        Object.keys(result).forEach(function(cTitle) {
-          var cfn = calcFns[cTitle]
-          if (cfn) result[cTitle] = cfn(row, result[cTitle])
-        })
 
-        var dimensionVals = self.parseSetKey(setKey)
-        _.extend(result, dimensionVals)
+        if (!self.cache[setKey]) {
+          setKeyCache[setKey] = result
+
+          Object.keys(result).forEach(function(cTitle) {
+            var cfn = calcFns[cTitle]
+            if (cfn) result[cTitle] = cfn(row, result[cTitle])
+          })
+
+          var dimensionVals = self.parseSetKey(setKey)
+          _.extend(result, dimensionVals)
+        } else {
+          curLevel[setKey].value = self.cache[setKey]
+        }
 
         curLevel = curLevel[setKey].subDimensions
       })
+    })
+
+    _.each(setKeyCache, function(cache, key) {
+      self.cache[key] = cache
     })
 
     return results
@@ -95,11 +109,16 @@ module.exports = React.createClass({
 
   render: function() {
     var self = this
+    // console.time('render')
 
     var columns = this.getColumns()
-    var results = this.getResults()
 
-    return (
+    // console.time('results')
+    var results = this.getResults()
+    // console.timeEnd('results')
+
+    // console.time('html')
+    var html = (
       <div>
         <h1>ReactPivot!</h1>
 
@@ -128,6 +147,10 @@ module.exports = React.createClass({
 
       </div>
     )
+
+    // console.timeEnd('html')
+    // console.timeEnd('render')
+    return html
   },
 
   renderTable: function(columns, results) {
@@ -171,8 +194,10 @@ module.exports = React.createClass({
       <tbody>
         {rows.map(function(row) {
           return (
-            <tr>
-              {columns.map(function(col) {
+            <tr key={row.key}>
+              {columns.map(function(col, i) {
+                if (i < row._level) return <td/>
+
                 return self.renderCell(col, row)
               })}
             </tr>
@@ -214,7 +239,7 @@ module.exports = React.createClass({
     if (col.template) val = col.template(val, row)
 
     return(
-      <td>{val}</td>
+      <td key={[col.title, row.key].join('\xff')}>{val}</td>
     )
   },
 
@@ -256,7 +281,6 @@ module.exports = React.createClass({
     }
     return parsed
   }
-
 
 })
 
