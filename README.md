@@ -68,5 +68,4 @@ TODO:
 * Pagination
 * Split out dataframe
 * hide/solo
-* csv export
 * responsive table
