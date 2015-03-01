@@ -2,6 +2,7 @@ var _ = require('underscore')
 var React = require('react')
 
 var partial = require('./lib/partial')
+var download = require('./lib/download')
 
 module.exports = React.createClass({
   cache: {},
@@ -38,6 +39,25 @@ module.exports = React.createClass({
     }
 
     this.setState({sortBy: sortBy, sortDir: sortDir})
+  },
+
+  downloadCSV: function() {
+    var self = this
+
+    var columns = this.getColumns()
+
+    var csv = _.pluck(columns, 'title')
+      .map(JSON.stringify.bind(JSON))
+      .join(',') + '\n'
+
+    this.renderedRows.forEach(function(row) {
+      var vals = columns.map(function(col) {
+        return JSON.stringify(getDimensionValue(col, row))
+      })
+      csv += vals.join(',') + '\n'
+    })
+
+    download(csv, 'table.csv', 'text/csv')
   },
 
   getColumns: function() {
@@ -84,10 +104,6 @@ module.exports = React.createClass({
         if (!self.cache[setKey]) {
           setKeyCache[setKey] = result
 
-          // Object.keys(result).forEach(function(cTitle) {
-          //   var cfn = calcFns[cTitle]
-          //   if (cfn) result[cTitle] = cfn(row, result[cTitle])
-          // })
           _.extend(result, reduce(row, result))
 
           var dimensionVals = self.parseSetKey(setKey)
@@ -143,6 +159,10 @@ module.exports = React.createClass({
           Calculations
         </div>
 
+        <div className="export-csv">
+          <button onClick={this.downloadCSV}>Export CSV</button>
+        </div>
+
         {this.renderTable(columns, results)}
 
       </div>
@@ -189,6 +209,7 @@ module.exports = React.createClass({
     var self = this
 
     var rows = this.renderRows(results)
+    this.renderedRows = rows
 
     return (
       <tbody>
