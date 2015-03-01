@@ -15,17 +15,28 @@ var dimensions = [
   }, title: 'Transaction Type'}
 ]
 
+var reduce = function(row, memo) {
+  memo.count = (memo.count || 0) + 1
+  memo.amountTotal = (memo.amountTotal || 0) + parseFloat(row.transaction.amount)
+  return memo
+}
+
 var calculations = [
   {
     title: 'Count',
-    value: function(row, memo) {
-      return memo + 1
-    }
+    value: 'count'
   },
   {
     title: 'Amount',
-    value: function(row, memo) {
-      return memo + parseFloat(row.transaction.amount)
+    value: 'amountTotal',
+    template: function(val, row) {
+      return '$' + val.toFixed(2)
+    }
+  },
+  {
+    title: 'Avg Amount',
+    value: function(row) {
+      return row.amountTotal / row.count
     },
     template: function(val, row) {
       return '$' + val.toFixed(2)
@@ -34,6 +45,9 @@ var calculations = [
 ]
 
 React.render(
-  <ReactPivot rows={data} dimensions={dimensions} calculations={calculations}/>,
+  <ReactPivot rows={data}
+              dimensions={dimensions}
+              calculations={calculations}
+              reduce={reduce} />,
   document.body
 )

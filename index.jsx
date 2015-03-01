@@ -8,7 +8,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      dimensions: ['First Name', 'Last Name'],
+      dimensions: [],
       calculations: {},
       sortBy: null,
       sortDir: 'asc'
@@ -44,11 +44,13 @@ module.exports = React.createClass({
     var columns = []
 
     this.state.dimensions.forEach(function(d) {
-      columns.push({type: 'dimension', title: d})
+      columns.push({type: 'dimension', title: d, value: d})
     })
 
     this.props.calculations.forEach(function(c) {
-      columns.push({type:'calculation', title: c.title, template: c.template})
+      columns.push({
+        type:'calculation', title: c.title, template: c.template, value: c.value
+      })
     })
 
     return columns
@@ -58,10 +60,7 @@ module.exports = React.createClass({
     var self = this
     var activeDimensions = this.state.dimensions
 
-    var calcFns = {}
-    this.props.calculations.forEach(function(c) {
-      calcFns[c.title] = c.value
-    })
+    var reduce = this.props.reduce
 
     var results = {}
     var setKeyCache = {}
@@ -85,10 +84,11 @@ module.exports = React.createClass({
         if (!self.cache[setKey]) {
           setKeyCache[setKey] = result
 
-          Object.keys(result).forEach(function(cTitle) {
-            var cfn = calcFns[cTitle]
-            if (cfn) result[cTitle] = cfn(row, result[cTitle])
-          })
+          // Object.keys(result).forEach(function(cTitle) {
+          //   var cfn = calcFns[cTitle]
+          //   if (cfn) result[cTitle] = cfn(row, result[cTitle])
+          // })
+          _.extend(result, reduce(row, result))
 
           var dimensionVals = self.parseSetKey(setKey)
           _.extend(result, dimensionVals)
@@ -213,9 +213,7 @@ module.exports = React.createClass({
     var level = level || 0
     var rows = []
 
-    var sorted = _.sortBy(dimensions, function(dimension) {
-      return dimension.value[self.state.sortBy]
-    })
+    var sorted = _.sortBy(dimensions, self.getSortValue)
     if (self.state.sortDir === 'desc') sorted.reverse()
 
     _.each(sorted, function(dimension) {
@@ -235,8 +233,12 @@ module.exports = React.createClass({
   },
 
   renderCell: function(col, row) {
-    var val = row[col.title]
-    if (col.template) val = col.template(val, row)
+    if (col.type === 'dimension') {
+      var val = row[col.title]
+    } else {
+      var val = getDimensionValue(col, row)
+      if (col.template) val = col.template(val, row)
+    }
 
     return(
       <td key={[col.title, row.key].join('\xff')}>{val}</td>
@@ -280,11 +282,21 @@ module.exports = React.createClass({
       if (dTitle) parsed[dTitle] = dVal
     }
     return parsed
+  },
+
+  getSortValue: function(dimension) {
+    var sortBy = this.state.sortBy
+    var columns = this.getColumns()
+    var sortCol = _.find(columns, function(c) {
+      return c.title === sortBy
+    })
+    return getDimensionValue(sortCol, dimension.value)
   }
 
 })
 
 function getDimensionValue (dimension, row) {
+  if (dimension == null) return null
   var val
   if (typeof dimension.value === 'string') {
     val = row[dimension.value]
