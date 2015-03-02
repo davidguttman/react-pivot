@@ -18,6 +18,7 @@
     "cssify": "^0.6.0",
     "dataframe": "^1.0.2",
     "envify": "^3.2.0",
+    "lodash": "^3.3.1",
     "react": "^0.12.2",
     "reactify": "^1.0.0",
     "underscore": "^1.8.2",

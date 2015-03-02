@@ -1,4 +1,4 @@
-var _ = require('underscore')
+var _ = require('lodash')
 var React = require('react')
 var DataFrame = require('DataFrame')
 
@@ -87,16 +87,10 @@ module.exports = React.createClass({
 
   render: function() {
     var html = (
-      <div>
-        <h1>ReactPivot!</h1>
-
+      <div className='reactPivot'>
         {this.renderDimensions()}
 
-        <div className="calculations">
-          Calculations
-        </div>
-
-        <div className="export-csv">
+        <div className="reactPivot-csvExport">
           <button onClick={this.downloadCSV}>Export CSV</button>
         </div>
 
@@ -111,7 +105,7 @@ module.exports = React.createClass({
   renderDimensions: function() {
     var self = this
     return (
-      <div className="dimensions">
+      <div className="reactPivot-dimensions">
         {this.props.dimensions.map(function(dimension) {
           var checked = _.contains(self.state.dimensions, dimension.title)
 
@@ -154,7 +148,7 @@ module.exports = React.createClass({
     var tBody = this.renderTableBody(columns, results)
 
     return (
-      <div className="results">
+      <div className="reactPivot-results">
         <table>
           <thead>
             <tr>
@@ -185,7 +179,7 @@ module.exports = React.createClass({
       <tbody>
         {rows.map(function(row) {
           return (
-            <tr key={row.key}>
+            <tr key={row._key}>
               {columns.map(function(col, i) {
                 if (i < row._level) return <td/>
 

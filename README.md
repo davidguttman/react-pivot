@@ -66,6 +66,5 @@ React.render(
 TODO:
 * Calculation toggle
 * Pagination
-* Split out dataframe
 * hide/solo
 * responsive table
