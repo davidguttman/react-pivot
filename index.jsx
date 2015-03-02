@@ -1,6 +1,6 @@
 var _ = require('lodash')
 var React = require('react')
-var DataFrame = require('DataFrame')
+var DataFrame = require('dataframe')
 
 var partial = require('./lib/partial')
 var download = require('./lib/download')
