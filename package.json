@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "cssify": "^0.6.0",
+    "dataframe": "^1.0.2",
     "envify": "^3.2.0",
     "react": "^0.12.2",
     "reactify": "^1.0.0",
