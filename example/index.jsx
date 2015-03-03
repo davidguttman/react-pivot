@@ -1,3 +1,5 @@
+require('./style.css')
+
 var React = require('react')
 var ReactPivot = require('..')
 
@@ -24,14 +26,16 @@ var reduce = function(row, memo) {
 var calculations = [
   {
     title: 'Count',
-    value: 'count'
+    value: 'count',
+    className: 'alignRight'
   },
   {
     title: 'Amount',
     value: 'amountTotal',
     template: function(val, row) {
       return '$' + val.toFixed(2)
-    }
+    },
+    className: 'alignRight'
   },
   {
     title: 'Avg Amount',
@@ -40,7 +44,8 @@ var calculations = [
     },
     template: function(val, row) {
       return '$' + val.toFixed(2)
-    }
+    },
+    className: 'alignRight'
   }
 ]
 

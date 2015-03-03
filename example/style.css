@@ -1,0 +1,32 @@
+body {
+  font-family: 'helvetica neue';
+  text-align: center;
+}
+
+.reactPivot-results table {
+  width: 90%;
+  margin: 0 auto;
+  text-align: left;
+  border-spacing: 0;
+}
+
+.reactPivot-results td {
+  border-top: 1px solid #ddd;
+  padding: 8px;
+}
+
+.reactPivot-results td.reactPivot-indent {
+  border: none;
+}
+
+.reactPivot-results tr:hover td {
+  background: #f5f5f5
+}
+
+.reactPivot-results tr:hover td.reactPivot-indent {
+  background: none;
+}
+
+.alignRight {
+  text-align: right;
+}

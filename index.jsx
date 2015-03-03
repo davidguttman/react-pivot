@@ -8,6 +8,15 @@ var download = require('./lib/download')
 module.exports = React.createClass({
   cache: {},
 
+  getDefaultProps: function() {
+    return {
+      rows: [],
+      dimensions: [],
+      reduce: function() {},
+      tableClass: 'table'
+    }
+  },
+
   getInitialState: function() {
     return {
       dimensions: [],
@@ -73,12 +82,13 @@ module.exports = React.createClass({
     var columns = []
 
     this.state.dimensions.forEach(function(d) {
-      columns.push({type: 'dimension', title: d, value: d})
+      columns.push({type: 'dimension', title: d, value: d, className: d.className})
     })
 
     this.props.calculations.forEach(function(c) {
       columns.push({
-        type:'calculation', title: c.title, template: c.template, value: c.value
+        type:'calculation', title: c.title, template: c.template,
+        value: c.value, className: c.className
       })
     })
 
@@ -147,14 +157,16 @@ module.exports = React.createClass({
 
     var tBody = this.renderTableBody(columns, results)
 
+    var classNames = 'reactPivot-results ' + this.props.tableClass
+
     return (
-      <div className="reactPivot-results">
+      <div className={classNames}>
         <table>
           <thead>
             <tr>
               { columns.map(function(col) {
                 return (
-                  <th onClick={partial(self.setSort, col.title)}
+                  <th className={col.className} onClick={partial(self.setSort, col.title)}
                       style={{cursor: 'pointer'}}
                   >
                     {col.title}
@@ -181,7 +193,7 @@ module.exports = React.createClass({
           return (
             <tr key={row._key}>
               {columns.map(function(col, i) {
-                if (i < row._level) return <td/>
+                if (i < row._level) return <td className='reactPivot-indent' />
 
                 return self.renderCell(col, row)
               })}
@@ -202,7 +214,7 @@ module.exports = React.createClass({
     }
 
     return(
-      <td key={[col.title, row.key].join('\xff')}>{val}</td>
+      <td className={col.className} key={[col.title, row.key].join('\xff')}>{val}</td>
     )
   }
 
