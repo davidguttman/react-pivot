@@ -129,7 +129,7 @@ module.exports = React.createClass({
           )
         })}
         <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
-          <option value={''}>Dimension...</option>
+          <option value={''}>Sub Dimension...</option>
           {self.props.dimensions.map(function(dimension) {
             return <option>{dimension.title}</option>
           })}

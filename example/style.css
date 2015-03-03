@@ -46,4 +46,9 @@ body {
   padding: 10px 0;
   text-align: left;
 }
+
+.reactPivot-dimensions select {
+  margin-right: 5px;
+  border: none;
+  padding: 2px;
 }
