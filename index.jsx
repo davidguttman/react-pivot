@@ -34,16 +34,15 @@ module.exports = React.createClass({
     })
   },
 
-  toggleDimension: function (evt) {
+  toggleDimension: function (iDimension, evt) {
     var dimension = evt.target.value
-
     var dimensions = this.state.dimensions
-    if (_.contains(dimensions, dimension)) {
-      this.setState({dimensions: _.without(dimensions, dimension)})
-    } else {
-      dimensions.push(dimension)
-      this.setState({dimensions: dimensions})
-    }
+
+    var curIdx = dimensions.indexOf(dimension)
+    if (curIdx >= 0) dimensions[curIdx] = null
+    dimensions[iDimension] = dimension
+
+    this.setState({dimensions: _.compact(dimensions)})
   },
 
   setSort: function(cTitle) {
@@ -114,22 +113,27 @@ module.exports = React.createClass({
 
   renderDimensions: function() {
     var self = this
+    var selectedDimensions = this.state.dimensions
+    var nSelected = selectedDimensions.length
+
     return (
       <div className="reactPivot-dimensions">
-        {this.props.dimensions.map(function(dimension) {
-          var checked = _.contains(self.state.dimensions, dimension.title)
-
+        {selectedDimensions.map(function(selectedDimension, i) {
           return (
-            <label>
-              <input type='checkbox'
-                     value={dimension.title}
-                     checked={checked}
-                     onChange={self.toggleDimension} />
-
-              {dimension.title}
-            </label>
+            <select value={selectedDimension} onChange={partial(self.toggleDimension, i)}>
+              <option></option>
+              {self.props.dimensions.map(function(dimension) {
+                return <option>{dimension.title}</option>
+              })}
+            </select>
           )
         })}
+        <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
+          <option value={''}>Dimension...</option>
+          {self.props.dimensions.map(function(dimension) {
+            return <option>{dimension.title}</option>
+          })}
+        </select>
       </div>
     )
   },
