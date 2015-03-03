@@ -3,9 +3,13 @@ body {
   text-align: center;
 }
 
-.reactPivot-results table {
-  width: 90%;
+.reactPivot {
+  width: 750px;
   margin: 0 auto;
+}
+
+.reactPivot-results table {
+  width: 100%;
   text-align: left;
   border-spacing: 0;
 }
@@ -29,4 +33,15 @@ body {
 
 .alignRight {
   text-align: right;
+}
+
+.reactPivot-csvExport {
+  float: right;
+  padding: 10px 0;
+}
+
+.reactPivot-dimensions {
+  width: 500px;
+  float: left;
+  padding: 10px 0;
 }

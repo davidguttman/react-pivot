@@ -13,7 +13,7 @@ module.exports = React.createClass({
       rows: [],
       dimensions: [],
       reduce: function() {},
-      tableClass: 'table'
+      tableClassName: 'table'
     }
   },
 
@@ -157,7 +157,7 @@ module.exports = React.createClass({
 
     var tBody = this.renderTableBody(columns, results)
 
-    var classNames = 'reactPivot-results ' + this.props.tableClass
+    var classNames = 'reactPivot-results ' + this.props.tableClassName
 
     return (
       <div className={classNames}>

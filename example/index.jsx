@@ -50,10 +50,22 @@ var calculations = [
 ]
 
 React.render(
-  <ReactPivot rows={data}
-              dimensions={dimensions}
-              calculations={calculations}
-              reduce={reduce}
-              activeDimensions={['Transaction Type']} />,
+  (
+    <div>
+      <h1>ReactPivot</h1>
+
+      <p>
+        ReactPivot is a data-grid component with pivot-table-like functionality
+        for data display, filtering, and exploration.
+      </p>
+
+      <ReactPivot rows={data}
+                  dimensions={dimensions}
+                  calculations={calculations}
+                  reduce={reduce}
+                  activeDimensions={['Transaction Type']} />
+    </div>
+  ),
+
   document.body
 )
