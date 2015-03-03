@@ -19,7 +19,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      dimensions: [],
+      dimensions: this.props.activeDimensions || [],
       calculations: {},
       sortBy: null,
       sortDir: 'asc'

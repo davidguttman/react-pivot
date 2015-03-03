@@ -53,6 +53,7 @@ React.render(
   <ReactPivot rows={data}
               dimensions={dimensions}
               calculations={calculations}
-              reduce={reduce} />,
+              reduce={reduce}
+              activeDimensions={['Transaction Type']} />,
   document.body
 )
