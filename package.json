@@ -58,6 +58,6 @@
     "dist": "npm run remove-dist && npm run build-standalone",
     "remove-dist": "rm dist/*.js",
     "build-standalone": "NODE_ENV=production browserify lib/umd.js | uglifyjs -mc > dist/react-pivot-standalone-${npm_package_version}.min.js",
-    "build-gh": "NODE_ENV=production browserify example/index.jsx > example/dist.js"
+    "build-gh": "NODE_ENV=production browserify example/demo.jsx > example/dist.js"
   }
 }

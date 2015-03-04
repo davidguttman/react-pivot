@@ -783,24 +783,9 @@ module.exports=[
 ]
 
 },{}],2:[function(require,module,exports){
-var React = require('react')
-
-var repo = 'davidguttman/react-pivot'
-
-var style = {
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  border: 0
-}
-
-module.exports = (
-  React.createElement("a", {href: "https://github.com/"+repo}, React.createElement("img", {style: style, src: "https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67", alt: "Fork me on GitHub", "data-canonical-src": "https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"}))
-)
-
-
-},{"react":157}],3:[function(require,module,exports){
-require('./style.css')
+var css = "body {\n  font-family: 'helvetica neue';\n  text-align: center;\n  background: #f5f5f5;\n  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);\n  font-weight: 200;\n  color: #333;\n}\n\na { color: #0ab; cursor: pointer; }\na:hover {text-decoration: none}\n\nh1 {\n  font-weight: 300;\n  letter-spacing: 1px;\n}\n\nth { font-weight: 400; letter-spacing: 1px; }\ntd { font-weight: 200 }\n\n.strong {font-weight: bold}\n.hide {display: none}\n\n.demo {\n  width: 750px;\n  margin: 0 auto;\n  padding: 20px;\n}\n\n.demo textarea {\n  width: 710px;\n  height: 215px;\n  margin-top: 20px;\n  border: 0;\n  padding: 10px 20px 20px;\n  background: #fff;\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);\n  font-family: 'anonymous pro', 'courier', 'monospace'\n}\n"; (require("./../node_modules/cssify"))(css); module.exports = css;
+},{"./../node_modules/cssify":8}],3:[function(require,module,exports){
+require('./demo.css')
 
 var React = require('react')
 var ReactPivot = require('..')
@@ -870,7 +855,7 @@ var Demo = React.createClass({displayName: "Demo",
         ), 
 
         React.createElement("p", null, 
-          "Data-lovers will love you."
+          "Muggles will love you."
         ), 
 
         React.createElement("p", null, 
@@ -911,9 +896,24 @@ React.render(
 )
 
 
-},{"..":5,"./data.json":1,"./gh.jsx":2,"./style.css":4,"react":157}],4:[function(require,module,exports){
-var css = "body {\n  font-family: 'helvetica neue';\n  text-align: center;\n  background: #f5f5f5;\n  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);\n  font-weight: 200;\n  color: #333;\n}\n\na { color: #0ab; cursor: pointer; }\na:hover {text-decoration: none}\n\nh1 {\n  font-weight: 300;\n  letter-spacing: 1px;\n}\n\nth { font-weight: 400; letter-spacing: 1px; }\ntd { font-weight: 200 }\n\n.strong {font-weight: bold}\n.hide {display: none}\n\n.demo {\n  width: 750px;\n  margin: 0 auto;\n  padding: 20px;\n}\n\n.demo textarea {\n  width: 710px;\n  height: 215px;\n  margin-top: 20px;\n  border: 0;\n  padding: 10px 20px 20px;\n  background: #fff;\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);\n  font-family: 'anonymous pro', 'courier', 'monospace'\n}\n\n.reactPivot {\n  margin-top: 40px;\n  padding: 10px 20px 20px;\n  background: #fff;\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);\n}\n\n.reactPivot-results table {\n  width: 100%;\n  text-align: left;\n  border-spacing: 0;\n}\n\n.reactPivot-results th.asc:after,\n.reactPivot-results th.desc:after {\n  font-size: 50%;\n  opacity: 0.5;\n}\n\n.reactPivot-results th.asc:after { content: ' ▲' }\n.reactPivot-results th.desc:after { content: ' ▼' }\n\n.reactPivot-results td {\n  border-top: 1px solid #ddd;\n  padding: 8px;\n}\n\n.reactPivot-results td.reactPivot-indent {\n  border: none;\n}\n\n.reactPivot-results tr:hover td {\n  background: #f5f5f5\n}\n\n.reactPivot-results tr:hover td.reactPivot-indent {\n  background: none;\n}\n\n.alignRight {\n  text-align: right;\n}\n\n.reactPivot-csvExport {\n  float: right;\n  padding: 10px 0;\n}\n.reactPivot-csvExport button {\n  background-color: #FFF;\n  border: 1px solid #CCC;\n  height: 28px;\n  color: #555;\n  cursor: pointer;\n  padding: 0 10px;\n  border-radius: 4px;\n  margin-top: 5px;\n}\n\n.reactPivot-dimensions {\n  width: 600px;\n  float: left;\n  padding: 10px 0;\n  text-align: left;\n}\n\n.reactPivot-dimensions select {\n  color: #555;\n  height: 28px;\n  border: none;\n  margin-right: 5px;\n  margin-top: 5px;\n  background-color: #FFF;\n  border: 1px solid #CCC;\n}\n"; (require("/Users/dguttman/Dropbox/play/js/react-pivot/node_modules/cssify"))(css); module.exports = css;
-},{"/Users/dguttman/Dropbox/play/js/react-pivot/node_modules/cssify":8}],5:[function(require,module,exports){
+},{"..":5,"./data.json":1,"./demo.css":2,"./gh.jsx":4,"react":157}],4:[function(require,module,exports){
+var React = require('react')
+
+var repo = 'davidguttman/react-pivot'
+
+var style = {
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  border: 0
+}
+
+module.exports = (
+  React.createElement("a", {href: "https://github.com/"+repo}, React.createElement("img", {style: style, src: "https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67", alt: "Fork me on GitHub", "data-canonical-src": "https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"}))
+)
+
+
+},{"react":157}],5:[function(require,module,exports){
 var _ = require('lodash')
 var React = require('react')
 var DataFrame = require('dataframe')
@@ -929,7 +929,8 @@ module.exports = React.createClass({displayName: "exports",
       rows: [],
       dimensions: [],
       reduce: function() {},
-      tableClassName: 'table'
+      tableClassName: '',
+      defaultStyles: true
     }
   },
 
@@ -943,6 +944,8 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   componentWillMount: function() {
+    if (this.props.defaultStyles) loadStyles()
+
     this.dataFrame = DataFrame({
       rows: this.props.rows,
       dimensions: this.props.dimensions,
@@ -1075,11 +1078,9 @@ module.exports = React.createClass({displayName: "exports",
 
     var tBody = this.renderTableBody(columns, results)
 
-    var classNames = 'reactPivot-results ' + this.props.tableClassName
-
     return (
-      React.createElement("div", {className: classNames}, 
-        React.createElement("table", null, 
+      React.createElement("div", {className: "reactPivot-results"}, 
+        React.createElement("table", {className: this.props.tableClassName}, 
           React.createElement("thead", null, 
             React.createElement("tr", null, 
                columns.map(function(col) {
@@ -1149,8 +1150,12 @@ function getValue (dimension, row) {
   return val
 }
 
+function loadStyles () {
+  require('./style.css')
+}
 
-},{"./lib/download":6,"./lib/partial":7,"dataframe":9,"lodash":11,"react":157}],6:[function(require,module,exports){
+
+},{"./lib/download":6,"./lib/partial":7,"./style.css":158,"dataframe":9,"lodash":11,"react":157}],6:[function(require,module,exports){
 module.exports = function(content, filename, mime) {
   if (mime == null) mime = 'text/csv'
 
@@ -30932,4 +30937,6 @@ module.exports = warning;
 },{"./emptyFunction":118}],157:[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":39}]},{},[3]);
+},{"./lib/React":39}],158:[function(require,module,exports){
+var css = ".reactPivot {\n  margin-top: 40px;\n  padding: 10px 20px 20px;\n  background: #fff;\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);\n}\n\n.reactPivot-results table {\n  width: 100%;\n  text-align: left;\n  border-spacing: 0;\n}\n\n.reactPivot-results th.asc:after,\n.reactPivot-results th.desc:after {\n  font-size: 50%;\n  opacity: 0.5;\n}\n\n.reactPivot-results th.asc:after { content: ' ▲' }\n.reactPivot-results th.desc:after { content: ' ▼' }\n\n.reactPivot-results td {\n  border-top: 1px solid #ddd;\n  padding: 8px;\n}\n\n.reactPivot-results td.reactPivot-indent {\n  border: none;\n}\n\n.reactPivot-results tr:hover td {\n  background: #f5f5f5\n}\n\n.reactPivot-results tr:hover td.reactPivot-indent {\n  background: none;\n}\n\n.alignRight {\n  text-align: right;\n}\n\n.reactPivot-csvExport {\n  float: right;\n  padding: 10px 0;\n}\n.reactPivot-csvExport button {\n  background-color: #FFF;\n  border: 1px solid #CCC;\n  height: 28px;\n  color: #555;\n  cursor: pointer;\n  padding: 0 10px;\n  border-radius: 4px;\n  margin-top: 5px;\n}\n\n.reactPivot-dimensions {\n  width: 600px;\n  float: left;\n  padding: 10px 0;\n  text-align: left;\n}\n\n.reactPivot-dimensions select {\n  color: #555;\n  height: 28px;\n  border: none;\n  margin-right: 5px;\n  margin-top: 5px;\n  background-color: #FFF;\n  border: 1px solid #CCC;\n}\n"; (require("./node_modules/cssify"))(css); module.exports = css;
+},{"./node_modules/cssify":8}]},{},[3]);
