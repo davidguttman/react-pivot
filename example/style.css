@@ -39,16 +39,30 @@ body {
   float: right;
   padding: 10px 0;
 }
+.reactPivot-csvExport button {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  height: 28px;
+  color: #555;
+  cursor: pointer;
+  padding: 0 10px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
 
 .reactPivot-dimensions {
-  width: 500px;
+  width: 600px;
   float: left;
   padding: 10px 0;
   text-align: left;
 }
 
 .reactPivot-dimensions select {
-  margin-right: 5px;
+  color: #555;
+  height: 28px;
   border: none;
-  padding: 2px;
+  margin-right: 5px;
+  margin-top: 5px;
+  background-color: #FFF;
+  border: 1px solid #CCC;
 }
