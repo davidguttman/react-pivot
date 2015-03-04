@@ -21,7 +21,6 @@
     "lodash": "^3.3.1",
     "react": "^0.12.2",
     "reactify": "^1.0.0",
-    "underscore": "^1.8.2",
     "xtend": "^4.0.0"
   },
   "devDependencies": {
@@ -52,6 +51,9 @@
     "url": "https://github.com/davidguttman/react-pivot.git"
   },
   "scripts": {
-    "example": "beefy example/index.jsx"
+    "example": "beefy example/index.jsx",
+    "dist": "npm run remove-dist && npm run build-standalone",
+    "remove-dist": "rm dist/*.js",
+    "build-standalone": "NODE_ENV=production browserify lib/umd.js | uglifyjs -mc > dist/react-pivot-standalone-${npm_package_version}.min.js"
   }
 }
