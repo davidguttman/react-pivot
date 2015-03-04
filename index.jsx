@@ -13,7 +13,8 @@ module.exports = React.createClass({
       rows: [],
       dimensions: [],
       reduce: function() {},
-      tableClassName: 'table'
+      tableClassName: '',
+      defaultStyles: true
     }
   },
 
@@ -27,6 +28,8 @@ module.exports = React.createClass({
   },
 
   componentWillMount: function() {
+    if (this.props.defaultStyles) loadStyles()
+
     this.dataFrame = DataFrame({
       rows: this.props.rows,
       dimensions: this.props.dimensions,
@@ -159,16 +162,14 @@ module.exports = React.createClass({
 
     var tBody = this.renderTableBody(columns, results)
 
-    var classNames = 'reactPivot-results ' + this.props.tableClassName
-
     return (
-      <div className={classNames}>
-        <table>
+      <div className='reactPivot-results'>
+        <table className={this.props.tableClassName}>
           <thead>
             <tr>
               { columns.map(function(col) {
                 return (
-                  <th className={(col.title === sortByTitle) ? col.className + ' ' + sortDir : col.className} 
+                  <th className={(col.title === sortByTitle) ? col.className + ' ' + sortDir : col.className}
                       onClick={partial(self.setSort, col.title)}
                       style={{cursor: 'pointer'}}
                   >
@@ -231,4 +232,8 @@ function getValue (dimension, row) {
     val = dimension.value(row)
   }
   return val
+}
+
+function loadStyles () {
+  require('./style.css')
 }

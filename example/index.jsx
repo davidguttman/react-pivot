@@ -1,5 +1,4 @@
 require('./demo.css')
-require('./style.css')
 
 var React = require('react')
 var ReactPivot = require('..')
