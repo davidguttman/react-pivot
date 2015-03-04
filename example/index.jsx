@@ -3,6 +3,7 @@ require('./style.css')
 var React = require('react')
 var ReactPivot = require('..')
 
+var gh = require('./gh.jsx')
 var data = require('./data.json')
 
 var dimensions = [
@@ -59,7 +60,13 @@ React.render(
       </p>
 
       <p>
-        Your analysts will love you.
+        Data-lovers will love you.
+      </p>
+
+      <p>
+        <a href='https://github.com/davidguttman/react-pivot'>
+          View project and docs on Github
+        </a>
       </p>
 
       <ReactPivot rows={data}
@@ -67,6 +74,8 @@ React.render(
                   calculations={calculations}
                   reduce={reduce}
                   activeDimensions={['Transaction Type']} />
+
+      {gh}
     </div>
   ),
 

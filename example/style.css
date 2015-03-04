@@ -7,10 +7,16 @@ body {
   color: #333;
 }
 
+a { color: #0ab }
+a:hover {text-decoration: none}
+
 h1 {
   font-weight: 300;
   letter-spacing: 1px;
 }
+
+th { font-weight: 400; letter-spacing: 1px; }
+td { font-weight: 200 }
 
 .demo {
   width: 750px;
