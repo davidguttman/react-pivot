@@ -7,66 +7,67 @@ Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io
 ## Example ##
 
 ```js
-
 var React = require('react')
 var ReactPivot = require('react-pivot')
 
-var data = require('./data.json')
+React.render(
+  <ReactPivot rows={rows}
+              dimensions={dimensions}
+              reduce={reduce}
+              calculations={calculations} />,
+  document.body
+)
+```
 
-var dimensions = [
-  {value: 'firstName', title: 'First Name'},
-  {value: 'lastName', title: 'Last Name'},
-  {value: 'state', title: 'State'},
-  {value: function(row) {
-    return row.transaction.business
-  }, title: 'Business'},
-  {value: function(row) {
-    return row.transaction.type
-  }, title: 'Transaction Type'}
+`ReactPivot` takes four arguments: `rows`, `dimensions`, `reduce` and `calculations`
+
+`rows` is your data, just an array of objects:
+```js
+var rows = [
+  {"firstName":"Francisco","lastName":"Brekke","state":"NY","transaction":{"amount":"399.73","date":"2012-02-02T08:00:00.000Z","business":"Kozey-Moore","name":"Checking Account 2297","type":"deposit","account":"82741327"}},
+  {"firstName":"Francisco","lastName":"Brekke","state":"NY","transaction":{"amount":"768.84","date":"2012-02-02T08:00:00.000Z","business":"Herman-Langworth","name":"Money Market Account 9344","type":"deposit","account":"95753704"}}
 ]
+```
 
+`dimensions` is how you want to group your data. Maybe you want to get the total $$ by `firstName` and have the column title be `First Name`:
+
+```js
+var dimensions = [
+  {value: 'firstName', title: 'First Name'}
+]
+```
+
+`reduce` is how you calculate numbers for each group:
+
+```js
 var reduce = function(row, memo) {
-  memo.count = (memo.count || 0) + 1
   memo.amountTotal = (memo.amountTotal || 0) + parseFloat(row.transaction.amount)
   return memo
 }
+```
 
+`calculations` is how you want to display the calculations done in `reduce`:
+
+```js
 var calculations = [
   {
-    title: 'Count',
-    value: 'count'
-  },
-  {
-    title: 'Amount',
-    value: 'amountTotal',
-    template: function(val, row) {
-      return '$' + val.toFixed(2)
-    }
-  },
-  {
-    title: 'Avg Amount',
-    value: function(row) {
-      return row.amountTotal / row.count
-    },
+    title: 'Amount', value: 'amountTotal',
     template: function(val, row) {
       return '$' + val.toFixed(2)
     }
   }
 ]
-
-React.render(
-  <ReactPivot rows={data}
-              dimensions={dimensions}
-              calculations={calculations}
-              reduce={reduce} />,
-  document.body
-)
-
-
 ```
 
-TODO:
+See it all together in [example/basic.jsx](https://github.com/davidguttman/react-pivot/blob/master/example/basic.jsx)
+
+### TODO ###
+
 * Calculation toggle
 * Pagination
 * hide/solo
 * responsive table
+
+## License ##
+
+MIT
