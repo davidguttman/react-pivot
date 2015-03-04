@@ -7,7 +7,7 @@ body {
   color: #333;
 }
 
-a { color: #0ab }
+a { color: #0ab; cursor: pointer; }
 a:hover {text-decoration: none}
 
 h1 {
@@ -18,10 +18,24 @@ h1 {
 th { font-weight: 400; letter-spacing: 1px; }
 td { font-weight: 200 }
 
+.strong {font-weight: bold}
+.hide {display: none}
+
 .demo {
   width: 750px;
   margin: 0 auto;
   padding: 20px;
+}
+
+.demo textarea {
+  width: 710px;
+  height: 215px;
+  margin-top: 20px;
+  border: 0;
+  padding: 10px 20px 20px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-family: 'anonymous pro', 'courier', 'monospace'
 }
 
 .reactPivot {
@@ -36,6 +50,15 @@ td { font-weight: 200 }
   text-align: left;
   border-spacing: 0;
 }
+
+.reactPivot-results th.asc:after,
+.reactPivot-results th.desc:after {
+  font-size: 50%;
+  opacity: 0.5;
+}
+
+.reactPivot-results th.asc:after { content: ' ▲' }
+.reactPivot-results th.desc:after { content: ' ▼' }
 
 .reactPivot-results td {
   border-top: 1px solid #ddd;

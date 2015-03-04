@@ -50,34 +50,60 @@ var calculations = [
   }
 ]
 
+var Demo = React.createClass({
+  getInitialState: function() {
+    return {showInput: false}
+  },
+  toggleShow: function() {
+    var showInput = this.state.showInput
+    this.setState({showInput: !showInput})
+  },
+  render: function() {
+    return (
+      <div className='demo'>
+        <h1>ReactPivot</h1>
+
+        <p>
+          ReactPivot is a data-grid component with pivot-table-like functionality.
+        </p>
+
+        <p>
+          Data-lovers will love you.
+        </p>
+
+        <p>
+          <a href='https://github.com/davidguttman/react-pivot'>
+            View project and docs on Github
+          </a>
+        </p>
+
+        <div className={this.state.showInput ? 'hide' : ''}>
+          <ReactPivot rows={data}
+                      dimensions={dimensions}
+                      calculations={calculations}
+                      reduce={reduce}
+                      activeDimensions={['Transaction Type']} />
+        </div>
+
+        <div className={this.state.showInput ? '' : 'hide'}>
+          <textarea>{JSON.stringify(data, null, 2)}</textarea>
+        </div>
+
+        <p>
+          <a className={this.state.showInput ? '' : 'strong'}
+             onClick={this.toggleShow}>Grid View</a>
+          {' | '}
+          <a className={this.state.showInput ? 'strong' : ''}
+             onClick={this.toggleShow}>Input Data</a>
+        </p>
+
+        {gh}
+      </div>
+    )
+  }
+})
+
 React.render(
-  (
-    <div className='demo'>
-      <h1>ReactPivot</h1>
-
-      <p>
-        ReactPivot is a data-grid component with pivot-table-like functionality.
-      </p>
-
-      <p>
-        Data-lovers will love you.
-      </p>
-
-      <p>
-        <a href='https://github.com/davidguttman/react-pivot'>
-          View project and docs on Github
-        </a>
-      </p>
-
-      <ReactPivot rows={data}
-                  dimensions={dimensions}
-                  calculations={calculations}
-                  reduce={reduce}
-                  activeDimensions={['Transaction Type']} />
-
-      {gh}
-    </div>
-  ),
-
+  <Demo />,
   document.body
 )

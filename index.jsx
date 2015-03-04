@@ -143,20 +143,18 @@ module.exports = React.createClass({
 
     var columns = this.getColumns()
 
-    var sortSym = self.state.sortDir === 'asc' ? '▲' : '▼'
-    var sortSymSpan = <span style={{fontSize: '50%'}}> {sortSym}</span>
-
     var sortByTitle = self.state.sortBy
     var sortCol = _.find(columns, function(col) {
       return col.title === sortByTitle
     })
     var sortBy = (sortCol || {}).value
+    var sortDir = this.state.sortDir
 
     var columns = this.getColumns()
     var results = this.dataFrame.calculate({
       dimensions: this.state.dimensions,
       sortBy: sortBy,
-      sortDir: this.state.sortDir
+      sortDir: sortDir
     })
 
     var tBody = this.renderTableBody(columns, results)
@@ -170,11 +168,11 @@ module.exports = React.createClass({
             <tr>
               { columns.map(function(col) {
                 return (
-                  <th className={col.className} onClick={partial(self.setSort, col.title)}
+                  <th className={(col.title === sortByTitle) ? col.className + ' ' + sortDir : col.className} 
+                      onClick={partial(self.setSort, col.title)}
                       style={{cursor: 'pointer'}}
                   >
                     {col.title}
-                    {col.title === sortByTitle ? sortSymSpan : ''}
                   </th>
                 )
               })}
