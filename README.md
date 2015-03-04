@@ -1,8 +1,10 @@
-# React-Pivot #
+# ReactPivot #
 
-React-Pivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration.
+ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration.
 
 Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io/react-pivot/)
+
+![Demo](http://i.imgur.com/BhPF2Cv.gif)
 
 ## Example ##
 
