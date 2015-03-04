@@ -15,7 +15,7 @@
     "url": "https://github.com/davidguttman/react-pivot/issues"
   },
   "dependencies": {
-    "cssify": "^0.6.0",
+    "cssify": "^0.7.0",
     "dataframe": "^1.0.2",
     "envify": "^3.2.0",
     "lodash": "^3.3.1",
