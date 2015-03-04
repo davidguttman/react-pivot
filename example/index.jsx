@@ -51,12 +51,15 @@ var calculations = [
 
 React.render(
   (
-    <div>
+    <div className='demo'>
       <h1>ReactPivot</h1>
 
       <p>
-        ReactPivot is a data-grid component with pivot-table-like functionality
-        for data display, filtering, and exploration.
+        ReactPivot is a data-grid component with pivot-table-like functionality.
+      </p>
+
+      <p>
+        Your analysts will love you.
       </p>
 
       <ReactPivot rows={data}
