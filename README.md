@@ -1,10 +1,62 @@
 # ReactPivot #
 
-ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration.
+ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration. Can be used without React.
 
 Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io/react-pivot/)
 
 ![Demo](http://i.imgur.com/BhPF2Cv.gif)
+
+## Installation & Usage ##
+
+<strong> Default (Browserify/webpack): </strong>
+
+```
+npm i -S react-pivot
+```
+
+```js
+var React = require('react')
+var ReactPivot = require('react-pivot')
+
+React.render(
+  <ReactPivot rows={rows}
+              dimensions={dimensions}
+              reduce={reduce}
+              calculations={calculations} />,
+  document.body
+)
+```
+
+<strong> Classic (no React or Browserify): </strong>
+
+Download [react-pivot-standalone-1.3.0.min.js](https://raw.githubusercontent.com/davidguttman/react-pivot/master/dist/react-pivot-standalone-1.3.0.min.js)
+
+```html
+<script src='react-pivot-standalone-1.3.0.min.js'></script>
+<script>
+  ReactPivot(document.body, {
+    rows: rows,
+    dimensions: dimensions,
+    calculations: calculations,
+    reduce: reduce
+  })
+</script>
+```
+
+<strong> Custom (Browserify, no React): </strong>
+
+```js
+var ReactPivot = require('react-pivot/load')
+
+ReactPivot(document.body, {
+  rows: rows,
+  dimensions: dimensions,
+  reduce: reduce,
+  calculations: calculations
+})
+
+```
+
 
 ## Example ##
 
@@ -61,7 +113,23 @@ var calculations = [
 ]
 ```
 
+Plug them in and you're good to go!
+
+```js
+
+// Optional: set a default grouping with "activeDimensions"
+React.render(
+  <ReactPivot rows={rows}
+              dimensions={dimensions}
+              reduce={reduce}
+              calculations={calculations}
+              activeDimensions={['First Name']} />,
+  document.body
+)
+```
+
 See it all together in [example/basic.jsx](https://github.com/davidguttman/react-pivot/blob/master/example/basic.jsx)
+
 
 ### TODO ###
 
