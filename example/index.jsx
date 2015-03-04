@@ -68,7 +68,7 @@ var Demo = React.createClass({
         </p>
 
         <p>
-          Data-lovers will love you.
+          Muggles will love you.
         </p>
 
         <p>
