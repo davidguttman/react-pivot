@@ -7,6 +7,7 @@
 
 .reactPivot-results table {
   width: 100%;
+  clear: both;
   text-align: left;
   border-spacing: 0;
 }
