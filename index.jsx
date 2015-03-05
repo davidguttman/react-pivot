@@ -16,7 +16,8 @@ module.exports = React.createClass({
       reduce: function() {},
       tableClassName: '',
       defaultStyles: true,
-      nPaginateRows: 25
+      nPaginateRows: 25,
+      solo: null
     }
   },
 
@@ -67,6 +68,14 @@ module.exports = React.createClass({
 
   setPaginatePage: function(nPage) {
     this.setState({paginatePage: nPage})
+  },
+
+  setSolo: function(solo) {
+    this.setState({solo: solo })
+  },
+
+  clearSolo: function() {
+    this.setState({solo: null})
   },
 
   downloadCSV: function() {
@@ -140,6 +149,17 @@ module.exports = React.createClass({
           <button onClick={this.downloadCSV}>Export CSV</button>
         </div>
 
+        {
+          this.state.solo ? (
+            <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
+              <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
+                &times;
+              </span>
+              {this.state.solo.title}: {this.state.solo.value}
+            </div>
+          ) : ''
+        }
+
         {this.renderTable()}
 
       </div>
@@ -188,11 +208,20 @@ module.exports = React.createClass({
     var sortDir = this.state.sortDir
 
     var columns = this.getColumns()
-    var results = this.dataFrame.calculate({
+    var calcOpts = {
       dimensions: this.state.dimensions,
       sortBy: sortBy,
       sortDir: sortDir
-    })
+    }
+
+    var filter = this.state.solo
+    if (filter) {
+      calcOpts.filter = function(dVals) {
+        return dVals[filter.title] === filter.value
+      }
+    }
+
+    var results = this.dataFrame.calculate(calcOpts)
 
     var paginatedResults = this.paginate(results)
 
@@ -254,8 +283,23 @@ module.exports = React.createClass({
       if (col.template) val = col.template(val, row)
     }
 
+    var exists = (typeof val) !== 'undefined'
+    if (col.type === 'dimension' && exists) {
+      var solo = (
+        <span className='reactPivot-solo'>
+          <a style={{cursor: 'pointer'}}
+             onClick={partial(this.setSolo, {
+                title: col.title,
+                value: val
+              })}>solo</a>
+        </span>
+      )
+    }
+
     return(
-      <td className={col.className} key={[col.title, row.key].join('\xff')}>{val}</td>
+      <td className={col.className} key={[col.title, row.key].join('\xff')}>
+        {val} {solo}
+      </td>
     )
   },
 
