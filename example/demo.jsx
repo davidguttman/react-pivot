@@ -82,7 +82,8 @@ var Demo = React.createClass({
                       dimensions={dimensions}
                       calculations={calculations}
                       reduce={reduce}
-                      activeDimensions={['Transaction Type']} />
+                      activeDimensions={['Transaction Type']}
+                      nPaginateRows={20} />
         </div>
 
         <div className={this.state.showInput ? '' : 'hide'}>

@@ -12,18 +12,22 @@ module.exports = React.createClass({
     return {
       rows: [],
       dimensions: [],
+      activeDimensions: [],
       reduce: function() {},
       tableClassName: '',
-      defaultStyles: true
+      defaultStyles: true,
+      nPaginateRows: 25
     }
   },
 
   getInitialState: function() {
     return {
-      dimensions: this.props.activeDimensions || [],
+      dimensions: this.props.activeDimensions,
       calculations: {},
       sortBy: null,
-      sortDir: 'asc'
+      sortDir: 'asc',
+      nPaginateRows: this.props.nPaginateRows,
+      paginatePage: 0
     }
   },
 
@@ -61,6 +65,10 @@ module.exports = React.createClass({
     this.setState({sortBy: sortBy, sortDir: sortDir})
   },
 
+  setPaginatePage: function(nPage) {
+    this.setState({paginatePage: nPage})
+  },
+
   downloadCSV: function() {
     var self = this
 
@@ -95,6 +103,32 @@ module.exports = React.createClass({
     })
 
     return columns
+  },
+
+  paginate: function(results) {
+    var paginatePage = this.state.paginatePage
+    var nPaginateRows = this.state.nPaginateRows
+    var nPaginatePages = Math.ceil(results.length / nPaginateRows)
+    if (paginatePage >= nPaginatePages) paginatePage = nPaginatePages - 1
+
+    var iBoundaryRow = paginatePage * nPaginateRows
+
+    var boundaryLevel = results[iBoundaryRow]._level
+    var parentRows = []
+    if (boundaryLevel > 0) {
+      for (var i = iBoundaryRow-1; i >= 0; i--) {
+        if (results[i]._level < boundaryLevel) {
+          parentRows.unshift(results[i])
+          boundaryLevel = results[i]._level
+        }
+        if (results[i._level === 9]) break
+      }
+    }
+
+    var iEnd = iBoundaryRow + nPaginateRows
+    var rows = parentRows.concat(results.slice(iBoundaryRow, iEnd))
+
+    return {rows: rows, nPages: nPaginatePages, curPage: paginatePage}
   },
 
   render: function() {
@@ -160,7 +194,9 @@ module.exports = React.createClass({
       sortDir: sortDir
     })
 
-    var tBody = this.renderTableBody(columns, results)
+    var paginatedResults = this.paginate(results)
+
+    var tBody = this.renderTableBody(columns, paginatedResults.rows)
 
     return (
       <div className='reactPivot-results'>
@@ -181,6 +217,8 @@ module.exports = React.createClass({
           </thead>
           {tBody}
         </table>
+
+        {this.renderPagination(paginatedResults)}
       </div>
     )
   },
@@ -218,6 +256,28 @@ module.exports = React.createClass({
 
     return(
       <td className={col.className} key={[col.title, row.key].join('\xff')}>{val}</td>
+    )
+  },
+
+  renderPagination: function(pagination) {
+    var self = this
+    var nPaginatePages = pagination.nPages
+    var paginatePage = pagination.curPage
+
+    if (nPaginatePages === 1) return ''
+
+    return (
+      <div className='reactPivot-paginate'>
+        {_.range(0, nPaginatePages).map(function(n) {
+          var c = 'reactPivot-pageNumber'
+          if (n === paginatePage) c += ' is-selected'
+          return (
+            <span className={c}>
+              <a onClick={partial(self.setPaginatePage, n)}>{n+1}</a>
+            </span>
+          )
+        })}
+      </div>
     )
   }
 

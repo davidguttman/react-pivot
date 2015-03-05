@@ -70,3 +70,15 @@
   background-color: #FFF;
   border: 1px solid #CCC;
 }
+
+.reactPivot-pageNumber {
+  padding: 2px;
+}
+
+.reactPivot-pageNumber:hover {
+  font-weight: bold;
+}
+
+.reactPivot-pageNumber.is-selected {
+  font-weight: bold;
+}
