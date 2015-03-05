@@ -20,6 +20,7 @@ td { font-weight: 200 }
 
 .strong {font-weight: bold}
 .hide {display: none}
+.alignRight { text-align: right }
 
 .demo {
   width: 750px;
