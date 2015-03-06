@@ -226,29 +226,43 @@ module.exports = React.createClass({
     var paginatedResults = this.paginate(results)
 
     var tBody = this.renderTableBody(columns, paginatedResults.rows)
+    var tHead = this.renderTableHead(columns)
 
     return (
       <div className='reactPivot-results'>
         <table className={this.props.tableClassName}>
-          <thead>
-            <tr>
-              { columns.map(function(col) {
-                return (
-                  <th className={(col.title === sortByTitle) ? col.className + ' ' + sortDir : col.className}
-                      onClick={partial(self.setSort, col.title)}
-                      style={{cursor: 'pointer'}}
-                  >
-                    {col.title}
-                  </th>
-                )
-              })}
-            </tr>
-          </thead>
+          {tHead}
           {tBody}
         </table>
 
         {this.renderPagination(paginatedResults)}
       </div>
+    )
+  },
+
+  renderTableHead: function(columns) {
+    var self = this
+    var sortBy = this.state.sortBy
+    var sortDir =  this.state.sortDir
+
+    return (
+      <thead>
+        <tr>
+          { columns.map(function(col) {
+            var className = col.className
+            if (col.title === sortBy) className += ' ' + sortDir
+
+            return (
+              <th className={className}
+                  onClick={partial(self.setSort, col.title)}
+                  style={{cursor: 'pointer'}}
+              >
+                {col.title}
+              </th>
+            )
+          })}
+        </tr>
+      </thead>
     )
   },
 
