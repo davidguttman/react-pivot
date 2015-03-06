@@ -16,6 +16,16 @@
   margin-right: 2px;
 }
 
+.reactPivot select {
+  color: #555;
+  height: 28px;
+  border: none;
+  margin-right: 5px;
+  margin-top: 5px;
+  background-color: #FFF;
+  border: 1px solid #CCC;
+}
+
 .reactPivot-results table {
   width: 100%;
   clear: both;
@@ -52,10 +62,12 @@
 .reactPivot-solo {display: none}
 td:hover .reactPivot-solo {display: inline}
 
-.reactPivot-csvExport {
+.reactPivot-csvExport,
+.reactPivot-columnControl {
   float: right;
-  padding: 10px 0;
+  margin-left: 5px;
 }
+
 .reactPivot-csvExport button {
   background-color: #FFF;
   border: 1px solid #CCC;
@@ -68,20 +80,21 @@ td:hover .reactPivot-solo {display: inline}
 }
 
 .reactPivot-dimensions {
-  width: 600px;
   float: left;
   padding: 10px 0;
   text-align: left;
 }
 
-.reactPivot-dimensions select {
-  color: #555;
-  height: 28px;
-  border: none;
-  margin-right: 5px;
-  margin-top: 5px;
-  background-color: #FFF;
-  border: 1px solid #CCC;
+.reactPivot-hideColumn { display: none }
+
+th:hover .reactPivot-hideColumn {
+  display: inline;
+  margin-right: 4px;
+}
+
+.reactPivot-hideColumn:hover {
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .reactPivot-pageNumber {
