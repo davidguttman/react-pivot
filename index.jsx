@@ -17,7 +17,8 @@ module.exports = React.createClass({
       tableClassName: '',
       defaultStyles: true,
       nPaginateRows: 25,
-      solo: null
+      solo: null,
+      hiddenColumns: []
     }
   },
 
@@ -28,7 +29,8 @@ module.exports = React.createClass({
       sortBy: null,
       sortDir: 'asc',
       nPaginateRows: this.props.nPaginateRows,
-      paginatePage: 0
+      paginatePage: 0,
+      hiddenColumns: this.props.hiddenColumns
     }
   },
 
@@ -78,6 +80,18 @@ module.exports = React.createClass({
     this.setState({solo: null})
   },
 
+  hideColumn: function(cTitle) {
+    var hidden = this.state.hiddenColumns
+    hidden.push(cTitle)
+    this.setState({hiddenColumns: hidden})
+  },
+
+  showColumn: function(evt) {
+    var col = evt.target.value
+    var hidden = _.without(this.state.hiddenColumns, col)
+    this.setState({hiddenColumns: hidden})
+  },
+
   downloadCSV: function() {
     var self = this
 
@@ -98,6 +112,7 @@ module.exports = React.createClass({
   },
 
   getColumns: function() {
+    var self = this
     var columns = []
 
     this.state.dimensions.forEach(function(d) {
@@ -105,6 +120,8 @@ module.exports = React.createClass({
     })
 
     this.props.calculations.forEach(function(c) {
+      if (self.state.hiddenColumns.indexOf(c.title) >= 0) return
+
       columns.push({
         type:'calculation', title: c.title, template: c.template,
         value: c.value, className: c.className
@@ -144,6 +161,7 @@ module.exports = React.createClass({
     var html = (
       <div className='reactPivot'>
         {this.renderDimensions()}
+        {this.renderColumnControl()}
 
         <div className="reactPivot-csvExport">
           <button onClick={this.downloadCSV}>Export CSV</button>
@@ -193,6 +211,23 @@ module.exports = React.createClass({
         </select>
       </div>
     )
+  },
+
+  renderColumnControl: function() {
+    var self = this
+    if (!this.state.hiddenColumns.length > 0) return
+
+    return (
+      <div className='reactPivot-columnControl'>
+        <select value={''} onChange={self.showColumn}>
+          <option value={''}>Hidden Columns</option>
+          {self.state.hiddenColumns.map(function(column) {
+            return <option>{column}</option>
+          })}
+        </select>
+      </div>
+    )
+
   },
 
   renderTable: function() {
@@ -252,11 +287,20 @@ module.exports = React.createClass({
             var className = col.className
             if (col.title === sortBy) className += ' ' + sortDir
 
+            var hide = ''
+            if (col.type !== 'dimension') hide = (
+              <span className='reactPivot-hideColumn'
+                    onClick={partial(self.hideColumn, col.title)}>
+                &times;
+              </span>
+            )
+
             return (
               <th className={className}
                   onClick={partial(self.setSort, col.title)}
-                  style={{cursor: 'pointer'}}
-              >
+                  style={{cursor: 'pointer'}} >
+
+                {hide}
                 {col.title}
               </th>
             )
