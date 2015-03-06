@@ -10,10 +10,13 @@
 }
 
 .reactPivot-clearSolo {
-  font-weight: bold;
+  opacity: 0.5;
   cursor: pointer;
   font-size: 120%;
   margin-right: 2px;
+}
+.reactPivot-clearSolo:hover {
+  font-weight: bold;
 }
 
 .reactPivot select {
@@ -59,8 +62,9 @@
   background: none;
 }
 
-.reactPivot-solo {display: none}
-td:hover .reactPivot-solo {display: inline}
+.reactPivot-solo {opacity: 0}
+.reactPivot-solo:hover {font-weight: bold}
+td:hover .reactPivot-solo {opacity: 0.5}
 
 .reactPivot-csvExport,
 .reactPivot-columnControl {
@@ -85,11 +89,12 @@ td:hover .reactPivot-solo {display: inline}
   text-align: left;
 }
 
-.reactPivot-hideColumn { display: none }
+.reactPivot-hideColumn { opacity: 0 }
 
 th:hover .reactPivot-hideColumn {
-  display: inline;
+  opacity: 0.5;
   margin-right: 4px;
+  margin-bottom: 2px;
 }
 
 .reactPivot-hideColumn:hover {
