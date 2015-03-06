@@ -134,10 +134,8 @@ See it all together in [example/basic.jsx](https://github.com/davidguttman/react
 
 ### TODO ###
 
-* Calculation toggle
-* Pagination
-* hide/solo
-* responsive table
+* Better Pagination
+* Responsive Table
 
 ## License ##
 
