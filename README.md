@@ -30,10 +30,10 @@ React.render(
 
 <strong> Classic (no React or Browserify): </strong>
 
-Download [react-pivot-standalone-1.6.0.min.js](https://raw.githubusercontent.com/davidguttman/react-pivot/master/dist/react-pivot-standalone-1.6.0.min.js)
+Download [react-pivot-standalone-1.6.1.min.js](https://raw.githubusercontent.com/davidguttman/react-pivot/master/dist/react-pivot-standalone-1.6.1.min.js)
 
 ```html
-<script src='react-pivot-standalone-1.6.0.min.js'></script>
+<script src='react-pivot-standalone-1.6.1.min.js'></script>
 <script>
   ReactPivot(document.body, {
     rows: rows,
