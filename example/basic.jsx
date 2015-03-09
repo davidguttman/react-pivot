@@ -12,7 +12,10 @@ var dimensions = [
   // "value" can also be function that returns what you want to group on
   {
     title: 'Transaction Type',
-    value: function(row) { return row.transaction.type }
+    value: function(row) { return row.transaction.type },
+    template: function(value) {
+      return '<a href="http://google.com/?q='+value+'">'+value+'</a>'
+    }
   }
 ]
 

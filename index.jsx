@@ -115,8 +115,15 @@ module.exports = React.createClass({
     var self = this
     var columns = []
 
-    this.state.dimensions.forEach(function(d) {
-      columns.push({type: 'dimension', title: d, value: d, className: d.className})
+    this.state.dimensions.forEach(function(title) {
+      var d =  _.find(self.props.dimensions, function(col) {
+        return col.title === title
+      })
+
+      columns.push({
+        type: 'dimension', title: d.title, value: d.value,
+        className: d.className, template: d.template
+      })
     })
 
     this.props.calculations.forEach(function(c) {
@@ -338,8 +345,9 @@ module.exports = React.createClass({
       var val = row[col.title]
     } else {
       var val = getValue(col, row)
-      if (col.template) val = col.template(val, row)
     }
+
+    if (col.template) val = col.template(val, row)
 
     var exists = (typeof val) !== 'undefined'
     if (col.type === 'dimension' && exists) {
@@ -356,7 +364,7 @@ module.exports = React.createClass({
 
     return(
       <td className={col.className} key={[col.title, row.key].join('\xff')}>
-        {val} {solo}
+        <span dangerouslySetInnerHTML={{__html: val}}></span> {solo}
       </td>
     )
   },
