@@ -139,6 +139,8 @@ module.exports = React.createClass({
   },
 
   paginate: function(results) {
+    if (results.length <= 0) return {rows: results, nPages: 1, curPage: 0}
+
     var paginatePage = this.state.paginatePage
     var nPaginateRows = this.state.nPaginateRows
     var nPaginatePages = Math.ceil(results.length / nPaginateRows)
