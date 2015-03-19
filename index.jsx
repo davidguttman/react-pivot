@@ -1,6 +1,7 @@
 var _ = require('lodash')
 var React = require('react')
 var DataFrame = require('dataframe')
+var Emitter = require('wildemitter')
 
 var partial = require('./lib/partial')
 var download = require('./lib/download')
@@ -20,7 +21,8 @@ module.exports = React.createClass({
       solo: null,
       hiddenColumns: [],
       sortBy: null,
-      sortDir: 'asc'
+      sortDir: 'asc',
+      eventBus: new Emitter
     }
   },
 
@@ -55,7 +57,10 @@ module.exports = React.createClass({
     if (curIdx >= 0) dimensions[curIdx] = null
     dimensions[iDimension] = dimension
 
-    this.setState({dimensions: _.compact(dimensions)})
+    var updatedDimensions = _.compact(dimensions)
+
+    this.props.eventBus.emit('activeDimensions', updatedDimensions)
+    this.setState({dimensions: updatedDimensions})
   },
 
   setSort: function(cTitle) {
@@ -68,30 +73,37 @@ module.exports = React.createClass({
       sortDir = 'asc'
     }
 
+    this.props.eventBus.emit('sortBy', sortBy)
+    this.props.eventBus.emit('sortDir', sortDir)
     this.setState({sortBy: sortBy, sortDir: sortDir})
   },
 
   setPaginatePage: function(nPage) {
+    this.props.eventBus.emit('paginatePage', nPage)
     this.setState({paginatePage: nPage})
   },
 
   setSolo: function(solo) {
+    this.props.eventBus.emit('solo', solo)
     this.setState({solo: solo })
   },
 
   clearSolo: function() {
+    this.props.eventBus.emit('solo', null)
     this.setState({solo: null})
   },
 
   hideColumn: function(cTitle) {
     var hidden = this.state.hiddenColumns
     hidden.push(cTitle)
+    this.props.eventBus.emit('hiddenColumns', hidden)
     this.setState({hiddenColumns: hidden})
   },
 
   showColumn: function(evt) {
     var col = evt.target.value
     var hidden = _.without(this.state.hiddenColumns, col)
+    this.props.eventBus.emit('hiddenColumns', hidden)
     this.setState({hiddenColumns: hidden})
   },
 

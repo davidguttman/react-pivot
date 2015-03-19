@@ -21,6 +21,7 @@
     "lodash": "^3.3.1",
     "react": "^0.12.2",
     "reactify": "^1.0.0",
+    "wildemitter": "^1.0.1",
     "xtend": "^4.0.0"
   },
   "devDependencies": {
@@ -53,6 +54,7 @@
   "scripts": {
     "example": "beefy example/demo.jsx",
     "example-basic": "beefy example/basic.jsx",
+    "example-persist": "beefy example/persist.js",
     "dist": "npm run remove-dist && npm run build-standalone",
     "remove-dist": "rm dist/*.js",
     "build-standalone": "NODE_ENV=production browserify lib/umd.js | uglifyjs -mc > dist/react-pivot-standalone-${npm_package_version}.min.js"
