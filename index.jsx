@@ -18,7 +18,9 @@ module.exports = React.createClass({
       defaultStyles: true,
       nPaginateRows: 25,
       solo: null,
-      hiddenColumns: []
+      hiddenColumns: [],
+      sortBy: null,
+      sortDir: 'asc'
     }
   },
 
@@ -26,11 +28,12 @@ module.exports = React.createClass({
     return {
       dimensions: this.props.activeDimensions,
       calculations: {},
-      sortBy: null,
-      sortDir: 'asc',
+      sortBy: this.props.sortBy,
+      sortDir: this.props.sortDir,
       nPaginateRows: this.props.nPaginateRows,
       paginatePage: 0,
-      hiddenColumns: this.props.hiddenColumns
+      hiddenColumns: this.props.hiddenColumns,
+      solo: this.props.solo
     }
   },
 
