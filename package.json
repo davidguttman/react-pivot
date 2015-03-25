@@ -19,7 +19,7 @@
     "dataframe": "^1.2.2",
     "envify": "^3.2.0",
     "lodash": "^3.3.1",
-    "react": "^0.12.2",
+    "react": ">=0.12.2",
     "reactify": "^1.0.0",
     "wildemitter": "^1.0.1",
     "xtend": "^4.0.0"
