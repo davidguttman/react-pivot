@@ -383,7 +383,7 @@ module.exports = React.createClass({
 
     return(
       <td className={col.className} key={[col.title, row.key].join('\xff')}>
-        <span dangerouslySetInnerHTML={{__html: text}}></span> {solo}
+        <span dangerouslySetInnerHTML={{__html: text || ''}}></span> {solo}
       </td>
     )
   },
