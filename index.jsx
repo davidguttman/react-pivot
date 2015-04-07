@@ -118,7 +118,14 @@ module.exports = React.createClass({
 
     this.renderedRows.forEach(function(row) {
       var vals = columns.map(function(col) {
-        return JSON.stringify(getValue(col, row))
+
+        if (col.type === 'dimension') {
+          var val = row[col.title]
+        } else {
+          var val = getValue(col, row)
+        }
+
+        return JSON.stringify(val)
       })
       csv += vals.join(',') + '\n'
     })
