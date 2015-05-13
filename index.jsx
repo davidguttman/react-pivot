@@ -166,6 +166,8 @@ module.exports = React.createClass({
 
     var paginatePage = this.state.paginatePage
     var nPaginateRows = this.state.nPaginateRows
+    if (!nPaginateRows || !isFinite(nPaginateRows)) nPaginateRows = results.length
+
     var nPaginatePages = Math.ceil(results.length / nPaginateRows)
     if (paginatePage >= nPaginatePages) paginatePage = nPaginatePages - 1
 
