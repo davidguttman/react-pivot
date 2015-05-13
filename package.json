@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "cssify": "^0.7.0",
-    "dataframe": "^1.2.2",
+    "dataframe": "^1.3.0",
     "envify": "^3.2.0",
     "lodash": "^3.3.1",
     "react": ">=0.12.2",

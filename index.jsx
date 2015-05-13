@@ -22,7 +22,8 @@ module.exports = React.createClass({
       hiddenColumns: [],
       sortBy: null,
       sortDir: 'asc',
-      eventBus: new Emitter
+      eventBus: new Emitter,
+      compact: false
     }
   },
 
@@ -277,7 +278,8 @@ module.exports = React.createClass({
     var calcOpts = {
       dimensions: this.state.dimensions,
       sortBy: sortBy,
-      sortDir: sortDir
+      sortDir: sortDir,
+      compact: this.props.compact
     }
 
     var filter = this.state.solo
