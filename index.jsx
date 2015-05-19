@@ -353,7 +353,7 @@ module.exports = React.createClass({
       <tbody>
         {rows.map(function(row) {
           return (
-            <tr key={row._key}>
+            <tr key={row._key} className={"reactPivot-level-" + row._level}>
               {columns.map(function(col, i) {
                 if (i < row._level) return <td className='reactPivot-indent' />
 
