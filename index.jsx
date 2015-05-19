@@ -22,7 +22,8 @@ module.exports = React.createClass({
       hiddenColumns: [],
       sortBy: null,
       sortDir: 'asc',
-      eventBus: new Emitter
+      eventBus: new Emitter,
+      compact: false
     }
   },
 
@@ -165,6 +166,8 @@ module.exports = React.createClass({
 
     var paginatePage = this.state.paginatePage
     var nPaginateRows = this.state.nPaginateRows
+    if (!nPaginateRows || !isFinite(nPaginateRows)) nPaginateRows = results.length
+
     var nPaginatePages = Math.ceil(results.length / nPaginateRows)
     if (paginatePage >= nPaginatePages) paginatePage = nPaginatePages - 1
 
@@ -270,14 +273,14 @@ module.exports = React.createClass({
     var sortCol = _.find(columns, function(col) {
       return col.title === sortByTitle
     })
-    var sortBy = (sortCol || {}).value
+    var sortBy = (sortCol || {}).title
     var sortDir = this.state.sortDir
 
-    var columns = this.getColumns()
     var calcOpts = {
       dimensions: this.state.dimensions,
       sortBy: sortBy,
-      sortDir: sortDir
+      sortDir: sortDir,
+      compact: this.props.compact
     }
 
     var filter = this.state.solo
