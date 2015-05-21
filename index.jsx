@@ -272,8 +272,8 @@ module.exports = React.createClass({
     var sortByTitle = self.state.sortBy
     var sortCol = _.find(columns, function(col) {
       return col.title === sortByTitle
-    })
-    var sortBy = (sortCol || {}).title
+    }) || {}
+    var sortBy = sortCol.type === 'dimension' ? sortCol.title : sortCol.value
     var sortDir = this.state.sortDir
 
     var calcOpts = {
@@ -353,7 +353,7 @@ module.exports = React.createClass({
       <tbody>
         {rows.map(function(row) {
           return (
-            <tr key={row._key}>
+            <tr key={row._key} className={"reactPivot-level-" + row._level}>
               {columns.map(function(col, i) {
                 if (i < row._level) return <td className='reactPivot-indent' />
 
