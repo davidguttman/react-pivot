@@ -272,8 +272,8 @@ module.exports = React.createClass({
     var sortByTitle = self.state.sortBy
     var sortCol = _.find(columns, function(col) {
       return col.title === sortByTitle
-    })
-    var sortBy = (sortCol || {}).title
+    }) || {}
+    var sortBy = sortCol.type === 'dimension' ? sortCol.title : sortCol.value
     var sortDir = this.state.sortDir
 
     var calcOpts = {
