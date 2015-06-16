@@ -16,6 +16,7 @@ module.exports = React.createClass({
       activeDimensions: [],
       reduce: function() {},
       tableClassName: '',
+      csvDownloadFileName: 'table.csv',
       defaultStyles: true,
       nPaginateRows: 25,
       solo: null,
@@ -131,7 +132,7 @@ module.exports = React.createClass({
       csv += vals.join(',') + '\n'
     })
 
-    download(csv, 'table.csv', 'text/csv')
+    download(csv, this.props.csvDownloadFileName, 'text/csv')
   },
 
   getColumns: function() {
@@ -392,7 +393,9 @@ module.exports = React.createClass({
     }
 
     return(
-      <td className={col.className} key={[col.title, row.key].join('\xff')}>
+      <td className={col.className}
+          key={[col.title, row.key].join('\xff')}
+          title={col.title}>
         <span dangerouslySetInnerHTML={{__html: text || ''}}></span> {solo}
       </td>
     )
