@@ -8,7 +8,7 @@ var download = require('./lib/download')
 
 module.exports = React.createClass({
   cache: {},
-
+  displayName: 'ReactPivot',
   getDefaultProps: function() {
     return {
       rows: [],
