@@ -21,6 +21,7 @@ module.exports = React.createClass({
       nPaginateRows: 25,
       solo: null,
       hiddenColumns: [],
+      paginatePage: 0,
       sortBy: null,
       sortDir: 'asc',
       eventBus: new Emitter,
@@ -35,7 +36,7 @@ module.exports = React.createClass({
       sortBy: this.props.sortBy,
       sortDir: this.props.sortDir,
       nPaginateRows: this.props.nPaginateRows,
-      paginatePage: 0,
+      paginatePage: this.props.paginatePage,
       hiddenColumns: this.props.hiddenColumns,
       solo: this.props.solo
     }
