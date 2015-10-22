@@ -8,7 +8,7 @@ var download = require('./lib/download')
 
 module.exports = React.createClass({
   cache: {},
-
+  displayName: 'ReactPivot',
   getDefaultProps: function() {
     return {
       rows: [],
@@ -21,6 +21,7 @@ module.exports = React.createClass({
       nPaginateRows: 25,
       solo: null,
       hiddenColumns: [],
+      paginatePage: 0,
       sortBy: null,
       sortDir: 'asc',
       eventBus: new Emitter,
@@ -35,7 +36,7 @@ module.exports = React.createClass({
       sortBy: this.props.sortBy,
       sortDir: this.props.sortDir,
       nPaginateRows: this.props.nPaginateRows,
-      paginatePage: 0,
+      paginatePage: this.props.paginatePage,
       hiddenColumns: this.props.hiddenColumns,
       solo: this.props.solo
     }
@@ -233,7 +234,7 @@ module.exports = React.createClass({
             <select value={selectedDimension} onChange={partial(self.toggleDimension, i)}>
               <option></option>
               {self.props.dimensions.map(function(dimension) {
-                return <option>{dimension.title}</option>
+                return <option value={dimension.title}>{dimension.title}</option>
               })}
             </select>
           )
