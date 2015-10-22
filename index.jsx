@@ -234,7 +234,7 @@ module.exports = React.createClass({
             <select value={selectedDimension} onChange={partial(self.toggleDimension, i)}>
               <option></option>
               {self.props.dimensions.map(function(dimension) {
-                return <option>{dimension.title}</option>
+                return <option value={dimension.title}>{dimension.title}</option>
               })}
             </select>
           )
