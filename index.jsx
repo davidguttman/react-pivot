@@ -110,7 +110,7 @@ module.exports = React.createClass({
     this.setState({hiddenColumns: hidden})
   },
 
-  downloadCSV: function() {
+  downloadCSV: function(allRows=false) {
     var self = this
 
     var columns = this.getColumns()
@@ -119,7 +119,9 @@ module.exports = React.createClass({
       .map(JSON.stringify.bind(JSON))
       .join(',') + '\n'
 
-    this.renderedRows.forEach(function(row) {
+    var rows = allRows ? this.allResults : this.renderedRows;
+
+    rows.forEach(function(row) {
       var vals = columns.map(function(col) {
 
         if (col.type === 'dimension') {
@@ -200,9 +202,11 @@ module.exports = React.createClass({
         {this.renderColumnControl()}
 
         <div className="reactPivot-csvExport">
-          <button onClick={this.downloadCSV}>Export CSV</button>
+          <button onClick={this.downloadCSV}>Export this page</button>
         </div>
-
+        <div className="reactPivot-csvExport">
+          <button onClick={this.downloadCSV.bind(this, true)}>Export All</button>
+        </div>
         {
           this.state.solo ? (
             <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
@@ -293,6 +297,8 @@ module.exports = React.createClass({
     }
 
     var results = this.dataFrame.calculate(calcOpts)
+
+    this.allResults = results;
 
     var paginatedResults = this.paginate(results)
 
