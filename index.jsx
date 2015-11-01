@@ -120,7 +120,7 @@ module.exports = React.createClass({
     this.setState({hiddenColumns: hidden})
   },
 
-  downloadCSV: function(allRows=false) {
+  downloadCSV: function(allRows) {
     var self = this
 
     var columns = this.getColumns()
