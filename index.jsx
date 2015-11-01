@@ -66,6 +66,16 @@ module.exports = React.createClass({
     this.setState({dimensions: updatedDimensions})
   },
 
+  clearDimensions: function () {
+    var dimensions = this.state.dimensions
+
+    if (dimensions && dimensions.length > 1) {
+      var updatedDimensions = [dimensions[0]]
+      this.props.eventBus.emit('activeDimensions', updatedDimensions)
+      this.setState({dimensions: updatedDimensions})
+    }
+  },
+
   setSort: function(cTitle) {
     var sortBy = this.state.sortBy
     var sortDir = this.state.sortDir
@@ -249,6 +259,7 @@ module.exports = React.createClass({
             return <option>{dimension.title}</option>
           })}
         </select>
+        <button onClick={this.clearDimensions} className="reactPivot-dimensionClear-btn">Clear</button>
       </div>
     )
   },
