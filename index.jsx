@@ -30,8 +30,15 @@ module.exports = React.createClass({
   },
 
   getInitialState: function() {
+    var allDimensions = this.props.dimensions
+    var activeDimensions =  _.filter(this.props.activeDimensions, function (title) {
+      return _.find(allDimensions, function(col) {
+        return col.title === title
+      })
+    })
+
     return {
-      dimensions: this.props.activeDimensions,
+      dimensions: activeDimensions,
       calculations: {},
       sortBy: this.props.sortBy,
       sortDir: this.props.sortDir,
