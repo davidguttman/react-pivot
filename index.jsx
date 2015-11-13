@@ -25,7 +25,8 @@ module.exports = React.createClass({
       sortBy: null,
       sortDir: 'asc',
       eventBus: new Emitter,
-      compact: false
+      compact: false,
+      excludeSummaryFromExport: false
     }
   },
 
@@ -126,7 +127,12 @@ module.exports = React.createClass({
       .map(JSON.stringify.bind(JSON))
       .join(',') + '\n'
 
+    var maxLevel = this.state.dimensions.length - 1
+    var excludeSummary = this.props.excludeSummaryFromExport
+
     this.renderedRows.forEach(function(row) {
+      if (excludeSummary && (row._level < maxLevel)) return
+
       var vals = columns.map(function(col) {
 
         if (col.type === 'dimension') {
