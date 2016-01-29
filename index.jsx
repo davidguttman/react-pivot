@@ -244,10 +244,10 @@ module.exports = React.createClass({
       <div className="reactPivot-dimensions">
         {selectedDimensions.map(function(selectedDimension, i) {
           return (
-            <select value={selectedDimension} onChange={partial(self.toggleDimension, i)}>
+            <select value={selectedDimension} onChange={partial(self.toggleDimension, i)} key={selectedDimension}>
               <option></option>
               {self.props.dimensions.map(function(dimension) {
-                return <option value={dimension.title}>{dimension.title}</option>
+                return <option value={dimension.title} key={dimension.title}>{dimension.title}</option>
               })}
             </select>
           )
@@ -255,7 +255,7 @@ module.exports = React.createClass({
         <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
           <option value={''}>Sub Dimension...</option>
           {self.props.dimensions.map(function(dimension) {
-            return <option>{dimension.title}</option>
+            return <option key={dimension.title}>{dimension.title}</option>
           })}
         </select>
       </div>
@@ -271,7 +271,7 @@ module.exports = React.createClass({
         <select value={''} onChange={self.showColumn}>
           <option value={''}>Hidden Columns</option>
           {self.state.hiddenColumns.map(function(column) {
-            return <option>{column}</option>
+            return <option key={column}>{column}</option>
           })}
         </select>
       </div>
@@ -347,7 +347,8 @@ module.exports = React.createClass({
             return (
               <th className={className}
                   onClick={partial(self.setSort, col.title)}
-                  style={{cursor: 'pointer'}} >
+                  style={{cursor: 'pointer'}}
+                  key={col.title}>
 
                 {hide}
                 {col.title}
@@ -370,7 +371,7 @@ module.exports = React.createClass({
           return (
             <tr key={row._key} className={"reactPivot-level-" + row._level}>
               {columns.map(function(col, i) {
-                if (i < row._level) return <td className='reactPivot-indent' />
+                if (i < row._level) return <td key={i} className='reactPivot-indent' />
 
                 return self.renderCell(col, row)
               })}
@@ -428,7 +429,7 @@ module.exports = React.createClass({
           var c = 'reactPivot-pageNumber'
           if (n === paginatePage) c += ' is-selected'
           return (
-            <span className={c}>
+            <span className={c} key={n}>
               <a onClick={partial(self.setPaginatePage, n)}>{n+1}</a>
             </span>
           )
