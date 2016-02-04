@@ -5,6 +5,8 @@ var Emitter = require('wildemitter')
 
 var partial = require('./lib/partial')
 var download = require('./lib/download')
+var Dimensions = require('./lib/dimensions.jsx')
+var ColumnControl = require('./lib/column-control.jsx')
 
 module.exports = React.createClass({
   cache: {},
@@ -58,95 +60,6 @@ module.exports = React.createClass({
       dimensions: this.props.dimensions,
       reduce: this.props.reduce
     })
-  },
-
-  toggleDimension: function (iDimension, evt) {
-    var dimension = evt.target.value
-    var dimensions = this.state.dimensions
-
-    var curIdx = dimensions.indexOf(dimension)
-    if (curIdx >= 0) dimensions[curIdx] = null
-    dimensions[iDimension] = dimension
-
-    var updatedDimensions = _.compact(dimensions)
-
-    this.props.eventBus.emit('activeDimensions', updatedDimensions)
-    this.setState({dimensions: updatedDimensions})
-  },
-
-  setSort: function(cTitle) {
-    var sortBy = this.state.sortBy
-    var sortDir = this.state.sortDir
-    if (sortBy === cTitle) {
-      sortDir = (sortDir === 'asc') ? 'desc' : 'asc'
-    } else {
-      sortBy = cTitle
-      sortDir = 'asc'
-    }
-
-    this.props.eventBus.emit('sortBy', sortBy)
-    this.props.eventBus.emit('sortDir', sortDir)
-    this.setState({sortBy: sortBy, sortDir: sortDir})
-  },
-
-  setPaginatePage: function(nPage) {
-    this.props.eventBus.emit('paginatePage', nPage)
-    this.setState({paginatePage: nPage})
-  },
-
-  setSolo: function(solo) {
-    this.props.eventBus.emit('solo', solo)
-    this.setState({solo: solo })
-  },
-
-  clearSolo: function() {
-    this.props.eventBus.emit('solo', null)
-    this.setState({solo: null})
-  },
-
-  hideColumn: function(cTitle) {
-    var hidden = this.state.hiddenColumns
-    hidden.push(cTitle)
-    this.props.eventBus.emit('hiddenColumns', hidden)
-    this.setState({hiddenColumns: hidden})
-  },
-
-  showColumn: function(evt) {
-    var col = evt.target.value
-    var hidden = _.without(this.state.hiddenColumns, col)
-    this.props.eventBus.emit('hiddenColumns', hidden)
-    this.setState({hiddenColumns: hidden})
-  },
-
-  downloadCSV: function() {
-    var self = this
-
-    var columns = this.getColumns()
-
-    var csv = _.pluck(columns, 'title')
-      .map(JSON.stringify.bind(JSON))
-      .join(',') + '\n'
-
-    var maxLevel = this.state.dimensions.length - 1
-    var excludeSummary = this.props.excludeSummaryFromExport
-
-    this.renderedRows.forEach(function(row) {
-      if (excludeSummary && (row._level < maxLevel)) return
-
-      var vals = columns.map(function(col) {
-
-        if (col.type === 'dimension') {
-          var val = row[col.title]
-        } else {
-          var val = getValue(col, row)
-        }
-
-        return JSON.stringify(val)
-      })
-      csv += vals.join(',') + '\n'
-    })
-
-    download(csv, this.props.csvDownloadFileName, 'text/csv')
   },
 
   getColumns: function() {
@@ -209,8 +122,14 @@ module.exports = React.createClass({
   render: function() {
     var html = (
       <div className='reactPivot'>
-        {this.renderDimensions()}
-        {this.renderColumnControl()}
+        <Dimensions
+          dimensions={this.props.dimensions}
+          selectedDimensions={this.state.dimensions}
+          onChange={this.setDimensions} />
+
+        <ColumnControl
+          hiddenColumns={this.state.hiddenColumns}
+          onChange={this.setHiddenColumns} />
 
         <div className="reactPivot-csvExport">
           <button onClick={this.downloadCSV}>Export CSV</button>
@@ -233,50 +152,6 @@ module.exports = React.createClass({
     )
 
     return html
-  },
-
-  renderDimensions: function() {
-    var self = this
-    var selectedDimensions = this.state.dimensions
-    var nSelected = selectedDimensions.length
-
-    return (
-      <div className="reactPivot-dimensions">
-        {selectedDimensions.map(function(selectedDimension, i) {
-          return (
-            <select value={selectedDimension} onChange={partial(self.toggleDimension, i)} key={selectedDimension}>
-              <option></option>
-              {self.props.dimensions.map(function(dimension) {
-                return <option value={dimension.title} key={dimension.title}>{dimension.title}</option>
-              })}
-            </select>
-          )
-        })}
-        <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
-          <option value={''}>Sub Dimension...</option>
-          {self.props.dimensions.map(function(dimension) {
-            return <option key={dimension.title}>{dimension.title}</option>
-          })}
-        </select>
-      </div>
-    )
-  },
-
-  renderColumnControl: function() {
-    var self = this
-    if (!this.state.hiddenColumns.length > 0) return
-
-    return (
-      <div className='reactPivot-columnControl'>
-        <select value={''} onChange={self.showColumn}>
-          <option value={''}>Hidden Columns</option>
-          {self.state.hiddenColumns.map(function(column) {
-            return <option key={column}>{column}</option>
-          })}
-        </select>
-      </div>
-    )
-
   },
 
   renderTable: function() {
@@ -436,8 +311,84 @@ module.exports = React.createClass({
         })}
       </div>
     )
-  }
+  },
 
+  setDimensions: function (updatedDimensions) {
+    this.props.eventBus.emit('activeDimensions', updatedDimensions)
+    this.setState({dimensions: updatedDimensions})
+  },
+
+  setHiddenColumns: function (hidden) {
+    this.props.eventBus.emit('hiddenColumns', hidden)
+    this.setState({hiddenColumns: hidden})
+  },
+
+  setSort: function(cTitle) {
+    var sortBy = this.state.sortBy
+    var sortDir = this.state.sortDir
+    if (sortBy === cTitle) {
+      sortDir = (sortDir === 'asc') ? 'desc' : 'asc'
+    } else {
+      sortBy = cTitle
+      sortDir = 'asc'
+    }
+
+    this.props.eventBus.emit('sortBy', sortBy)
+    this.props.eventBus.emit('sortDir', sortDir)
+    this.setState({sortBy: sortBy, sortDir: sortDir})
+  },
+
+  setPaginatePage: function(nPage) {
+    this.props.eventBus.emit('paginatePage', nPage)
+    this.setState({paginatePage: nPage})
+  },
+
+  setSolo: function(solo) {
+    this.props.eventBus.emit('solo', solo)
+    this.setState({solo: solo })
+  },
+
+  clearSolo: function() {
+    this.props.eventBus.emit('solo', null)
+    this.setState({solo: null})
+  },
+
+  hideColumn: function(cTitle) {
+    var hidden = this.state.hiddenColumns
+    hidden.push(cTitle)
+    this.setHiddenColumns(hidden)
+  },
+
+  downloadCSV: function() {
+    var self = this
+
+    var columns = this.getColumns()
+
+    var csv = _.pluck(columns, 'title')
+      .map(JSON.stringify.bind(JSON))
+      .join(',') + '\n'
+
+    var maxLevel = this.state.dimensions.length - 1
+    var excludeSummary = this.props.excludeSummaryFromExport
+
+    this.renderedRows.forEach(function(row) {
+      if (excludeSummary && (row._level < maxLevel)) return
+
+      var vals = columns.map(function(col) {
+
+        if (col.type === 'dimension') {
+          var val = row[col.title]
+        } else {
+          var val = getValue(col, row)
+        }
+
+        return JSON.stringify(val)
+      })
+      csv += vals.join(',') + '\n'
+    })
+
+    download(csv, this.props.csvDownloadFileName, 'text/csv')
+  }
 })
 
 function getValue (dimension, row) {
