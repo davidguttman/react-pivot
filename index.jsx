@@ -11,7 +11,6 @@ var Dimensions = require('./lib/dimensions.jsx')
 var ColumnControl = require('./lib/column-control.jsx')
 
 module.exports = React.createClass({
-  cache: {},
   displayName: 'ReactPivot',
   getDefaultProps: function() {
     return {
@@ -47,7 +46,8 @@ module.exports = React.createClass({
       sortBy: this.props.sortBy,
       sortDir: this.props.sortDir,
       hiddenColumns: this.props.hiddenColumns,
-      solo: this.props.solo
+      solo: this.props.solo,
+      rows: []
     }
   },
 
@@ -59,6 +59,8 @@ module.exports = React.createClass({
       dimensions: this.props.dimensions,
       reduce: this.props.reduce
     })
+
+    this.updateRows()
   },
 
   getColumns: function() {
@@ -89,6 +91,49 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var html = (
+      <div className='reactPivot'>
+        <Dimensions
+          dimensions={this.props.dimensions}
+          selectedDimensions={this.state.dimensions}
+          onChange={this.setDimensions} />
+
+        <ColumnControl
+          hiddenColumns={this.state.hiddenColumns}
+          onChange={this.setHiddenColumns} />
+
+        <div className="reactPivot-csvExport">
+          <button onClick={partial(this.downloadCSV, this.state.rows)}>
+            Export CSV
+          </button>
+        </div>
+
+        { !this.state.solo ? '' :
+          <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
+            <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
+              &times;
+            </span>
+            {this.state.solo.title}: {this.state.solo.value}
+          </div>
+        }
+
+        <PivotTable
+          columns={this.getColumns()}
+          rows={this.state.rows}
+          sortBy={this.state.sortBy}
+          sortDir={this.state.sortDir}
+          onSort={this.setSort}
+          onColumnHide={this.hideColumn}
+          nPaginateRows={this.props.nPaginateRows}
+          onSolo={this.setSolo} />
+
+      </div>
+    )
+
+    return html
+  },
+
+  updateRows: function () {
     var columns = this.getColumns()
 
     var sortByTitle = this.state.sortBy
@@ -113,55 +158,19 @@ module.exports = React.createClass({
     }
 
     var rows = this.dataFrame.calculate(calcOpts)
-
-    var html = (
-      <div className='reactPivot'>
-        <Dimensions
-          dimensions={this.props.dimensions}
-          selectedDimensions={this.state.dimensions}
-          onChange={this.setDimensions} />
-
-        <ColumnControl
-          hiddenColumns={this.state.hiddenColumns}
-          onChange={this.setHiddenColumns} />
-
-        <div className="reactPivot-csvExport">
-          <button onClick={partial(this.downloadCSV, rows)}>Export CSV</button>
-        </div>
-
-        { !this.state.solo ? '' :
-          <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
-            <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
-              &times;
-            </span>
-            {this.state.solo.title}: {this.state.solo.value}
-          </div>
-        }
-
-        <PivotTable
-          columns={this.getColumns()}
-          rows={rows}
-          sortBy={this.state.sortBy}
-          sortDir={this.state.sortDir}
-          onSort={this.setSort}
-          onColumnHide={this.hideColumn}
-          nPaginateRows={this.props.nPaginateRows}
-          onSolo={this.setSolo} />
-
-      </div>
-    )
-
-    return html
+    this.setState({rows: rows})
   },
 
   setDimensions: function (updatedDimensions) {
     this.props.eventBus.emit('activeDimensions', updatedDimensions)
     this.setState({dimensions: updatedDimensions})
+    setTimeout(this.updateRows.bind(this), 0)
   },
 
   setHiddenColumns: function (hidden) {
     this.props.eventBus.emit('hiddenColumns', hidden)
     this.setState({hiddenColumns: hidden})
+    setTimeout(this.updateRows.bind(this), 0)
   },
 
   setSort: function(cTitle) {
@@ -177,22 +186,26 @@ module.exports = React.createClass({
     this.props.eventBus.emit('sortBy', sortBy)
     this.props.eventBus.emit('sortDir', sortDir)
     this.setState({sortBy: sortBy, sortDir: sortDir})
+    setTimeout(this.updateRows.bind(this), 0)
   },
 
   setSolo: function(solo) {
     this.props.eventBus.emit('solo', solo)
     this.setState({solo: solo })
+    setTimeout(this.updateRows.bind(this), 0)
   },
 
   clearSolo: function() {
     this.props.eventBus.emit('solo', null)
     this.setState({solo: null})
+    setTimeout(this.updateRows.bind(this), 0)
   },
 
   hideColumn: function(cTitle) {
     var hidden = this.state.hiddenColumns
     hidden.push(cTitle)
     this.setHiddenColumns(hidden)
+    setTimeout(this.updateRows.bind(this), 0)
   },
 
   downloadCSV: function(rows) {
