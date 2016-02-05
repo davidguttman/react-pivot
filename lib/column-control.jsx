@@ -9,7 +9,7 @@ module.exports = React.createClass({
     }
   },
 
-  render: function () {
+  render () {
     return (
       <div className='reactPivot-columnControl'>
         { !this.props.hiddenColumns.length ? '' :
@@ -24,7 +24,7 @@ module.exports = React.createClass({
     )
   },
 
-  showColumn: function(evt) {
+  showColumn (evt) {
     var col = evt.target.value
     var hidden = _.without(this.props.hiddenColumns, col)
     this.props.onChange(hidden)

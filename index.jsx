@@ -135,15 +135,13 @@ module.exports = React.createClass({
           <button onClick={this.downloadCSV}>Export CSV</button>
         </div>
 
-        {
-          this.state.solo ? (
-            <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
-              <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
-                &times;
-              </span>
-              {this.state.solo.title}: {this.state.solo.value}
-            </div>
-          ) : ''
+        { !this.state.solo ? '' :
+          <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
+            <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
+              &times;
+            </span>
+            {this.state.solo.title}: {this.state.solo.value}
+          </div>
         }
 
         {this.renderTable()}
