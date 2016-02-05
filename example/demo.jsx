@@ -1,6 +1,7 @@
 require('./demo.css')
 
 var React = require('react')
+var ReactDOM = require('react-dom')
 var ReactPivot = require('..')
 
 var gh = require('./gh.jsx')
@@ -87,7 +88,9 @@ var Demo = React.createClass({
         </div>
 
         <div className={this.state.showInput ? '' : 'hide'}>
-          <textarea>{JSON.stringify(data, null, 2)}</textarea>
+          <textarea
+            value={JSON.stringify(data, null, 2)}
+            readOnly={true} />
         </div>
 
         <p>
@@ -104,7 +107,10 @@ var Demo = React.createClass({
   }
 })
 
-React.render(
+var el = document.createElement('div')
+document.body.appendChild(el)
+
+ReactDOM.render(
   <Demo />,
-  document.body
+  el
 )
