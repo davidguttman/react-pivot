@@ -28,7 +28,8 @@ module.exports = React.createClass({
       sortDir: 'asc',
       eventBus: new Emitter,
       compact: false,
-      excludeSummaryFromExport: false
+      excludeSummaryFromExport: false,
+      onData: function () {}
     }
   },
 
@@ -159,6 +160,7 @@ module.exports = React.createClass({
 
     var rows = this.dataFrame.calculate(calcOpts)
     this.setState({rows: rows})
+    this.props.onData(rows)
   },
 
   setDimensions: function (updatedDimensions) {
