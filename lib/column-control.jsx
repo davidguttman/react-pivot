@@ -2,14 +2,14 @@ var _ = require('lodash')
 var React = require('react')
 
 module.exports = React.createClass({
-  getDefaultProps() {
+  getDefaultProps: function () {
     return {
       hiddenColumns: [],
       onChange: function () {}
     }
   },
 
-  render () {
+  render: function () {
     return (
       <div className='reactPivot-columnControl'>
         { !this.props.hiddenColumns.length ? '' :
@@ -24,7 +24,7 @@ module.exports = React.createClass({
     )
   },
 
-  showColumn (evt) {
+  showColumn: function (evt) {
     var col = evt.target.value
     var hidden = _.without(this.props.hiddenColumns, col)
     this.props.onChange(hidden)

@@ -5,7 +5,7 @@ var getValue = require('./get-value')
 
 module.exports = React.createClass({
 
-  getDefaultProps() {
+  getDefaultProps: function () {
     return {
       columns: [],
       rows: [],
@@ -17,7 +17,7 @@ module.exports = React.createClass({
     }
   },
 
-  getInitialState() {
+  getInitialState: function () {
     return {
       paginatePage: 0
     }

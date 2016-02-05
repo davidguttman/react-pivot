@@ -3,7 +3,7 @@ var React = require('react')
 var partial = require('./partial')
 
 module.exports = React.createClass({
-  getDefaultProps() {
+  getDefaultProps: function () {
     return {
       dimensions: [],
       selectedDimensions: [],
