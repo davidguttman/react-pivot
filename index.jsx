@@ -212,10 +212,10 @@ module.exports = React.createClass({
         {this.renderColumnControl()}
 
         <div className="reactPivot-csvExport">
-          <button onClick={this.downloadCSV}>Export this page</button>
+          <button onClick={this.downloadCSV}>Export This Page</button>
         </div>
         <div className="reactPivot-csvExport">
-          <button onClick={this.downloadCSV.bind(this, true)}>Export All</button>
+          <button onClick={this.downloadCSV.bind(this, true)}>Export These Results</button>
         </div>
         {
           this.state.solo ? (
