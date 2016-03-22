@@ -18,7 +18,7 @@ module.exports = React.createClass({
 
     return (
       <div className="reactPivot-dimensions">
-        {selectedDimensions.map(this.renderDimension.bind(this))}
+        {selectedDimensions.map(this.renderDimension)}
 
         <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
           <option value={''}>Sub Dimension...</option>

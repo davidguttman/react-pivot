@@ -166,13 +166,13 @@ module.exports = React.createClass({
   setDimensions: function (updatedDimensions) {
     this.props.eventBus.emit('activeDimensions', updatedDimensions)
     this.setState({dimensions: updatedDimensions})
-    setTimeout(this.updateRows.bind(this), 0)
+    setTimeout(this.updateRows, 0)
   },
 
   setHiddenColumns: function (hidden) {
     this.props.eventBus.emit('hiddenColumns', hidden)
     this.setState({hiddenColumns: hidden})
-    setTimeout(this.updateRows.bind(this), 0)
+    setTimeout(this.updateRows, 0)
   },
 
   setSort: function(cTitle) {
@@ -188,26 +188,26 @@ module.exports = React.createClass({
     this.props.eventBus.emit('sortBy', sortBy)
     this.props.eventBus.emit('sortDir', sortDir)
     this.setState({sortBy: sortBy, sortDir: sortDir})
-    setTimeout(this.updateRows.bind(this), 0)
+    setTimeout(this.updateRows, 0)
   },
 
   setSolo: function(solo) {
     this.props.eventBus.emit('solo', solo)
     this.setState({solo: solo })
-    setTimeout(this.updateRows.bind(this), 0)
+    setTimeout(this.updateRows, 0)
   },
 
   clearSolo: function() {
     this.props.eventBus.emit('solo', null)
     this.setState({solo: null})
-    setTimeout(this.updateRows.bind(this), 0)
+    setTimeout(this.updateRows, 0)
   },
 
   hideColumn: function(cTitle) {
     var hidden = this.state.hiddenColumns
     hidden.push(cTitle)
     this.setHiddenColumns(hidden)
-    setTimeout(this.updateRows.bind(this), 0)
+    setTimeout(this.updateRows, 0)
   },
 
   downloadCSV: function(rows) {
