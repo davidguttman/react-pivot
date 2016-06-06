@@ -1,4 +1,8 @@
-var _ = require('lodash')
+var _ = {
+  filter: require('lodash/filter'),
+  map: require('lodash/map'),
+  find: require('lodash/find')
+}
 var React = require('react')
 var DataFrame = require('dataframe')
 var Emitter = require('wildemitter')
@@ -215,7 +219,7 @@ module.exports = React.createClass({
 
     var columns = this.getColumns()
 
-    var csv = _.pluck(columns, 'title')
+    var csv = _.map(columns, 'title')
       .map(JSON.stringify.bind(JSON))
       .join(',') + '\n'
 

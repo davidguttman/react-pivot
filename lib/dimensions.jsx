@@ -1,4 +1,4 @@
-var _ = require('lodash')
+var _ = { compact: require('lodash/compact') }
 var React = require('react')
 var partial = require('./partial')
 
