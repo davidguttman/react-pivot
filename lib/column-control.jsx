@@ -1,4 +1,4 @@
-var _ = require('lodash')
+var _ = { without: require('lodash/without') }
 var React = require('react')
 
 module.exports = React.createClass({
