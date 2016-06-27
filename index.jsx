@@ -98,10 +98,13 @@ module.exports = React.createClass({
   render: function() {
     var html = (
       <div className='reactPivot'>
+
+      { this.props.hideDimensionFilter ? '' :
         <Dimensions
           dimensions={this.props.dimensions}
           selectedDimensions={this.state.dimensions}
           onChange={this.setDimensions} />
+      }
 
         <ColumnControl
           hiddenColumns={this.state.hiddenColumns}
