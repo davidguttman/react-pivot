@@ -224,8 +224,7 @@ module.exports = React.createClass({
   },
 
   hideColumn: function(cTitle) {
-    var hidden = this.state.hiddenColumns
-    hidden.push(cTitle)
+    var hidden = this.state.hiddenColumns.concat([cTitle])
     this.setHiddenColumns(hidden)
     setTimeout(this.updateRows, 0)
   },
