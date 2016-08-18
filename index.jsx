@@ -241,7 +241,7 @@ module.exports = React.createClass({
           var val = getValue(col, row)
         }
 
-        if (col.template && this.props.csvTemplateFormat) {
+        if (col.template && self.props.csvTemplateFormat) {
           val = col.template(val)
         }
 
