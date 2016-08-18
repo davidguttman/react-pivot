@@ -24,6 +24,7 @@ module.exports = React.createClass({
       reduce: function() {},
       tableClassName: '',
       csvDownloadFileName: 'table.csv',
+      csvTemplateFormat: false,
       defaultStyles: true,
       nPaginateRows: 25,
       solo: null,
@@ -238,6 +239,10 @@ module.exports = React.createClass({
           var val = row[col.title]
         } else {
           var val = getValue(col, row)
+        }
+
+        if (col.template && this.props.csvTemplateFormat) {
+          val = col.template(val)
         }
 
         return JSON.stringify(val)
