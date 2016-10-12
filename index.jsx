@@ -68,15 +68,18 @@ module.exports = React.createClass({
 
     this.updateRows()
   },
-  
+
   componentWillReceiveProps: function(newProps) {
+    newProps.hiddenColumns !== this.props.hiddenColumns &&
+      this.setHiddenColumns(newProps.hiddenColumns);
+
     if(newProps.rows !== this.props.rows) {
       this.dataFrame = DataFrame({
         rows: newProps.rows,
         dimensions: this.props.dimensions,
         reduce: this.props.reduce
       })
-      
+
       this.updateRows()
     }
   },
