@@ -1,4 +1,5 @@
 var React = require('react')
+var ReactDOM = require('react-dom')
 var ReactPivot = require('..')
 
 var rows = require('./data.json')
@@ -48,7 +49,7 @@ var calculations = [
   }
 ]
 
-React.render(
+ReactDOM.render(
   <ReactPivot rows={rows}
     dimensions={dimensions}
     reduce={reduce}
