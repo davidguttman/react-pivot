@@ -144,6 +144,7 @@ solo | object | item that should be displayed solo | null
 sortBy | string | name of column to use for record sort | null
 sortDir | string | sort direction, either 'asc' or 'desc' | 'asc'
 tableClassName | string | assign css class to table containing react-pivot elements | ''
+hideDimensionFilter | boolean | do not render the dimension filter | false
 
 ### TODO ###
 
