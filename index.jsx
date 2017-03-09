@@ -27,7 +27,7 @@ module.exports = React.createClass({
       csvTemplateFormat: false,
       defaultStyles: true,
       nPaginateRows: 25,
-      solo: null,
+      solo: {},
       hiddenColumns: [],
       sortBy: null,
       sortDir: 'asc',
@@ -113,6 +113,8 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var self = this
+
     var html = (
       <div className='reactPivot'>
 
@@ -133,14 +135,23 @@ module.exports = React.createClass({
           </button>
         </div>
 
-        { !this.state.solo ? '' :
-          <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
-            <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
-              &times;
-            </span>
-            {this.state.solo.title}: {this.state.solo.value}
-          </div>
-        }
+        { Object.keys(this.state.solo).map(function (title) {
+          var value = self.state.solo[title]
+
+          return (
+            <div
+              style={{clear: 'both'}}
+              className='reactPivot-soloDisplay'
+              key={'solo-' + title} >
+              <span
+                className='reactPivot-clearSolo'
+                onClick={partial(self.clearSolo, title)} >
+                &times;
+              </span>
+              {title}: {value}
+            </div>
+          )
+        }) }
 
         <PivotTable
           columns={this.getColumns()}
@@ -178,7 +189,11 @@ module.exports = React.createClass({
     var filter = this.state.solo
     if (filter) {
       calcOpts.filter = function(dVals) {
-        return dVals[filter.title] === filter.value
+        var pass = true
+        Object.keys(filter).forEach(function (title) {
+          if (dVals[title] !== filter[title]) pass = false
+        })
+        return pass
       }
     }
 
@@ -216,14 +231,21 @@ module.exports = React.createClass({
   },
 
   setSolo: function(solo) {
-    this.props.eventBus.emit('solo', solo)
-    this.setState({solo: solo })
+    var newSolo = this.state.solo
+    newSolo[solo.title] = solo.value
+    this.props.eventBus.emit('solo', newSolo)
+    this.setState({solo: newSolo })
     setTimeout(this.updateRows, 0)
   },
 
-  clearSolo: function() {
-    this.props.eventBus.emit('solo', null)
-    this.setState({solo: null})
+  clearSolo: function(title) {
+    var oldSolo = this.state.solo
+    var newSolo = {}
+    Object.keys(oldSolo).forEach(function (k) {
+      if (k !== title) newSolo[k] = oldSolo[k]
+    })
+    this.props.eventBus.emit('solo', newSolo)
+    this.setState({solo: newSolo})
     setTimeout(this.updateRows, 0)
   },
 
