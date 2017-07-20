@@ -4,6 +4,7 @@ var _ = {
   find: require('lodash/find')
 }
 var React = require('react')
+var createReactClass = require('create-react-class')
 var DataFrame = require('dataframe')
 var Emitter = require('wildemitter')
 
@@ -14,7 +15,7 @@ var PivotTable = require('./lib/pivot-table.jsx')
 var Dimensions = require('./lib/dimensions.jsx')
 var ColumnControl = require('./lib/column-control.jsx')
 
-module.exports = React.createClass({
+module.exports = createReactClass({
   displayName: 'ReactPivot',
   getDefaultProps: function() {
     return {

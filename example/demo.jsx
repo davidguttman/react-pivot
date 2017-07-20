@@ -2,6 +2,7 @@ require('./demo.css')
 
 var React = require('react')
 var ReactDOM = require('react-dom')
+var createReactClass = require('create-react-class')
 var ReactPivot = require('..')
 
 var gh = require('./gh.jsx')
@@ -51,7 +52,7 @@ var calculations = [
   }
 ]
 
-var Demo = React.createClass({
+var Demo = createReactClass({
   getInitialState: function() {
     return {showInput: false}
   },
