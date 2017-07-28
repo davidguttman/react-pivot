@@ -1,9 +1,10 @@
 var _ = { range: require('lodash/range') }
 var React = require('react')
+var createReactClass = require('create-react-class')
 var partial = require('./partial')
 var getValue = require('./get-value')
 
-module.exports = React.createClass({
+module.exports = createReactClass({
 
   getDefaultProps: function () {
     return {
