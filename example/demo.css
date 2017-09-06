@@ -38,3 +38,29 @@ td { font-weight: 200 }
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   font-family: 'anonymous pro', 'courier', 'monospace'
 }
+
+ul.pagination li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 5px 10px;
+  border-right: 1px solid #00aac2;
+  border-top: 1px solid #00aac2;
+  border-bottom: 1px solid #00aac2;
+}
+ul.pagination li:first-child {
+  border-left: 1px solid #00aac2;
+}
+ul.pagination li a {
+  color: #00aac2;
+}
+ul.pagination li.active {
+  background: #00aac2;
+}
+ul.pagination li.active a {
+  font-weight: 600;
+  color: #FFFFFF;
+}
+ul.pagination li.active:focus, ul.pagination li.active a:focus,
+ul.pagination li:focus, ul.pagination li a:focus {
+  outline: none;
+}
