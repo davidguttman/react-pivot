@@ -38,3 +38,33 @@ td { font-weight: 200 }
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   font-family: 'anonymous pro', 'courier', 'monospace'
 }
+
+.pagination a {
+  list-style-type: none;
+  display: inline-block;
+  padding: 5px 10px;
+  border-right: 1px solid #00aac2;
+  border-top: 1px solid #00aac2;
+  border-bottom: 1px solid #00aac2;
+}
+.pagination a:first-child {
+  border-left: 1px solid #00aac2;
+}
+.pagination a {
+  color: #00aac2;
+}
+.pagination .active {
+  background: #00aac2;
+}
+.pagination a.active {
+  font-weight: 600;
+  color: #FFFFFF;
+}
+.pagination .active:focus, .pagination .active a:focus,
+.pagination a:focus, .pagination a:focus {
+  outline: none;
+}
+a.disabled {
+  color: #929292 !important;
+  cursor: not-allowed;
+}
