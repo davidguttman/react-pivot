@@ -3,7 +3,8 @@ var React = require('react')
 var createReactClass = require('create-react-class')
 var partial = require('./partial')
 var getValue = require('./get-value')
-var Pagination = require('react-paginate')
+var Pagination = require('./Pagination.jsx')
+var paginate = require('react-paginate')
 
 module.exports = createReactClass({
 
@@ -145,16 +146,8 @@ module.exports = createReactClass({
     return (
       <div className='reactPivot-paginate'>
         <Pagination
-          pageCount={nPaginatePages}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={1}
-          onPageChange={(number)=>{partial(self.setPaginatePage(number))}}
-          pageClassName={'pagination'}
-          pageLinkClassName	={'pagination-link'}
-          activeClassName={'active'}
-          previousLinkClassName={'previous-link'}
-          nextLinkClassName={'next-link'}
-          containerClassName={'pagination'}
+          totalPages={nPaginatePages}
+          onPageChange={(number)=>partial(self.setPaginatePage(number))}
         />
       </div>
     )

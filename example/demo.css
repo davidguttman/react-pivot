@@ -39,7 +39,7 @@ td { font-weight: 200 }
   font-family: 'anonymous pro', 'courier', 'monospace'
 }
 
-ul.pagination li {
+.pagination a {
   list-style-type: none;
   display: inline-block;
   padding: 5px 10px;
@@ -47,20 +47,24 @@ ul.pagination li {
   border-top: 1px solid #00aac2;
   border-bottom: 1px solid #00aac2;
 }
-ul.pagination li:first-child {
+.pagination a:first-child {
   border-left: 1px solid #00aac2;
 }
-ul.pagination li a {
+.pagination a {
   color: #00aac2;
 }
-ul.pagination li.active {
+.pagination .active {
   background: #00aac2;
 }
-ul.pagination li.active a {
+.pagination a.active {
   font-weight: 600;
   color: #FFFFFF;
 }
-ul.pagination li.active:focus, ul.pagination li.active a:focus,
-ul.pagination li:focus, ul.pagination li a:focus {
+.pagination .active:focus, .pagination .active a:focus,
+.pagination a:focus, .pagination a:focus {
   outline: none;
+}
+a.disabled {
+  color: #929292 !important;
+  cursor: not-allowed;
 }
