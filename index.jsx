@@ -1,7 +1,8 @@
 var _ = {
   filter: require('lodash/filter'),
   map: require('lodash/map'),
-  find: require('lodash/find')
+  find: require('lodash/find'),
+  isDate: require('lodash/isDate')
 }
 var React = require('react')
 var createReactClass = require('create-react-class')
@@ -192,7 +193,15 @@ module.exports = createReactClass({
       calcOpts.filter = function(dVals) {
         var pass = true
         Object.keys(filter).forEach(function (title) {
-          if (dVals[title] !== filter[title]) pass = false
+
+          if (dVals[title] !== filter[title]) {
+           if(_.isDate(dVals[title])){
+             if (dVals[title].toDateString() !== filter[title]) pass = false
+           }
+           else{
+             pass=false
+           }
+          }
         })
         return pass
       }
