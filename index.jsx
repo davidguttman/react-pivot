@@ -97,7 +97,7 @@ module.exports = createReactClass({
 
       columns.push({
         type: 'dimension', title: d.title, value: d.value,
-        className: d.className, template: d.template
+        className: d.className, template: d.template, sortBy: d.sortBy
       })
     })
 
@@ -106,7 +106,7 @@ module.exports = createReactClass({
 
       columns.push({
         type:'calculation', title: c.title, template: c.template,
-        value: c.value, className: c.className
+        value: c.value, className: c.className, sortBy: c.sortBy
       })
     })
 
@@ -177,7 +177,7 @@ module.exports = createReactClass({
     var sortCol = _.find(columns, function(col) {
       return col.title === sortByTitle
     }) || {}
-    var sortBy = sortCol.type === 'dimension' ? sortCol.title : sortCol.value
+    var sortBy = sortCol.sortBy || (sortCol.type === 'dimension' ? sortCol.title : sortCol.value);
     var sortDir = this.state.sortDir
 
     var calcOpts = {

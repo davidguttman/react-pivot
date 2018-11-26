@@ -30,7 +30,8 @@ var calculations = [
   {
     title: 'Count',
     value: 'count',
-    className: 'alignRight'
+    className: 'alignRight',
+    sortBy: function(row) { return row.count }
   },
   {
     title: 'Amount',

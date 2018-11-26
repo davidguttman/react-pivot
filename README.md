@@ -109,6 +109,9 @@ var calculations = [
     title: 'Amount', value: 'amountTotal',
     template: function(val, row) {
       return '$' + val.toFixed(2)
+    },
+    sortBy: function(row) {
+      return isNaN(row.amountTotal) ? 0 : row.amountTotal
     }
   }
 ]
