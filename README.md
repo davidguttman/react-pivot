@@ -110,7 +110,7 @@ var calculations = [
     template: function(val, row) {
       return '$' + val.toFixed(2)
     },
-    onSort: function(row) {
+    sortBy: function(row) {
       return isNaN(row.amountTotal) ? 0 : row.amountTotal
     }
   }

@@ -31,7 +31,7 @@ var calculations = [
     title: 'Count',
     value: 'count',
     className: 'alignRight',
-    onSort: function(row) { return row.count }
+    sortBy: function(row) { return row.count }
   },
   {
     title: 'Amount',
