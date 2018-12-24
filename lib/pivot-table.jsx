@@ -176,7 +176,7 @@ module.exports = createReactClass({
           parentRows.unshift(results[i])
           boundaryLevel = results[i]._level
         }
-        if (results[i._level === 9]) break
+        if (results[i]._level === 9) break
       }
     }
 
