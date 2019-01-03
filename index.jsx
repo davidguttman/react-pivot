@@ -35,7 +35,8 @@ module.exports = createReactClass({
       eventBus: new Emitter,
       compact: false,
       excludeSummaryFromExport: false,
-      onData: function () {}
+      onData: function () {},
+      soloText: "solo"
     }
   },
 
@@ -162,8 +163,9 @@ module.exports = createReactClass({
           onSort={this.setSort}
           onColumnHide={this.hideColumn}
           nPaginateRows={this.props.nPaginateRows}
-          onSolo={this.setSolo} />
-
+          onSolo={this.setSolo}
+          soloText={this.props.soloText}
+        />
       </div>
     )
 
