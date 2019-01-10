@@ -14,7 +14,8 @@ module.exports = createReactClass({
       sortDir: 'asc',
       onSort: function () {},
       onSolo: function () {},
-      onColumnHide: function () {}
+      onColumnHide: function () {},
+      soloText: "solo"
     }
   },
 
@@ -120,7 +121,7 @@ module.exports = createReactClass({
              onClick={partial(this.props.onSolo, {
                 title: col.title,
                 value: val
-              })}>solo</a>
+              })}>{this.props.soloText}</a>
         </span>
       )
     }
