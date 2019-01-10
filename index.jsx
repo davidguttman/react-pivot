@@ -79,8 +79,8 @@ module.exports = createReactClass({
     if(newProps.rows !== this.props.rows) {
       this.dataFrame = DataFrame({
         rows: newProps.rows,
-        dimensions: this.props.dimensions,
-        reduce: this.props.reduce
+        dimensions: newProps.dimensions,
+        reduce: newProps.reduce
       })
 
       this.updateRows()
