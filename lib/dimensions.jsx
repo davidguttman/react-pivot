@@ -8,12 +8,14 @@ module.exports = createReactClass({
     return {
       dimensions: [],
       selectedDimensions: [],
-      onChange: function () {}
+      onChange: function () { },
+      subDimensionText: "Sub Dimension..."
     }
   },
 
   render: function () {
     var self = this
+    var subDimensionText = this.props.subDimensionText
     var selectedDimensions = this.props.selectedDimensions
     var nSelected = selectedDimensions.length
 
@@ -22,8 +24,8 @@ module.exports = createReactClass({
         {selectedDimensions.map(this.renderDimension)}
 
         <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
-          <option value={''}>Sub Dimension...</option>
-          {self.props.dimensions.map(function(dimension) {
+          <option value={''}>{subDimensionText}</option>
+          {self.props.dimensions.map(function (dimension) {
             return <option key={dimension.title}>{dimension.title}</option>
           })}
         </select>
