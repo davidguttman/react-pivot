@@ -36,7 +36,8 @@ module.exports = createReactClass({
       compact: false,
       excludeSummaryFromExport: false,
       onData: function () {},
-      soloText: "solo"
+      soloText: "solo",
+      subDimensionText: "Sub Dimension..."
     }
   },
 
@@ -123,6 +124,7 @@ module.exports = createReactClass({
       { this.props.hideDimensionFilter ? '' :
         <Dimensions
           dimensions={this.props.dimensions}
+          subDimensionText={this.props.subDimensionText}
           selectedDimensions={this.state.dimensions}
           onChange={this.setDimensions} />
       }
