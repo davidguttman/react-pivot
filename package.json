@@ -17,7 +17,7 @@
   "dependencies": {
     "create-react-class": "^15.6.0",
     "cssify": "^0.7.0",
-    "dataframe": "^1.3.0",
+    "dataframe": "^2.0.1",
     "envify": "^3.2.0",
     "lodash": "^4.1.0",
     "react": "^0.14.7",
