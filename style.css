@@ -25,8 +25,8 @@
   border: none;
   margin-right: 5px;
   margin-top: 5px;
-  background-color: #FFF;
-  border: 1px solid #CCC;
+  background-color: #fff;
+  border: 1px solid #ccc;
 }
 
 .reactPivot-results table {
@@ -42,8 +42,12 @@
   opacity: 0.5;
 }
 
-.reactPivot-results th.asc:after { content: ' ▲' }
-.reactPivot-results th.desc:after { content: ' ▼' }
+.reactPivot-results th.asc:after {
+  content: " ▲";
+}
+.reactPivot-results th.desc:after {
+  content: " ▼";
+}
 
 .reactPivot-results td {
   border-top: 1px solid #ddd;
@@ -55,16 +59,22 @@
 }
 
 .reactPivot-results tr:hover td {
-  background: #f5f5f5
+  background: #f5f5f5;
 }
 
 .reactPivot-results tr:hover td.reactPivot-indent {
   background: none;
 }
 
-.reactPivot-solo {opacity: 0}
-.reactPivot-solo:hover {font-weight: bold}
-td:hover .reactPivot-solo {opacity: 0.5}
+.reactPivot-solo {
+  opacity: 0;
+}
+.reactPivot-solo:hover {
+  font-weight: bold;
+}
+td:hover .reactPivot-solo {
+  opacity: 0.5;
+}
 
 .reactPivot-csvExport,
 .reactPivot-columnControl {
@@ -73,8 +83,8 @@ td:hover .reactPivot-solo {opacity: 0.5}
 }
 
 .reactPivot-csvExport button {
-  background-color: #FFF;
-  border: 1px solid #CCC;
+  background-color: #fff;
+  border: 1px solid #ccc;
   height: 28px;
   color: #555;
   cursor: pointer;
@@ -89,7 +99,9 @@ td:hover .reactPivot-solo {opacity: 0.5}
   text-align: left;
 }
 
-.reactPivot-hideColumn { opacity: 0 }
+.reactPivot-hideColumn {
+  opacity: 0;
+}
 
 th:hover .reactPivot-hideColumn {
   opacity: 0.5;
