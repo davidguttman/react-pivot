@@ -165,6 +165,7 @@ module.exports = createReactClass({
           onSort={this.setSort}
           onColumnHide={this.hideColumn}
           nPaginateRows={this.props.nPaginateRows}
+          tableClassName={this.props.tableClassName}
           onSolo={this.setSolo}
           soloText={this.props.soloText}
         />
