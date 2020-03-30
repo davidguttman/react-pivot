@@ -30,6 +30,7 @@ module.exports = createReactClass({
       nPaginateRows: 25,
       solo: {},
       hiddenColumns: [],
+      hideRows: null,
       sortBy: null,
       sortDir: 'asc',
       eventBus: new Emitter,
@@ -56,6 +57,7 @@ module.exports = createReactClass({
       sortDir: this.props.sortDir,
       hiddenColumns: this.props.hiddenColumns,
       solo: this.props.solo,
+      hideRows: this.props.hideRows,
       rows: []
     }
   },
@@ -184,6 +186,7 @@ module.exports = createReactClass({
     }) || {}
     var sortBy = sortCol.sortBy || (sortCol.type === 'dimension' ? sortCol.title : sortCol.value);
     var sortDir = this.state.sortDir
+    var hideRows = this.state.hideRows
 
     var calcOpts = {
       dimensions: this.state.dimensions,
@@ -203,7 +206,9 @@ module.exports = createReactClass({
       }
     }
 
-    var rows = this.dataFrame.calculate(calcOpts)
+    var rows = this.dataFrame
+      .calculate(calcOpts)
+      .filter(function (row) { return hideRows ? !hideRows(row) : true })
     this.setState({rows: rows})
     this.props.onData(rows)
   },

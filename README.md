@@ -148,6 +148,7 @@ sortBy | string | name of column to use for record sort | null
 sortDir | string | sort direction, either 'asc' or 'desc' | 'asc'
 tableClassName | string | assign css class to table containing react-pivot elements | ''
 hideDimensionFilter | boolean | do not render the dimension filter | false
+hideRows | function | if provided, rows that are passed to the function will not render unless the return value is true | null
 
 ### TODO ###
 

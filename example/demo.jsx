@@ -53,6 +53,8 @@ var calculations = [
   }
 ]
 
+var hideRows = row => row.amountTotal < 1000
+
 var Demo = createReactClass({
   getInitialState: function() {
     return {showInput: false}
@@ -86,6 +88,7 @@ var Demo = createReactClass({
                       calculations={calculations}
                       reduce={reduce}
                       activeDimensions={['Transaction Type']}
+                      hideRows={hideRows}
                       nPaginateRows={20} />
         </div>
 
