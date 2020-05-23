@@ -104,12 +104,24 @@ th:hover .reactPivot-hideColumn {
 
 .reactPivot-pageNumber {
   padding: 2px;
+  margin: 4px;
+  cursor: pointer;
+  color: gray;
+  font-size: 14px;
 }
 
 .reactPivot-pageNumber:hover {
   font-weight: bold;
+  border-bottom: black solid 1px;
+  color: black;
 }
 
 .reactPivot-pageNumber.is-selected {
   font-weight: bold;
+  border-bottom: black solid 1px;
+  color: black;
+}
+
+.reactPivot-paginate {
+  margin-top: 24px;
 }
