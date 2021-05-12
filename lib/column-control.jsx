@@ -13,14 +13,13 @@ module.exports = createReactClass({
   render: function () {
     return (
       <div className='reactPivot-columnControl'>
-        { !this.props.hiddenColumns.length ? '' :
-          <select value={''} onChange={this.showColumn}>
-            <option value={''}>Hidden Columns</option>
-            { this.props.hiddenColumns.map(function(column) {
+        {!this.props.hiddenColumns.length ? ''
+          : <select value='' onChange={this.showColumn}>
+            <option value=''>Hidden Columns</option>
+            {this.props.hiddenColumns.map(function (column) {
               return <option key={column}>{column}</option>
             })}
-          </select>
-        }
+          </select>}
       </div>
     )
   },
@@ -29,5 +28,5 @@ module.exports = createReactClass({
     var col = evt.target.value
     var hidden = _.without(this.props.hiddenColumns, col)
     this.props.onChange(hidden)
-  },
+  }
 })
