@@ -9,7 +9,7 @@ module.exports = createReactClass({
       dimensions: [],
       selectedDimensions: [],
       onChange: function () { },
-      subDimensionText: "Sub Dimension..."
+      subDimensionText: 'Sub Dimension...'
     }
   },
 
@@ -20,11 +20,11 @@ module.exports = createReactClass({
     var nSelected = selectedDimensions.length
 
     return (
-      <div className="reactPivot-dimensions">
+      <div className='reactPivot-dimensions'>
         {selectedDimensions.map(this.renderDimension)}
 
-        <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
-          <option value={''}>{subDimensionText}</option>
+        <select value='' onChange={partial(self.toggleDimension, nSelected)}>
+          <option value=''>{subDimensionText}</option>
           {self.props.dimensions.map(function (dimension) {
             return <option key={dimension.title}>{dimension.title}</option>
           })}
@@ -33,18 +33,20 @@ module.exports = createReactClass({
     )
   },
 
-  renderDimension: function(selectedDimension, i) {
+  renderDimension: function (selectedDimension, i) {
     return (
       <select
         value={selectedDimension}
         onChange={partial(this.toggleDimension, i)}
-        key={selectedDimension} >
-        <option></option>
-        {this.props.dimensions.map(function(dimension) {
+        key={selectedDimension}
+      >
+        <option />
+        {this.props.dimensions.map(function (dimension) {
           return (
             <option
               value={dimension.title}
-              key={dimension.title} >
+              key={dimension.title}
+            >
               {dimension.title}
             </option>
           )
@@ -64,5 +66,5 @@ module.exports = createReactClass({
     var updatedDimensions = _.compact(dimensions)
 
     this.props.onChange(updatedDimensions)
-  },
+  }
 })
