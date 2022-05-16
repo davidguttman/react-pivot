@@ -9,7 +9,7 @@ var DataFrame = require('dataframe')
 var Emitter = require('wildemitter')
 
 var partial = require('./lib/partial')
-var download = require('./lib/download')
+var { download } = require('./lib/download')
 var getValue = require('./lib/get-value')
 var PivotTable = require('./lib/pivot-table.jsx')
 var Dimensions = require('./lib/dimensions.jsx')
