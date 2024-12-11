@@ -15,11 +15,11 @@
     "url": "https://github.com/davidguttman/react-pivot/issues"
   },
   "dependencies": {
-    "create-react-class": "^15.6.0",
+    "create-react-class": "^15.7.0",
     "cssify": "^0.7.0",
     "dataframe": "^2.0.1",
     "envify": "^3.2.0",
-    "lodash": "^4.1.0",
+    "lodash": "^4.17.21",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "reactify": "^1.0.0",
