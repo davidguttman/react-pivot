@@ -1,13 +1,13 @@
-require('./demo.css')
+import './demo.css'
 
-var React = require('react')
-var ReactDOM = require('react-dom')
-var { createRoot } = require('react-dom/client')
-var createReactClass = require('create-react-class')
-var ReactPivot = require('..')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
+import createReactClass from 'create-react-class'
+import ReactPivot from '../index.jsx'
 
-var gh = require('./gh.jsx')
-var data = require('./data.json')
+import gh from './gh.jsx'
+import data from './data.json'
 
 var dimensions = [
   {value: 'firstName', title: 'First Name'},
@@ -113,8 +113,7 @@ var Demo = createReactClass({
   }
 })
 
-var el = document.createElement('div')
-document.body.appendChild(el)
+const el = document.getElementById('root')
 const root = createRoot(el)
 
 root.render(

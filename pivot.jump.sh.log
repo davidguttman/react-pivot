@@ -1,0 +1,334 @@
+
+=== react-pivot started at 2025-07-26T21:35:18.315Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> budo example/demo.jsx --live
+
+[STDERR] (node:48537) [DEP0111] DeprecationWarning: Access to process.binding('http_parser') is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[0000] info  Server running at http://172.17.0.1:9967/ (connect)
+[0000] info  LiveReload running on 35729
+[0001] 462ms      2.3MB (browserify)
+[0061] 95ms       2.3MB (browserify)
+
+=== Project manually stopped at 2025-07-26T21:36:32.335Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T21:36:36.651Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> budo example/demo.jsx --live --port ${PORT:-9966}
+
+[STDERR] (node:49400) [DEP0111] DeprecationWarning: Access to process.binding('http_parser') is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[0000] info  Server running at http://172.17.0.1:3001/ (connect)
+[0000] info  LiveReload running on 35730
+[0001] 460ms      2.3MB (browserify)
+[0003] 4ms           0B GET    200 / (generated)
+[0003] 1ms           0B GET    200 /demo.jsx (generated)
+[0089] 82ms       2.3MB (browserify)
+[0093] 70ms       2.3MB (browserify)
+[0109] 87ms       2.3MB (browserify)
+[STDERR] [Error: ENOENT: no such file or directory, lstat '/mnt/mintdata/play/js/react-pivot/node_modules/budo/node_modules/process'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'lstat',
+  path: '/mnt/mintdata/play/js/react-pivot/node_modules/budo/node_modules/process',
+  stream: [Labeled]
+}
+[STDERR] [Error: ENOENT: no such file or directory, lstat '/mnt/mintdata/play/js/react-pivot/node_modules/budo/node_modules/process'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'lstat',
+  path: '/mnt/mintdata/play/js/react-pivot/node_modules/budo/node_modules/process',
+  stream: [Labeled]
+}
+[2182] 5ms           0B GET    200 / (generated)
+[2182] 0ms           0B GET    200 /demo.jsx (generated)
+
+=== Project manually stopped at 2025-07-26T22:13:06.801Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:13:09.478Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> budo example/demo.jsx --live --port ${PORT:-9966}
+
+[0000] info  Server running at http://192.168.0.100:3006/ (connect)
+[0000] info  LiveReload running
+[0001] 441ms      3.9MB (browserify)
+
+=== Project manually stopped at 2025-07-26T22:15:37.862Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:15:55.547Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> budo example/demo.jsx --live --port ${PORT:-9966}
+
+[0000] info  Server running at http://192.168.0.100:9968/ (connect)
+[0000] info  LiveReload running
+[0001] 442ms      3.9MB (browserify)
+
+=== Project manually stopped at 2025-07-26T22:16:25.994Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:17:14.913Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> budo example/demo.jsx --live --port ${PORT:-9966}
+
+[0000] info  Server running at http://192.168.0.100:9969/ (connect)
+[0000] info  LiveReload running
+[0001] 437ms      3.9MB (browserify)
+
+=== Project manually stopped at 2025-07-26T22:17:28.385Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:17:47.336Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> budo example/demo.jsx --live --port ${PORT:-9966}
+
+[0000] info  Server running at http://192.168.0.100:5433/ (connect)
+[0000] info  LiveReload running
+[0000] 428ms      3.9MB (browserify)
+[0002] 6ms           0B GET    200 / (generated)
+[0002] 0ms           0B GET    200 /demo.jsx (generated)
+[0137] 452ms      4.7MB (browserify)
+[0137] 124ms      4.7MB (browserify)
+[0269] 3ms           0B GET    200 / (generated)
+[0270] 0ms           0B GET    200 /demo.jsx (generated)
+[0421] 92ms       881KB (browserify)
+[0430] 181ms      4.7MB (browserify)
+[0490] 121ms      4.7MB (browserify)
+[0551] 131ms      4.7MB (browserify)
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error [ReactifyError]: /mnt/mintdata/play/js/react-pivot/example/demo.jsx: Parse Error: Line 1: Illegal import declaration while parsing file: /mnt/mintdata/play/js/react-pivot/example/demo.jsx
+    at throwError (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2813:21)
+    at throwErrorTolerant (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:2825:24)
+    at parseSourceElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6390:17)
+    at parseProgramElement (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6446:16)
+    at parseProgramElements (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6478:29)
+    at parseProgram (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:6491:16)
+    at Object.parse (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/esprima-fb/esprima.js:7653:23)
+    at getAstForSource (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:251:21)
+    at transform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/node_modules/jstransform/src/jstransform.js:274:11)
+    at innerTransform (/mnt/mintdata/play/js/react-pivot/node_modules/react-tools/main.js:94:10) {
+  index: 0,
+  lineNumber: 1,
+  column: 1,
+  description: 'Illegal import declaration',
+  fileName: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  filename: '/mnt/mintdata/play/js/react-pivot/example/demo.jsx',
+  stream: [Labeled]
+}
+[STDERR] Error: Cannot find module 'reactify' from '/mnt/mintdata/play/js/react-pivot'
+    at /mnt/mintdata/play/js/react-pivot/node_modules/resolve/lib/async.js:146:35
+    at processDirs (/mnt/mintdata/play/js/react-pivot/node_modules/resolve/lib/async.js:299:39)
+    at isdir (/mnt/mintdata/play/js/react-pivot/node_modules/resolve/lib/async.js:306:32)
+    at /mnt/mintdata/play/js/react-pivot/node_modules/resolve/lib/async.js:34:69
+    at FSReqCallback.oncomplete (node:fs:198:21) {
+  code: 'MODULE_NOT_FOUND',
+  stream: [Labeled]
+}
+[STDERR] 
+/mnt/mintdata/play/js/react-pivot/example/demo.jsx:1
+import './demo.css'
+^
+ParseError: 'import' and 'export' may appear only with 'sourceType: module'

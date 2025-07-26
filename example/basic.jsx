@@ -1,9 +1,9 @@
-var React = require('react')
-var ReactDOM = require('react-dom')
-var { createRoot } = require('react-dom/client')
-var ReactPivot = require('..')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
+import ReactPivot from '../index.jsx'
 
-var rows = require('./data.json')
+import rows from './data.json'
 
 // These are your "groups"
 // "title" is the title of the column
@@ -50,8 +50,7 @@ var calculations = [
   }
 ]
 
-const container = document.createElement('div')
-document.body.appendChild(container)
+const container = document.getElementById('root')
 const root = createRoot(container)
 
 root.render(

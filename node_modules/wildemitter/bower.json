@@ -1,0 +1,23 @@
+{
+  "name": "wildemitter",
+  "main": "wildemitter-bare.js",
+  "version": "1.1.0",
+  "homepage": "https://github.com/HenrikJoreteg/wildemitter",
+  "authors": [
+    "Henrik Joreteg <henrik@andyet.net>"
+  ],
+  "description": "A super lightweight EventEmitter.",
+  "keywords": [
+    "events",
+    "emitter",
+    "browser"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

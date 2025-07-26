@@ -4,33 +4,22 @@
   "version": "4.4.0",
   "author": "David Guttman <david@guttman.io> (http://davidguttman.com/)",
   "browser": "index.jsx",
-  "browserify": {
-    "transform": [
-      "reactify",
-      "envify",
-      "cssify"
-    ]
-  },
   "bugs": {
     "url": "https://github.com/davidguttman/react-pivot/issues"
   },
   "dependencies": {
     "create-react-class": "^15.6.0",
-    "cssify": "^0.7.0",
     "dataframe": "^2.0.1",
-    "envify": "^3.2.0",
     "lodash": "^4.17.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "reactify": "^1.0.0",
     "wildemitter": "^1.0.1",
     "xtend": "^4.0.0"
   },
   "devDependencies": {
-    "browserify": "^17.0.0",
-    "budo": "^11.8.2",
+    "@vitejs/plugin-react": "^4.7.0",
     "faker": "^5.5.3",
-    "uglify-js": "^3.17.4"
+    "vite": "^7.0.6"
   },
   "directories": {
     "example": "example"
@@ -53,9 +42,12 @@
     "url": "https://github.com/davidguttman/react-pivot.git"
   },
   "scripts": {
-    "example": "budo example/demo.jsx --live --port ${PORT:-9966}",
-    "example-basic": "budo example/basic.jsx --port ${PORT:-9966}",
-    "example-persist": "budo example/persist.js --port ${PORT:-9966}",
+    "dev": "vite",
+    "example": "vite example/demo.html --port ${PORT:-9966}",
+    "example-basic": "vite example/basic.html --port ${PORT:-9966}",
+    "example-persist": "vite example/persist.html --port ${PORT:-9966}",
+    "build": "vite build",
+    "preview": "vite preview",
     "dist": "npm run remove-dist && npm run build-standalone",
     "remove-dist": "rm dist/*.js",
     "build-standalone": "NODE_ENV=production browserify lib/umd.js | uglifyjs -mc > dist/react-pivot-standalone-${npm_package_version}.min.js"
