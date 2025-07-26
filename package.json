@@ -20,8 +20,8 @@
     "dataframe": "^2.0.1",
     "envify": "^3.2.0",
     "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "reactify": "^1.0.0",
     "wildemitter": "^1.0.1",
     "xtend": "^4.0.0"
