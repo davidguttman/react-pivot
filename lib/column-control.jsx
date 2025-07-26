@@ -1,8 +1,10 @@
-var _ = { without: require('lodash/without') }
-var React = require('react')
-var createReactClass = require('create-react-class')
+import without from 'lodash/without'
+import React from 'react'
+import createReactClass from 'create-react-class'
 
-module.exports = createReactClass({
+const _ = { without }
+
+export default createReactClass({
   getDefaultProps: function () {
     return {
       hiddenColumns: [],
