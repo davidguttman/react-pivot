@@ -53,9 +53,9 @@
     "url": "https://github.com/davidguttman/react-pivot.git"
   },
   "scripts": {
-    "example": "budo example/demo.jsx --live",
-    "example-basic": "budo example/basic.jsx",
-    "example-persist": "budo example/persist.js",
+    "example": "budo example/demo.jsx --live --port ${PORT:-9966}",
+    "example-basic": "budo example/basic.jsx --port ${PORT:-9966}",
+    "example-persist": "budo example/persist.js --port ${PORT:-9966}",
     "dist": "npm run remove-dist && npm run build-standalone",
     "remove-dist": "rm dist/*.js",
     "build-standalone": "NODE_ENV=production browserify lib/umd.js | uglifyjs -mc > dist/react-pivot-standalone-${npm_package_version}.min.js"
