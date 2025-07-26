@@ -62,7 +62,7 @@ module.exports = createReactClass({
     }
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     if (this.props.defaultStyles) loadStyles()
 
     this.dataFrame = DataFrame({
@@ -74,16 +74,16 @@ module.exports = createReactClass({
     this.updateRows()
   },
 
-  componentWillReceiveProps: function(newProps) {
-     if(newProps.hiddenColumns !== this.props.hiddenColumns) {
-         this.setHiddenColumns(newProps.hiddenColumns);
+  componentDidUpdate: function(prevProps) {
+     if(this.props.hiddenColumns !== prevProps.hiddenColumns) {
+         this.setHiddenColumns(this.props.hiddenColumns);
      }
 
-    if(newProps.rows !== this.props.rows) {
+    if(this.props.rows !== prevProps.rows) {
       this.dataFrame = DataFrame({
-        rows: newProps.rows,
-        dimensions: newProps.dimensions,
-        reduce: newProps.reduce
+        rows: this.props.rows,
+        dimensions: this.props.dimensions,
+        reduce: this.props.reduce
       })
 
       this.updateRows()

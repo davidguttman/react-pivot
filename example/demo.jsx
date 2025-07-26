@@ -2,6 +2,7 @@ require('./demo.css')
 
 var React = require('react')
 var ReactDOM = require('react-dom')
+var { createRoot } = require('react-dom/client')
 var createReactClass = require('create-react-class')
 var ReactPivot = require('..')
 
@@ -114,8 +115,8 @@ var Demo = createReactClass({
 
 var el = document.createElement('div')
 document.body.appendChild(el)
+const root = createRoot(el)
 
-ReactDOM.render(
-  <Demo />,
-  el
+root.render(
+  <Demo />
 )

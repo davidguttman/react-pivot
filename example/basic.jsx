@@ -1,5 +1,6 @@
 var React = require('react')
 var ReactDOM = require('react-dom')
+var { createRoot } = require('react-dom/client')
 var ReactPivot = require('..')
 
 var rows = require('./data.json')
@@ -49,11 +50,14 @@ var calculations = [
   }
 ]
 
-ReactDOM.render(
+const container = document.createElement('div')
+document.body.appendChild(container)
+const root = createRoot(container)
+
+root.render(
   <ReactPivot rows={rows}
     dimensions={dimensions}
     reduce={reduce}
     calculations={calculations}
-    activeDimensions={['Transaction Type']} />,
-  document.body
+    activeDimensions={['Transaction Type']} />
 )
