@@ -1,6 +1,8 @@
 # ReactPivot #
 
-ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration. Can be used without React.
+ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration. 
+
+**Now compatible with React 19+ and modern build tools!**
 
 Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io/react-pivot/)
 
@@ -8,69 +10,78 @@ Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io
 
 ## Installation & Usage ##
 
-<strong> Default (Browserify/webpack): </strong>
-
-```
-npm i -S react-pivot
+```bash
+npm install react-pivot
 ```
 
-```js
-var React = require('react')
-var ReactPivot = require('react-pivot')
+### Modern ES Modules (Recommended)
 
-React.render(
-  <ReactPivot rows={rows}
-              dimensions={dimensions}
-              reduce={reduce}
-              calculations={calculations}
-              nPaginateRows={25} />,
-  document.body
+```jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import ReactPivot from 'react-pivot'
+
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <ReactPivot 
+    rows={rows}
+    dimensions={dimensions}
+    reduce={reduce}
+    calculations={calculations}
+    nPaginateRows={25} 
+  />
 )
 ```
 
-<strong> Classic (no React or Browserify): </strong>
+### CommonJS (Legacy Support)
 
-Download [react-pivot-standalone-3.0.0.min.js](https://raw.githubusercontent.com/davidguttman/react-pivot/master/dist/react-pivot-standalone-3.0.0.min.js)
+```js
+const React = require('react')
+const { createRoot } = require('react-dom/client')
+const ReactPivot = require('react-pivot')
 
-```html
-<script src='react-pivot-standalone-3.0.0.min.js'></script>
-<script>
-  ReactPivot(document.body, {
+const root = createRoot(document.getElementById('root'))
+root.render(
+  React.createElement(ReactPivot, {
     rows: rows,
     dimensions: dimensions,
+    reduce: reduce,
     calculations: calculations,
-    reduce: reduce
+    nPaginateRows: 25
   })
+)
+```
+
+### UMD (Browser Global)
+
+```html
+<script src="https://unpkg.com/react-pivot/dist/react-pivot.umd.js"></script>
+<script>
+  const root = ReactDOM.createRoot(document.getElementById('root'))
+  root.render(
+    React.createElement(ReactPivot, {
+      rows: rows,
+      dimensions: dimensions,
+      calculations: calculations,
+      reduce: reduce
+    })
+  )
 </script>
-```
-
-<strong> Custom (Browserify, no React): </strong>
-
-```js
-var ReactPivot = require('react-pivot/load')
-
-ReactPivot(document.body, {
-  rows: rows,
-  dimensions: dimensions,
-  reduce: reduce,
-  calculations: calculations
-})
-
-```
-
-
 ## Example ##
 
-```js
-var React = require('react')
-var ReactPivot = require('react-pivot')
+```jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import ReactPivot from 'react-pivot'
 
-React.render(
-  <ReactPivot rows={rows}
-              dimensions={dimensions}
-              reduce={reduce}
-              calculations={calculations} />,
-  document.body
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <ReactPivot 
+    rows={rows}
+    dimensions={dimensions}
+    reduce={reduce}
+    calculations={calculations} 
+  />
 )
 ```
 

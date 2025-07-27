@@ -3653,7 +3653,7 @@ const Hf = /* @__PURE__ */ Y(Gf), Kf = { without: Hf }, Uf = ye({
   }
 });
 function Yf() {
-  Promise.resolve({           });
+  Promise.resolve({          });
 }
 export {
   Vf as default
