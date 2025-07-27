@@ -42,8 +42,8 @@
     "url": "https://github.com/davidguttman/react-pivot.git"
   },
   "scripts": {
-    "dev": "vite",
-    "example": "vite example/demo.html --port ${PORT:-9966}",
+    "dev": "vite --host",
+    "example": "vite --host --port ${PORT:-9966}",
     "example-basic": "vite example/basic.html --port ${PORT:-9966}",
     "example-persist": "vite example/persist.html --port ${PORT:-9966}",
     "build": "vite build",

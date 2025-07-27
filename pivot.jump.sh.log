@@ -332,3 +332,88 @@ URL: https://pivot.jump.sh
 import './demo.css'
 ^
 ParseError: 'import' and 'export' may appear only with 'sourceType: module'
+[1555] 1ms           0B GET    200 / (generated)
+[1555] 0ms           0B GET    200 /demo.jsx (generated)
+[1556] 1ms           0B GET    200 / (generated)
+[1557] 0ms           0B GET    200 /demo.jsx (generated)
+
+=== Project manually stopped at 2025-07-26T22:43:51.926Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:43:54.653Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> vite example/demo.html --port ${PORT:-9966}
+
+3:43:54 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+Port 5433 is in use, trying another one...
+
+  VITE v7.0.6  ready in 81 ms
+
+  ➜  Local:   http://localhost:5434/
+  ➜  Network: use --host to expose
+
+=== Project manually stopped at 2025-07-26T22:45:46.057Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:46:09.218Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> vite example/demo.html --port ${PORT:-9966}
+
+Port 5433 is in use, trying another one...
+Port 5434 is in use, trying another one...
+
+  VITE v7.0.6  ready in 70 ms
+
+  ➜  Local:   http://localhost:5435/
+  ➜  Network: use --host to expose
+
+=== Project manually stopped at 2025-07-26T22:50:37.842Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-26T22:50:51.977Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> vite example/demo.html --port ${PORT:-9966}
+
+Port 5434 is in use, trying another one...
+Port 5435 is in use, trying another one...
+
+  VITE v7.0.6  ready in 69 ms
+
+  ➜  Local:   http://localhost:5436/
+  ➜  Network: use --host to expose
+
+=== Project manually stopped at 2025-07-27T04:42:11.298Z ===
+URL: https://pivot.jump.sh
+
+=== react-pivot started at 2025-07-27T04:42:15.185Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> vite example/demo.html --port ${PORT:-9966}
+
+Port 5434 is in use, trying another one...
+Port 5435 is in use, trying another one...
+Port 5436 is in use, trying another one...
+
+  VITE v7.0.6  ready in 69 ms
+
+  ➜  Local:   http://localhost:5437/
+  ➜  Network: use --host to expose
+
+=== react-pivot started at 2025-07-27T04:44:16.612Z ===
+URL: https://pivot.jump.sh
+
+> react-pivot@4.4.0 example
+> vite example/demo.html --port ${PORT:-9966}
+
+
+  VITE v7.0.6  ready in 69 ms
+
+  ➜  Local:   http://localhost:5434/
+  ➜  Network: use --host to expose
