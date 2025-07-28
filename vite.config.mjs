@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env.PORT) || 9966,
       strictPort: false, // Allow Vite to find next available port if default is taken
       allowedHosts: true,
-      // Disable HMR when running through jump.sh proxy to prevent infinite reconnection loops
+      // Conditional HMR management for production environments
       hmr: process.env.NODE_ENV === 'production' || process.env.DISABLE_HMR ? false : {
         port: parseInt(env.PORT) || 9966
       }
@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
       lib: {
         entry: 'index.jsx',
         name: 'ReactPivot',
-        fileName: (format) => `react-pivot.${format}.js`
+        fileName: (format) => format === 'umd' ? 'react-pivot.umd.cjs' : `react-pivot.${format}.js`
       },
       rollupOptions: {
         external: ['react', 'react-dom'],

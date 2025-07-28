@@ -4,13 +4,13 @@
   "version": "4.4.0",
   "type": "module",
   "author": "David Guttman <david@guttman.io> (http://davidguttman.com/)",
-  "main": "dist/react-pivot.umd.js",
+  "main": "dist/react-pivot.umd.cjs",
   "module": "dist/react-pivot.es.js",
-  "browser": "dist/react-pivot.umd.js",
+  "browser": "dist/react-pivot.umd.cjs",
   "exports": {
     ".": {
       "import": "./dist/react-pivot.es.js",
-      "require": "./dist/react-pivot.umd.js"
+      "require": "./dist/react-pivot.umd.cjs"
     }
   },
   "files": ["dist", "index.jsx", "lib", "style.css"],
