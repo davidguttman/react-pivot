@@ -1,10 +1,12 @@
-var _ = { range: require('lodash/range') }
-var React = require('react')
-var createReactClass = require('create-react-class')
-var partial = require('./partial')
-var getValue = require('./get-value')
+import range from 'lodash/range'
+import React from 'react'
+import createReactClass from 'create-react-class'
+import partial from './partial'
+import getValue from './get-value'
 
-module.exports = createReactClass({
+const _ = { range }
+
+export default createReactClass({
 
   getDefaultProps: function () {
     return {

@@ -1,21 +1,21 @@
-var _ = {
-  filter: require('lodash/filter'),
-  map: require('lodash/map'),
-  find: require('lodash/find')
-}
-var React = require('react')
-var createReactClass = require('create-react-class')
-var DataFrame = require('dataframe')
-var Emitter = require('wildemitter')
+import filter from 'lodash/filter'
+import map from 'lodash/map'
+import find from 'lodash/find'
+import React from 'react'
+import createReactClass from 'create-react-class'
+import DataFrame from 'dataframe'
+import Emitter from 'wildemitter'
 
-var partial = require('./lib/partial')
-var download = require('./lib/download')
-var getValue = require('./lib/get-value')
-var PivotTable = require('./lib/pivot-table.jsx')
-var Dimensions = require('./lib/dimensions.jsx')
-var ColumnControl = require('./lib/column-control.jsx')
+import partial from './lib/partial'
+import download from './lib/download'
+import getValue from './lib/get-value'
+import PivotTable from './lib/pivot-table.jsx'
+import Dimensions from './lib/dimensions.jsx'
+import ColumnControl from './lib/column-control.jsx'
 
-module.exports = createReactClass({
+const _ = { filter, map, find }
+
+export default createReactClass({
   displayName: 'ReactPivot',
   getDefaultProps: function() {
     return {
@@ -62,7 +62,7 @@ module.exports = createReactClass({
     }
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     if (this.props.defaultStyles) loadStyles()
 
     this.dataFrame = DataFrame({
@@ -74,16 +74,16 @@ module.exports = createReactClass({
     this.updateRows()
   },
 
-  componentWillReceiveProps: function(newProps) {
-     if(newProps.hiddenColumns !== this.props.hiddenColumns) {
-         this.setHiddenColumns(newProps.hiddenColumns);
+  componentDidUpdate: function(prevProps) {
+     if(this.props.hiddenColumns !== prevProps.hiddenColumns) {
+         this.setHiddenColumns(this.props.hiddenColumns);
      }
 
-    if(newProps.rows !== this.props.rows) {
+    if(this.props.rows !== prevProps.rows) {
       this.dataFrame = DataFrame({
-        rows: newProps.rows,
-        dimensions: newProps.dimensions,
-        reduce: newProps.reduce
+        rows: this.props.rows,
+        dimensions: this.props.dimensions,
+        reduce: this.props.reduce
       })
 
       this.updateRows()
@@ -302,4 +302,4 @@ module.exports = createReactClass({
   }
 })
 
-function loadStyles () { require('./style.css') }
+function loadStyles () { import('./style.css') }
