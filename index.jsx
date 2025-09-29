@@ -12,6 +12,7 @@ import getValue from './lib/get-value'
 import PivotTable from './lib/pivot-table.jsx'
 import Dimensions from './lib/dimensions.jsx'
 import ColumnControl from './lib/column-control.jsx'
+import SoloControl from './lib/solo-control.jsx'
 
 const _ = { filter, map, find }
 
@@ -45,10 +46,10 @@ export default createReactClass({
   getInitialState: function() {
     var allDimensions = this.props.dimensions
     var activeDimensions =  _.filter(this.props.activeDimensions, function (title) {
-      return _.find(allDimensions, function(col) {
-        return col.title === title
+        return _.find(allDimensions, function(col) {
+          return col.title === title
+        })
       })
-    })
 
     return {
       dimensions: activeDimensions,
@@ -66,7 +67,7 @@ export default createReactClass({
     if (this.props.defaultStyles) loadStyles()
 
     this.dataFrame = DataFrame({
-      rows: this.props.rows,
+      rows: this.getFilteredRows(),
       dimensions: this.props.dimensions,
       reduce: this.props.reduce
     })
@@ -77,17 +78,69 @@ export default createReactClass({
   componentDidUpdate: function(prevProps) {
      if(this.props.hiddenColumns !== prevProps.hiddenColumns) {
          this.setHiddenColumns(this.props.hiddenColumns);
-     }
+    }
 
     if(this.props.rows !== prevProps.rows) {
       this.dataFrame = DataFrame({
-        rows: this.props.rows,
+        rows: this.getFilteredRows(),
         dimensions: this.props.dimensions,
         reduce: this.props.reduce
       })
 
       this.updateRows()
     }
+  },
+
+  getFilteredRows: function () {
+    var self = this
+    var filter = this.state.solo
+    var rows = this.props.rows
+
+    if (!filter || Object.keys(filter).length === 0) {
+      return rows
+    }
+
+    return rows.filter(function (row) {
+      var pass = true
+      Object.keys(filter).forEach(function (title) {
+        var filterValue = filter[title]
+        var dataValue
+
+        // Get the data value based on the dimension
+        var dimension = self.props.dimensions.find(function (d) {
+          return d.title === title
+        })
+
+        if (dimension) {
+          if (typeof dimension.value === 'function') {
+            dataValue = dimension.value(row)
+          } else {
+            dataValue = row[dimension.value]
+          }
+        } else {
+          dataValue = row[title]
+        }
+
+        // Handle array values in solo filter
+        if (Array.isArray(filterValue)) {
+          // Empty array means "match nothing" for this property
+          if (filterValue.length === 0) {
+            pass = false
+            return
+          }
+          // Check if data value matches any value in the filter array
+          if (filterValue.indexOf(dataValue) === -1) {
+            pass = false
+          }
+        } else {
+          // Handle single values (existing behavior)
+          if (dataValue !== filterValue) {
+            pass = false
+          }
+        }
+      })
+      return pass
+    })
   },
 
   getColumns: function() {
@@ -122,13 +175,14 @@ export default createReactClass({
 
     var html = (
       <div className='reactPivot'>
-
-      { this.props.hideDimensionFilter ? '' :
-        <Dimensions
-          dimensions={this.props.dimensions}
-          subDimensionText={this.props.subDimensionText}
-          selectedDimensions={this.state.dimensions}
-          onChange={this.setDimensions} />
+        {this.props.hideDimensionFilter ? (
+          ''
+        ) : (
+          <Dimensions
+            dimensions={this.props.dimensions}
+            subDimensionText={this.props.subDimensionText}
+            selectedDimensions={this.state.dimensions}
+          onChange={this.setDimensions} />)
       }
 
         <ColumnControl
@@ -141,23 +195,12 @@ export default createReactClass({
           </button>
         </div>
 
-        { Object.keys(this.state.solo).map(function (title) {
-          var value = self.state.solo[title]
-
-          return (
-            <div
-              style={{clear: 'both'}}
-              className='reactPivot-soloDisplay'
-              key={'solo-' + title} >
-              <span
-                className='reactPivot-clearSolo'
-                onClick={partial(self.clearSolo, title)} >
-                &times;
-              </span>
-              {title}: {value}
-            </div>
-          )
-        }) }
+        <SoloControl
+          dimensions={this.props.dimensions}
+          solo={this.state.solo}
+          onChange={this.setSoloFromControl}
+          uniqueValues={this.getUniqueValues()}
+        />
 
         <PivotTable
           columns={this.getColumns()}
@@ -182,11 +225,18 @@ export default createReactClass({
 
     var sortByTitle = this.state.sortBy
     var sortCol = _.find(columns, function(col) {
-      return col.title === sortByTitle
-    }) || {}
-    var sortBy = sortCol.sortBy || (sortCol.type === 'dimension' ? sortCol.title : sortCol.value);
+        return col.title === sortByTitle
+      }) || {}
+    var sortBy = sortCol.sortBy || (sortCol.type === 'dimension' ? sortCol.title : sortCol.value)
     var sortDir = this.state.sortDir
     var hideRows = this.state.hideRows
+
+    // Recreate DataFrame with filtered rows when solo filters change
+    this.dataFrame = DataFrame({
+      rows: this.getFilteredRows(),
+      dimensions: this.props.dimensions,
+      reduce: this.props.reduce
+    })
 
     var calcOpts = {
       dimensions: this.state.dimensions,
@@ -195,20 +245,7 @@ export default createReactClass({
       compact: this.props.compact
     }
 
-    var filter = this.state.solo
-    if (filter) {
-      calcOpts.filter = function(dVals) {
-        var pass = true
-        Object.keys(filter).forEach(function (title) {
-          if (dVals[title] !== filter[title]) pass = false
-        })
-        return pass
-      }
-    }
-
-    var rows = this.dataFrame
-      .calculate(calcOpts)
-      .filter(function (row) { return hideRows ? !hideRows(row) : true })
+    var rows = this.dataFrame.calculate(calcOpts).filter(function (row) { return hideRows ? !hideRows(row) : true })
     this.setState({rows: rows})
     this.props.onData(rows)
   },
@@ -241,15 +278,72 @@ export default createReactClass({
     setTimeout(this.updateRows, 0)
   },
 
-  setSolo: function(solo) {
-    var newSolo = this.state.solo
-    newSolo[solo.title] = solo.value
+  setSolo: function (solo) {
+    const { title, value } = solo;
+    const { solo: currentSolo } = this.state;
+    const existingValue = currentSolo[title];
+
+    let newSolo;
+
+    if (Array.isArray(existingValue)) {
+      const index = existingValue.indexOf(value);
+      if (index !== -1) {
+        const newExistingValue = existingValue.filter(v => v !== value);
+        if (newExistingValue.length === 0) {
+          newSolo = { ...currentSolo };
+          delete newSolo[title];
+        } else {
+          newSolo = { ...currentSolo, [title]: newExistingValue };
+        }
+      } else {
+        newSolo = { ...currentSolo, [title]: [...existingValue, value] };
+      }
+    } else if (existingValue === value) {
+      newSolo = { ...currentSolo };
+      delete newSolo[title];
+    } else {
+      newSolo = { ...currentSolo, [title]: value };
+    }
+
+    this.props.eventBus.emit('solo', newSolo);
+    this.setState({ solo: newSolo });
+
+    setTimeout(this.updateRows, 0);
+  },
+
+  setSoloFromControl: function (newSolo) {
     this.props.eventBus.emit('solo', newSolo)
     this.setState({solo: newSolo })
     setTimeout(this.updateRows, 0)
   },
 
-  clearSolo: function(title) {
+  getUniqueValues: function () {
+    var self = this
+    var uniqueValues = {}
+
+    this.props.dimensions.forEach(function (dimension) {
+      var values = new Set()
+
+      self.props.rows.forEach(function (row) {
+        var value
+        if (typeof dimension.value === 'function') {
+          value = dimension.value(row)
+        } else {
+          value = row[dimension.value]
+        }
+
+        if (value !== undefined && value !== null && value !== '') {
+          values.add(String(value))
+        }
+      })
+
+      uniqueValues[dimension.title] = Array.from(values).sort()
+    })
+
+    return uniqueValues
+  },
+
+  clearSolo: function (title) {
     var oldSolo = this.state.solo
     var newSolo = {}
     Object.keys(oldSolo).forEach(function (k) {
@@ -305,7 +399,7 @@ export default createReactClass({
 function loadStyles() {
   if (typeof document === 'undefined') return // SSR safety
   if (document.getElementById('react-pivot-styles')) return // Already loaded
-  
+
   const css = `.reactPivot {
   margin-top: 40px;
   padding: 10px 20px 20px;
@@ -313,9 +407,6 @@ function loadStyles() {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.reactPivot-soloDisplay {
-  padding: 5px;
-}
 
 .reactPivot-clearSolo {
   opacity: 0.5;
@@ -398,6 +489,87 @@ td:hover .reactPivot-solo {opacity: 0.5}
   text-align: left;
 }
 
+.reactPivot-soloControl {
+  display: block;
+  text-align: left;
+  clear: both;
+}
+
+.reactPivot-soloFilter {
+  display: block;
+  margin-right: 15px;
+}
+
+.reactPivot-soloDimension {
+  font-size: 11px;
+  height: 24px;
+  margin-right: 5px;
+  font-weight: bold;
+  background: #e8f5e8;
+  border: 1px solid #4caf50;
+}
+
+.reactPivot-soloValues {
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.reactPivot-soloValueContainer {
+  display: inline-block;
+  margin: 2px;
+  position: relative;
+
+  select {
+    max-width: 150px;
+  }
+}
+
+.reactPivot-soloValue {
+  display: inline-block;
+  background: #e3f2fd;
+  border: 1px solid #2196f3;
+  border-radius: 3px;
+  padding: 2px 6px;
+  margin: 2px;
+  font-size: 11px;
+  position: relative;
+}
+
+.reactPivot-removeSoloValue {
+  margin-left: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #f44336;
+  opacity: 0.7;
+}
+
+.reactPivot-removeSoloValue:hover {
+  opacity: 1;
+}
+
+.reactPivot-addSoloValue {
+  font-size: 11px;
+  height: 24px;
+  margin-right: 5px;
+  max-width: 150px;
+}
+
+.reactPivot-removeSoloFilter {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 3px;
+  color: #f44336;
+  cursor: pointer;
+}
+
+.reactPivot-removeSoloFilter:hover {
+  background: #f44336;
+  color: white;
+}
+
 .reactPivot-hideColumn { opacity: 0 }
 
 th:hover .reactPivot-hideColumn {
@@ -434,7 +606,7 @@ th:hover .reactPivot-hideColumn {
 .reactPivot-paginate {
   margin-top: 24px;
 }`
-  
+
   const style = document.createElement('style')
   style.id = 'react-pivot-styles'
   style.textContent = css

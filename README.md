@@ -143,6 +143,64 @@ React.render(
 )
 ```
 
+## Solo Filtering ##
+
+The `solo` prop allows you to filter data to show only specific values. It supports both single values and arrays for multi-value filtering.
+
+### Single Value Filtering (Original Behavior)
+
+```jsx
+<ReactPivot 
+  solo={{ firstName: 'John', state: 'NY' }}
+  // ... other props
+/>
+```
+
+### Array Value Filtering (New Feature)
+
+```jsx
+<ReactPivot 
+  solo={{ 
+    firstName: ['John', 'Jane', 'Bob'],
+    state: ['NY', 'CA'] 
+  }}
+  // ... other props
+/>
+```
+
+### Mixed Value Filtering
+
+```jsx
+<ReactPivot 
+  solo={{ 
+    firstName: ['John', 'Jane'],    // Multiple values
+    department: 'Engineering',      // Single value
+    state: ['NY', 'CA', 'TX']      // Multiple values
+  }}
+  // ... other props
+/>
+```
+
+### Filtering Logic
+
+- **Within arrays**: Uses OR logic (matches any value in the array)
+- **Between properties**: Uses AND logic (all properties must match)
+- **Empty arrays**: Filter out all rows for that property
+- **Display**: Array values are shown as comma-separated strings
+
+### Example
+
+```jsx
+// This configuration:
+solo={{ 
+  state: ['NY', 'CA'], 
+  department: ['Sales', 'Marketing'] 
+}}
+
+// Would match rows where:
+// (state === 'NY' OR state === 'CA') AND (department === 'Sales' OR department === 'Marketing')
+```
+
 See it all together in [example/basic.jsx](https://github.com/davidguttman/react-pivot/blob/master/example/basic.jsx)
 
 ### Optional Arguments ###
@@ -154,7 +212,7 @@ csvTemplateFormat | boolean | apply template formatting to data before csv expor
 defaultStyles | boolean | apply default styles from style.css | true
 hiddenColumns | array | columns that should not display | []
 nPaginateRows | number | items per page setting | 25
-solo | object | item that should be displayed solo | null
+solo | object | item that should be displayed solo. Values can be strings or arrays of strings for multi-value filtering | null
 sortBy | string | name of column to use for record sort | null
 sortDir | string | sort direction, either 'asc' or 'desc' | 'asc'
 tableClassName | string | assign css class to table containing react-pivot elements | ''

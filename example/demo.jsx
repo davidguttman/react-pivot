@@ -58,7 +58,12 @@ var hideRows = row => row.amountTotal < 1000
 
 var Demo = createReactClass({
   getInitialState: function() {
-    return {showInput: false}
+    return {
+      showInput: false,
+      solo: {
+        'Transaction Type': ['deposit','withdrawal']
+      }
+    }
   },
   toggleShow: function() {
     var showInput = this.state.showInput
@@ -71,6 +76,11 @@ var Demo = createReactClass({
 
         <p>
           ReactPivot is a data-grid component with pivot-table-like functionality.
+        </p>
+
+        <p>
+          <strong>New Feature:</strong> Interactive Solo Control! When solo filters are applied, you can edit them using the dropdown interface. 
+          Change the dimension using the green dropdown, add multiple values to create arrays with OR logic, and click × to remove individual values.
         </p>
 
         <p>
@@ -90,7 +100,8 @@ var Demo = createReactClass({
                       reduce={reduce}
                       activeDimensions={['Transaction Type']}
                       hideRows={hideRows}
-                      nPaginateRows={20} />
+                      nPaginateRows={20}
+                      solo={this.state.solo} />
         </div>
 
         <div className={this.state.showInput ? '' : 'hide'}>
