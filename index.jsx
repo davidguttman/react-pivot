@@ -123,22 +123,26 @@ export default createReactClass({
     var html = (
       <div className='reactPivot'>
 
-      { this.props.hideDimensionFilter ? '' :
-        <Dimensions
-          dimensions={this.props.dimensions}
-          subDimensionText={this.props.subDimensionText}
-          selectedDimensions={this.state.dimensions}
-          onChange={this.setDimensions} />
-      }
+        <div className='reactPivot-toolbar'>
+          { this.props.hideDimensionFilter ? null :
+            <Dimensions
+              dimensions={this.props.dimensions}
+              subDimensionText={this.props.subDimensionText}
+              selectedDimensions={this.state.dimensions}
+              onChange={this.setDimensions} />
+          }
 
-        <ColumnControl
-          hiddenColumns={this.state.hiddenColumns}
-          onChange={this.setHiddenColumns} />
+          <div className='reactPivot-controls'>
+            <ColumnControl
+              hiddenColumns={this.state.hiddenColumns}
+              onChange={this.setHiddenColumns} />
 
-        <div className="reactPivot-csvExport">
-          <button onClick={partial(this.downloadCSV, this.state.rows)}>
-            Export CSV
-          </button>
+            <div className="reactPivot-csvExport">
+              <button onClick={partial(this.downloadCSV, this.state.rows)}>
+                Export CSV
+              </button>
+            </div>
+          </div>
         </div>
 
         { Object.keys(this.state.solo).map(function (title) {
@@ -146,7 +150,6 @@ export default createReactClass({
 
           return (
             <div
-              style={{clear: 'both'}}
               className='reactPivot-soloDisplay'
               key={'solo-' + title} >
               <span
@@ -371,14 +374,48 @@ function loadStyles() {
   background: none;
 }
 
-.reactPivot-solo {opacity: 0}
+.reactPivot-solo {
+  opacity: 0;
+  margin-left: 6px;
+}
+
 .reactPivot-solo:hover {font-weight: bold}
 td:hover .reactPivot-solo {opacity: 0.5}
 
-.reactPivot-csvExport,
-.reactPivot-columnControl {
-  float: right;
-  margin-left: 5px;
+.reactPivot-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.reactPivot-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.reactPivot-controls > * {
+  margin: 0;
+}
+
+.reactPivot-controls select {
+  margin: 0;
+  width: 120px;
+}
+
+.reactPivot-toolbar select {
+  margin-top: 0;
+}
+
+.reactPivot-csvExport {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
 }
 
 .reactPivot-csvExport button {
@@ -387,15 +424,25 @@ td:hover .reactPivot-solo {opacity: 0.5}
   height: 28px;
   color: #555;
   cursor: pointer;
-  padding: 0 10px;
-  border-radius: 4px;
-  margin-top: 5px;
+  padding: 0 12px;
+  border-radius: 0;
+  margin-top: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .reactPivot-dimensions {
-  float: left;
-  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0;
   text-align: left;
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.reactPivot-dimensions select {
+  margin: 0;
 }
 
 .reactPivot-hideColumn { opacity: 0 }
