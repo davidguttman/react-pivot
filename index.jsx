@@ -12,6 +12,7 @@ import getValue from './lib/get-value'
 import PivotTable from './lib/pivot-table.jsx'
 import Dimensions from './lib/dimensions.jsx'
 import ColumnControl from './lib/column-control.jsx'
+import SoloControl from './lib/solo-control.jsx'
 
 const _ = { filter, map, find }
 
@@ -118,8 +119,6 @@ export default createReactClass({
   },
 
   render: function() {
-    var self = this
-
     var html = (
       <div className='reactPivot'>
 
@@ -137,6 +136,11 @@ export default createReactClass({
               hiddenColumns={this.state.hiddenColumns}
               onChange={this.setHiddenColumns} />
 
+            <SoloControl
+              solo={this.state.solo}
+              onClear={this.clearSolo}
+            />
+
             <div className="reactPivot-csvExport">
               <button onClick={partial(this.downloadCSV, this.state.rows)}>
                 Export CSV
@@ -144,23 +148,6 @@ export default createReactClass({
             </div>
           </div>
         </div>
-
-        { Object.keys(this.state.solo).map(function (title) {
-          var value = self.state.solo[title]
-
-          return (
-            <div
-              className='reactPivot-soloDisplay'
-              key={'solo-' + title} >
-              <span
-                className='reactPivot-clearSolo'
-                onClick={partial(self.clearSolo, title)} >
-                &times;
-              </span>
-              {title}: {value}
-            </div>
-          )
-        }) }
 
         <PivotTable
           columns={this.getColumns()}
@@ -245,7 +232,7 @@ export default createReactClass({
   },
 
   setSolo: function(solo) {
-    var newSolo = this.state.solo
+    var newSolo = Object.assign({}, this.state.solo)
     newSolo[solo.title] = solo.value
     this.props.eventBus.emit('solo', newSolo)
     this.setState({solo: newSolo })
@@ -253,11 +240,10 @@ export default createReactClass({
   },
 
   clearSolo: function(title) {
-    var oldSolo = this.state.solo
-    var newSolo = {}
-    Object.keys(oldSolo).forEach(function (k) {
-      if (k !== title) newSolo[k] = oldSolo[k]
-    })
+    if (typeof title === 'undefined' || title === null) return
+
+    var newSolo = Object.assign({}, this.state.solo)
+    delete newSolo[title]
     this.props.eventBus.emit('solo', newSolo)
     this.setState({solo: newSolo})
     setTimeout(this.updateRows, 0)
@@ -314,21 +300,6 @@ function loadStyles() {
   padding: 10px 20px 20px;
   background: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.reactPivot-soloDisplay {
-  padding: 5px;
-}
-
-.reactPivot-clearSolo {
-  opacity: 0.5;
-  cursor: pointer;
-  font-size: 120%;
-  margin-right: 2px;
-}
-
-.reactPivot-clearSolo:hover {
-  font-weight: bold;
 }
 
 .reactPivot select {
