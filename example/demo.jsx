@@ -4,10 +4,65 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import createReactClass from 'create-react-class'
+import Emitter from 'wildemitter'
 import ReactPivot from '../index.jsx'
 
 import gh from './gh.jsx'
 import data from './data.json'
+
+const STORAGE_KEY = 'reactPivotDemoState'
+
+function loadPersistedState() {
+  if (typeof window === 'undefined') return {}
+
+  try {
+    var stored = window.localStorage.getItem(STORAGE_KEY)
+    if (!stored) return {}
+
+    var parsed = JSON.parse(stored)
+    return parsed && typeof parsed === 'object' ? parsed : {}
+  } catch (err) {
+    return {}
+  }
+}
+
+function persistState(state) {
+  if (typeof window === 'undefined') return
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  } catch (err) {}
+}
+
+var persistedState = loadPersistedState()
+var eventBus = new Emitter
+
+function persist(key, value) {
+  if (typeof key !== 'string') return
+
+  persistedState = Object.assign({}, persistedState, {[key]: value})
+  persistState(persistedState)
+}
+
+eventBus.on('activeDimensions', function(activeDimensions) {
+  persist('activeDimensions', activeDimensions)
+})
+
+eventBus.on('sortBy', function(sortBy) {
+  persist('sortBy', sortBy)
+})
+
+eventBus.on('sortDir', function(sortDir) {
+  persist('sortDir', sortDir)
+})
+
+eventBus.on('hiddenColumns', function(hiddenColumns) {
+  persist('hiddenColumns', hiddenColumns)
+})
+
+eventBus.on('solo', function(solo) {
+  persist('solo', solo)
+})
 
 var dimensions = [
   {value: 'firstName', title: 'First Name'},
@@ -54,8 +109,6 @@ var calculations = [
   }
 ]
 
-var hideRows = row => row.amountTotal < 1000
-
 var Demo = createReactClass({
   getInitialState: function() {
     return {showInput: false}
@@ -88,8 +141,12 @@ var Demo = createReactClass({
                       dimensions={dimensions}
                       calculations={calculations}
                       reduce={reduce}
-                      activeDimensions={['Transaction Type']}
-                      hideRows={hideRows}
+                      activeDimensions={persistedState.activeDimensions || ['Transaction Type']}
+                      sortBy={persistedState.sortBy}
+                      sortDir={persistedState.sortDir}
+                      solo={persistedState.solo}
+                      hiddenColumns={persistedState.hiddenColumns}
+                      eventBus={eventBus}
                       nPaginateRows={20} />
         </div>
 
