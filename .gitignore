@@ -1,2 +1,8 @@
 node_modules/
 *.log
+# macOS Finder junk
+.DS_Store
+._*
+
+# SpecStory session artifacts
+.specstory
