@@ -1,13 +1,27 @@
-var _ = require('lodash')
-var React = require('react')
-var DataFrame = require('dataframe')
-var Emitter = require('wildemitter')
+import filter from 'lodash/filter'
+import map from 'lodash/map'
+import find from 'lodash/find'
+import React from 'react'
+import createReactClass from 'create-react-class'
+import DataFrame from 'dataframe'
+import Emitter from 'wildemitter'
 
-var partial = require('./lib/partial')
-var download = require('./lib/download')
+import partial from './lib/partial'
+import download from './lib/download'
+import getValue from './lib/get-value'
+import PivotTable from './lib/pivot-table.jsx'
+import Dimensions from './lib/dimensions.jsx'
+import ColumnControl from './lib/column-control.jsx'
+import SoloControl from './lib/solo-control.jsx'
+import {
+  serializeSoloValue,
+  createSoloFilter,
+  soloEntries
+} from './lib/solo-utils.js'
 
-module.exports = React.createClass({
-  cache: {},
+const _ = { filter, map, find }
+
+export default createReactClass({
   displayName: 'ReactPivot',
   getDefaultProps: function() {
     return {
@@ -17,32 +31,45 @@ module.exports = React.createClass({
       reduce: function() {},
       tableClassName: '',
       csvDownloadFileName: 'table.csv',
+      csvTemplateFormat: false,
       defaultStyles: true,
       nPaginateRows: 25,
-      solo: null,
+      solo: {},
       hiddenColumns: [],
-      paginatePage: 0,
+      hideRows: null,
       sortBy: null,
       sortDir: 'asc',
       eventBus: new Emitter,
-      compact: false
+      compact: false,
+      excludeSummaryFromExport: false,
+      onData: function () {},
+      soloText: "solo",
+      subDimensionText: "Sub Dimension..."
     }
   },
 
   getInitialState: function() {
+    var allDimensions = this.props.dimensions
+    var activeDimensions =  _.filter(this.props.activeDimensions, function (title) {
+      return _.find(allDimensions, function(col) {
+        return col.title === title
+      })
+    })
+
     return {
-      dimensions: this.props.activeDimensions,
+      dimensions: activeDimensions,
       calculations: {},
       sortBy: this.props.sortBy,
       sortDir: this.props.sortDir,
-      nPaginateRows: this.props.nPaginateRows,
-      paginatePage: this.props.paginatePage,
       hiddenColumns: this.props.hiddenColumns,
-      solo: this.props.solo
+      solo: this.props.solo,
+      filtersPaused: false,
+      hideRows: this.props.hideRows,
+      rows: []
     }
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     if (this.props.defaultStyles) loadStyles()
 
     this.dataFrame = DataFrame({
@@ -50,20 +77,162 @@ module.exports = React.createClass({
       dimensions: this.props.dimensions,
       reduce: this.props.reduce
     })
+
+    this.updateRows()
   },
 
-  toggleDimension: function (iDimension, evt) {
-    var dimension = evt.target.value
-    var dimensions = this.state.dimensions
+  componentDidUpdate: function(prevProps) {
+     if(this.props.hiddenColumns !== prevProps.hiddenColumns) {
+         this.setHiddenColumns(this.props.hiddenColumns);
+     }
 
-    var curIdx = dimensions.indexOf(dimension)
-    if (curIdx >= 0) dimensions[curIdx] = null
-    dimensions[iDimension] = dimension
+    if(this.props.rows !== prevProps.rows) {
+      this.dataFrame = DataFrame({
+        rows: this.props.rows,
+        dimensions: this.props.dimensions,
+        reduce: this.props.reduce
+      })
 
-    var updatedDimensions = _.compact(dimensions)
+      this.updateRows()
+    }
 
+    if (this.props.solo !== prevProps.solo) {
+      this.setState({solo: this.props.solo}, this.updateRows)
+    }
+  },
+
+  getColumns: function() {
+    var self = this
+    var columns = []
+
+    this.state.dimensions.forEach(function(title) {
+      var d =  _.find(self.props.dimensions, function(col) {
+        return col.title === title
+      })
+
+      columns.push({
+        type: 'dimension', title: d.title, value: d.value,
+        className: d.className, template: d.template, sortBy: d.sortBy
+      })
+    })
+
+    this.props.calculations.forEach(function(c) {
+      if (self.state.hiddenColumns.indexOf(c.title) >= 0) return
+
+      columns.push({
+        type:'calculation', title: c.title, template: c.template,
+        value: c.value, className: c.className, sortBy: c.sortBy
+      })
+    })
+
+    return columns
+  },
+
+  renderFiltersToggle: function() {
+    if (soloEntries(this.state.solo).length === 0) return null
+
+    var buttonText = this.state.filtersPaused ? 'Resume Filters' : 'Pause Filters'
+
+    return (
+      <div className='reactPivot-filtersToggle'>
+        <button onClick={this.toggleFilters}>
+          {buttonText}
+        </button>
+      </div>
+    )
+  },
+
+  render: function() {
+    var html = (
+      <div className='reactPivot'>
+
+        <div className='reactPivot-toolbar'>
+          { this.props.hideDimensionFilter ? null :
+            <Dimensions
+              dimensions={this.props.dimensions}
+              subDimensionText={this.props.subDimensionText}
+              selectedDimensions={this.state.dimensions}
+              onChange={this.setDimensions} />
+          }
+
+          <div className='reactPivot-controls'>
+            <ColumnControl
+              hiddenColumns={this.state.hiddenColumns}
+              onChange={this.setHiddenColumns} />
+
+            <SoloControl
+              solo={this.state.solo}
+              onToggle={this.setSolo}
+            />
+
+            {this.renderFiltersToggle()}
+
+            <div className="reactPivot-csvExport">
+              <button onClick={partial(this.downloadCSV, this.state.rows)}>
+                Export CSV
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <PivotTable
+          columns={this.getColumns()}
+          rows={this.state.rows}
+          sortBy={this.state.sortBy}
+          sortDir={this.state.sortDir}
+          onSort={this.setSort}
+          onColumnHide={this.hideColumn}
+          nPaginateRows={this.props.nPaginateRows}
+          tableClassName={this.props.tableClassName}
+          onSolo={this.setSolo}
+          soloText={this.props.soloText}
+        />
+      </div>
+    )
+
+    return html
+  },
+
+  updateRows: function () {
+    var columns = this.getColumns()
+
+    var sortByTitle = this.state.sortBy
+    var sortCol = _.find(columns, function(col) {
+      return col.title === sortByTitle
+    }) || {}
+    var sortBy = sortCol.sortBy || (sortCol.type === 'dimension' ? sortCol.title : sortCol.value);
+    var sortDir = this.state.sortDir
+    var hideRows = this.state.hideRows
+
+    var calcOpts = {
+      dimensions: this.state.dimensions,
+      sortBy: sortBy,
+      sortDir: sortDir,
+      compact: this.props.compact
+    }
+
+    if (!this.state.filtersPaused) {
+      calcOpts.filter = createSoloFilter(this.state.solo, this.state.dimensions)
+    }
+
+    var rows = this.dataFrame
+      .calculate(calcOpts)
+      .filter(function (row) { return hideRows ? !hideRows(row) : true })
+
+    this.setState({rows: rows})
+    this.props.onData(rows)
+  },
+
+  setDimensions: function (updatedDimensions) {
     this.props.eventBus.emit('activeDimensions', updatedDimensions)
     this.setState({dimensions: updatedDimensions})
+    setTimeout(this.updateRows, 0)
+  },
+
+  setHiddenColumns: function (hidden) {
+    this.props.eventBus.emit('hiddenColumns', hidden)
+    this.setState({hiddenColumns: hidden})
+    setTimeout(this.updateRows, 0)
   },
 
   setSort: function(cTitle) {
@@ -79,47 +248,71 @@ module.exports = React.createClass({
     this.props.eventBus.emit('sortBy', sortBy)
     this.props.eventBus.emit('sortDir', sortDir)
     this.setState({sortBy: sortBy, sortDir: sortDir})
-  },
-
-  setPaginatePage: function(nPage) {
-    this.props.eventBus.emit('paginatePage', nPage)
-    this.setState({paginatePage: nPage})
+    setTimeout(this.updateRows, 0)
   },
 
   setSolo: function(solo) {
-    this.props.eventBus.emit('solo', solo)
-    this.setState({solo: solo })
+    if (!solo || typeof solo !== 'object') return
+
+    var dimension = solo.title
+    if (!dimension) return
+
+    var valueKey = serializeSoloValue(solo.value)
+    if (!valueKey) return
+
+    var newSolo = Object.assign({}, this.state.solo)
+    var valueMap = newSolo[dimension] || {}
+
+    if (Object.prototype.hasOwnProperty.call(valueMap, valueKey)) {
+      newSolo[dimension] = this.removeSoloValue(valueMap, valueKey)
+      if (!newSolo[dimension]) delete newSolo[dimension]
+    } else {
+      newSolo[dimension] = this.addSoloValue(valueMap, valueKey)
+    }
+
+    this.props.eventBus.emit('solo', newSolo)
+
+    // Auto-resume filters when adding or removing a solo value
+    this.setState({solo: newSolo, filtersPaused: false}, this.updateRows)
   },
 
-  clearSolo: function() {
-    this.props.eventBus.emit('solo', null)
-    this.setState({solo: null})
+  addSoloValue: function(valueMap, key) {
+    var updated = Object.assign({}, valueMap)
+    updated[key] = true
+    return updated
+  },
+
+  removeSoloValue: function(valueMap, key) {
+    var updated = Object.assign({}, valueMap)
+    delete updated[key]
+    return Object.keys(updated).length > 0 ? updated : null
+  },
+
+  toggleFilters: function() {
+    this.setState({filtersPaused: !this.state.filtersPaused}, this.updateRows)
   },
 
   hideColumn: function(cTitle) {
-    var hidden = this.state.hiddenColumns
-    hidden.push(cTitle)
-    this.props.eventBus.emit('hiddenColumns', hidden)
-    this.setState({hiddenColumns: hidden})
+    var hidden = this.state.hiddenColumns.concat([cTitle])
+    this.setHiddenColumns(hidden)
+    setTimeout(this.updateRows, 0)
   },
 
-  showColumn: function(evt) {
-    var col = evt.target.value
-    var hidden = _.without(this.state.hiddenColumns, col)
-    this.props.eventBus.emit('hiddenColumns', hidden)
-    this.setState({hiddenColumns: hidden})
-  },
-
-  downloadCSV: function() {
+  downloadCSV: function(rows) {
     var self = this
 
     var columns = this.getColumns()
 
-    var csv = _.pluck(columns, 'title')
+    var csv = _.map(columns, 'title')
       .map(JSON.stringify.bind(JSON))
       .join(',') + '\n'
 
-    this.renderedRows.forEach(function(row) {
+    var maxLevel = this.state.dimensions.length - 1
+    var excludeSummary = this.props.excludeSummaryFromExport
+
+    rows.forEach(function(row) {
+      if (excludeSummary && (row._level < maxLevel)) return
+
       var vals = columns.map(function(col) {
 
         if (col.type === 'dimension') {
@@ -128,315 +321,202 @@ module.exports = React.createClass({
           var val = getValue(col, row)
         }
 
+        if (col.template && self.props.csvTemplateFormat) {
+          val = col.template(val)
+        }
+
         return JSON.stringify(val)
       })
       csv += vals.join(',') + '\n'
     })
 
     download(csv, this.props.csvDownloadFileName, 'text/csv')
-  },
-
-  getColumns: function() {
-    var self = this
-    var columns = []
-
-    this.state.dimensions.forEach(function(title) {
-      var d =  _.find(self.props.dimensions, function(col) {
-        return col.title === title
-      })
-
-      columns.push({
-        type: 'dimension', title: d.title, value: d.value,
-        className: d.className, template: d.template
-      })
-    })
-
-    this.props.calculations.forEach(function(c) {
-      if (self.state.hiddenColumns.indexOf(c.title) >= 0) return
-
-      columns.push({
-        type:'calculation', title: c.title, template: c.template,
-        value: c.value, className: c.className
-      })
-    })
-
-    return columns
-  },
-
-  paginate: function(results) {
-    if (results.length <= 0) return {rows: results, nPages: 1, curPage: 0}
-
-    var paginatePage = this.state.paginatePage
-    var nPaginateRows = this.state.nPaginateRows
-    if (!nPaginateRows || !isFinite(nPaginateRows)) nPaginateRows = results.length
-
-    var nPaginatePages = Math.ceil(results.length / nPaginateRows)
-    if (paginatePage >= nPaginatePages) paginatePage = nPaginatePages - 1
-
-    var iBoundaryRow = paginatePage * nPaginateRows
-
-    var boundaryLevel = results[iBoundaryRow]._level
-    var parentRows = []
-    if (boundaryLevel > 0) {
-      for (var i = iBoundaryRow-1; i >= 0; i--) {
-        if (results[i]._level < boundaryLevel) {
-          parentRows.unshift(results[i])
-          boundaryLevel = results[i]._level
-        }
-        if (results[i._level === 9]) break
-      }
-    }
-
-    var iEnd = iBoundaryRow + nPaginateRows
-    var rows = parentRows.concat(results.slice(iBoundaryRow, iEnd))
-
-    return {rows: rows, nPages: nPaginatePages, curPage: paginatePage}
-  },
-
-  render: function() {
-    var html = (
-      <div className='reactPivot'>
-        {this.renderDimensions()}
-        {this.renderColumnControl()}
-
-        <div className="reactPivot-csvExport">
-          <button onClick={this.downloadCSV}>Export CSV</button>
-        </div>
-
-        {
-          this.state.solo ? (
-            <div style={{clear: 'both'}} className='reactPivot-soloDisplay'>
-              <span className='reactPivot-clearSolo' onClick={this.clearSolo}>
-                &times;
-              </span>
-              {this.state.solo.title}: {this.state.solo.value}
-            </div>
-          ) : ''
-        }
-
-        {this.renderTable()}
-
-      </div>
-    )
-
-    return html
-  },
-
-  renderDimensions: function() {
-    var self = this
-    var selectedDimensions = this.state.dimensions
-    var nSelected = selectedDimensions.length
-
-    return (
-      <div className="reactPivot-dimensions">
-        {selectedDimensions.map(function(selectedDimension, i) {
-          return (
-            <select value={selectedDimension} onChange={partial(self.toggleDimension, i)}>
-              <option></option>
-              {self.props.dimensions.map(function(dimension) {
-                return <option value={dimension.title}>{dimension.title}</option>
-              })}
-            </select>
-          )
-        })}
-        <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
-          <option value={''}>Sub Dimension...</option>
-          {self.props.dimensions.map(function(dimension) {
-            return <option>{dimension.title}</option>
-          })}
-        </select>
-      </div>
-    )
-  },
-
-  renderColumnControl: function() {
-    var self = this
-    if (!this.state.hiddenColumns.length > 0) return
-
-    return (
-      <div className='reactPivot-columnControl'>
-        <select value={''} onChange={self.showColumn}>
-          <option value={''}>Hidden Columns</option>
-          {self.state.hiddenColumns.map(function(column) {
-            return <option>{column}</option>
-          })}
-        </select>
-      </div>
-    )
-
-  },
-
-  renderTable: function() {
-    var self = this
-
-    var columns = this.getColumns()
-
-    var sortByTitle = self.state.sortBy
-    var sortCol = _.find(columns, function(col) {
-      return col.title === sortByTitle
-    }) || {}
-    var sortBy = sortCol.type === 'dimension' ? sortCol.title : sortCol.value
-    var sortDir = this.state.sortDir
-
-    var calcOpts = {
-      dimensions: this.state.dimensions,
-      sortBy: sortBy,
-      sortDir: sortDir,
-      compact: this.props.compact
-    }
-
-    var filter = this.state.solo
-    if (filter) {
-      calcOpts.filter = function(dVals) {
-        return dVals[filter.title] === filter.value
-      }
-    }
-
-    var results = this.dataFrame.calculate(calcOpts)
-
-    var paginatedResults = this.paginate(results)
-
-    var tBody = this.renderTableBody(columns, paginatedResults.rows)
-    var tHead = this.renderTableHead(columns)
-
-    return (
-      <div className='reactPivot-results'>
-        <table className={this.props.tableClassName}>
-          {tHead}
-          {tBody}
-        </table>
-
-        {this.renderPagination(paginatedResults)}
-      </div>
-    )
-  },
-
-  renderTableHead: function(columns) {
-    var self = this
-    var sortBy = this.state.sortBy
-    var sortDir =  this.state.sortDir
-
-    return (
-      <thead>
-        <tr>
-          { columns.map(function(col) {
-            var className = col.className
-            if (col.title === sortBy) className += ' ' + sortDir
-
-            var hide = ''
-            if (col.type !== 'dimension') hide = (
-              <span className='reactPivot-hideColumn'
-                    onClick={partial(self.hideColumn, col.title)}>
-                &times;
-              </span>
-            )
-
-            return (
-              <th className={className}
-                  onClick={partial(self.setSort, col.title)}
-                  style={{cursor: 'pointer'}} >
-
-                {hide}
-                {col.title}
-              </th>
-            )
-          })}
-        </tr>
-      </thead>
-    )
-  },
-
-  renderTableBody: function(columns, rows) {
-    var self = this
-
-    this.renderedRows = rows
-
-    return (
-      <tbody>
-        {rows.map(function(row) {
-          return (
-            <tr key={row._key} className={"reactPivot-level-" + row._level}>
-              {columns.map(function(col, i) {
-                if (i < row._level) return <td className='reactPivot-indent' />
-
-                return self.renderCell(col, row)
-              })}
-            </tr>
-          )
-
-        })}
-      </tbody>
-    )
-  },
-
-  renderCell: function(col, row) {
-    if (col.type === 'dimension') {
-      var val = row[col.title]
-      var text = val
-      var dimensionExists = (typeof val) !== 'undefined'
-      if (col.template && dimensionExists) text = col.template(val, row)
-    } else {
-      var val = getValue(col, row)
-      var text = val
-      if (col.template) text = col.template(val, row)
-    }
-
-    if (dimensionExists) {
-      var solo = (
-        <span className='reactPivot-solo'>
-          <a style={{cursor: 'pointer'}}
-             onClick={partial(this.setSolo, {
-                title: col.title,
-                value: val
-              })}>solo</a>
-        </span>
-      )
-    }
-
-    return(
-      <td className={col.className}
-          key={[col.title, row.key].join('\xff')}
-          title={col.title}>
-        <span dangerouslySetInnerHTML={{__html: text || ''}}></span> {solo}
-      </td>
-    )
-  },
-
-  renderPagination: function(pagination) {
-    var self = this
-    var nPaginatePages = pagination.nPages
-    var paginatePage = pagination.curPage
-
-    if (nPaginatePages === 1) return ''
-
-    return (
-      <div className='reactPivot-paginate'>
-        {_.range(0, nPaginatePages).map(function(n) {
-          var c = 'reactPivot-pageNumber'
-          if (n === paginatePage) c += ' is-selected'
-          return (
-            <span className={c}>
-              <a onClick={partial(self.setPaginatePage, n)}>{n+1}</a>
-            </span>
-          )
-        })}
-      </div>
-    )
   }
-
 })
 
-function getValue (dimension, row) {
-  if (dimension == null) return null
-  var val
-  if (typeof dimension.value === 'string') {
-    val = row[dimension.value]
-  } else {
-    val = dimension.value(row)
-  }
-  return val
+function loadStyles() {
+  if (typeof document === 'undefined') return // SSR safety
+  if (document.getElementById('react-pivot-styles')) return // Already loaded
+  
+  const css = `.reactPivot {
+  margin-top: 40px;
+  padding: 10px 20px 20px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-function loadStyles () {
-  require('./style.css')
+.reactPivot select {
+  color: #555;
+  height: 28px;
+  border: none;
+  margin-right: 5px;
+  margin-top: 5px;
+  background-color: #FFF;
+  border: 1px solid #CCC;
+}
+
+.reactPivot-results table {
+  width: 100%;
+  clear: both;
+  text-align: left;
+  border-spacing: 0;
+}
+
+.reactPivot-results th.asc:after,
+.reactPivot-results th.desc:after {
+  font-size: 50%;
+  opacity: 0.5;
+}
+
+.reactPivot-results th.asc:after { content: ' ▲' }
+.reactPivot-results th.desc:after { content: ' ▼' }
+
+.reactPivot-results td {
+  border-top: 1px solid #ddd;
+  padding: 8px;
+}
+
+.reactPivot-results td.reactPivot-indent {
+  border: none;
+}
+
+.reactPivot-results tr:hover td {
+  background: #f5f5f5
+}
+
+.reactPivot-results tr:hover td.reactPivot-indent {
+  background: none;
+}
+
+.reactPivot-solo {
+  opacity: 0;
+  margin-left: 6px;
+}
+
+.reactPivot-solo:hover {font-weight: bold}
+td:hover .reactPivot-solo {opacity: 0.5}
+
+.reactPivot-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.reactPivot-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.reactPivot-controls > * {
+  margin: 0;
+}
+
+.reactPivot-controls select {
+  margin: 0;
+  width: 120px;
+}
+
+.reactPivot-toolbar select {
+  margin-top: 0;
+}
+
+.reactPivot-csvExport {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.reactPivot-csvExport button {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  height: 28px;
+  color: #555;
+  cursor: pointer;
+  padding: 0 12px;
+  border-radius: 0;
+  margin-top: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.reactPivot-filtersToggle {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.reactPivot-filtersToggle button {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  height: 28px;
+  color: #555;
+  cursor: pointer;
+  padding: 0 12px;
+  border-radius: 0;
+  margin-top: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.reactPivot-dimensions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0;
+  text-align: left;
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.reactPivot-dimensions select {
+  margin: 0;
+}
+
+.reactPivot-hideColumn { opacity: 0 }
+
+th:hover .reactPivot-hideColumn {
+  opacity: 0.5;
+  margin-right: 4px;
+  margin-bottom: 2px;
+}
+
+.reactPivot-hideColumn:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.reactPivot-pageNumber {
+  padding: 2px;
+  margin: 4px;
+  cursor: pointer;
+  color: gray;
+  font-size: 14px;
+}
+
+.reactPivot-pageNumber:hover {
+  font-weight: bold;
+  border-bottom: black solid 1px;
+  color: black;
+}
+
+.reactPivot-pageNumber.is-selected {
+  font-weight: bold;
+  border-bottom: black solid 1px;
+  color: black;
+}
+
+.reactPivot-paginate {
+  margin-top: 24px;
+}`
+  
+  const style = document.createElement('style')
+  style.id = 'react-pivot-styles'
+  style.textContent = css
+  document.head.appendChild(style)
 }

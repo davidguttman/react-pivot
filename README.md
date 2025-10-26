@@ -1,6 +1,8 @@
 # ReactPivot #
 
-ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration. Can be used without React.
+ReactPivot is a data-grid component with pivot-table-like functionality for data display, filtering, and exploration. 
+
+**Now compatible with React 19+ and modern build tools!**
 
 Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io/react-pivot/)
 
@@ -8,73 +10,82 @@ Demo: [http://davidguttman.github.io/react-pivot/](http://davidguttman.github.io
 
 ## Installation & Usage ##
 
-<strong> Default (Browserify/webpack): </strong>
-
-```
-npm i -S react-pivot
+```bash
+npm install react-pivot
 ```
 
-```js
-var React = require('react')
-var ReactPivot = require('react-pivot')
+### Modern ES Modules (Recommended)
 
-React.render(
-  <ReactPivot rows={rows}
-              dimensions={dimensions}
-              reduce={reduce}
-              calculations={calculations}
-              nPaginateRows={25} />,
-  document.body
+```jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import ReactPivot from 'react-pivot'
+
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <ReactPivot 
+    rows={rows}
+    dimensions={dimensions}
+    reduce={reduce}
+    calculations={calculations}
+    nPaginateRows={25} 
+  />
 )
 ```
 
-<strong> Classic (no React or Browserify): </strong>
+### CommonJS (Legacy Support)
 
-Download [react-pivot-standalone-1.12.0.min.js](https://raw.githubusercontent.com/davidguttman/react-pivot/master/dist/react-pivot-standalone-1.12.0.min.js)
+```js
+const React = require('react')
+const { createRoot } = require('react-dom/client')
+const ReactPivot = require('react-pivot')
 
-```html
-<script src='react-pivot-standalone-1.12.0.min.js'></script>
-<script>
-  ReactPivot(document.body, {
+const root = createRoot(document.getElementById('root'))
+root.render(
+  React.createElement(ReactPivot, {
     rows: rows,
     dimensions: dimensions,
+    reduce: reduce,
     calculations: calculations,
-    reduce: reduce
+    nPaginateRows: 25
   })
-</script>
-```
-
-<strong> Custom (Browserify, no React): </strong>
-
-```js
-var ReactPivot = require('react-pivot/load')
-
-ReactPivot(document.body, {
-  rows: rows,
-  dimensions: dimensions,
-  reduce: reduce,
-  calculations: calculations
-})
-
-```
-
-
-## Example ##
-
-```js
-var React = require('react')
-var ReactPivot = require('react-pivot')
-
-React.render(
-  <ReactPivot rows={rows}
-              dimensions={dimensions}
-              reduce={reduce}
-              calculations={calculations} />,
-  document.body
 )
 ```
 
-`ReactPivot` takes four arguments: `rows`, `dimensions`, `reduce` and `calculations`
+### UMD (Browser Global)
+
+```html
+<script src="https://unpkg.com/react-pivot/dist/react-pivot.umd.js"></script>
+<script>
+  const root = ReactDOM.createRoot(document.getElementById('root'))
+  root.render(
+    React.createElement(ReactPivot, {
+      rows: rows,
+      dimensions: dimensions,
+      calculations: calculations,
+      reduce: reduce
+    })
+  )
+</script>
+## Example ##
+
+```jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import ReactPivot from 'react-pivot'
+
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <ReactPivot 
+    rows={rows}
+    dimensions={dimensions}
+    reduce={reduce}
+    calculations={calculations} 
+  />
+)
+```
+
+`ReactPivot` requires four arguments: `rows`, `dimensions`, `reduce` and `calculations`
 
 `rows` is your data, just an array of objects:
 ```js
@@ -109,6 +120,9 @@ var calculations = [
     title: 'Amount', value: 'amountTotal',
     template: function(val, row) {
       return '$' + val.toFixed(2)
+    },
+    sortBy: function(row) {
+      return isNaN(row.amountTotal) ? 0 : row.amountTotal
     }
   }
 ]
@@ -131,6 +145,21 @@ React.render(
 
 See it all together in [example/basic.jsx](https://github.com/davidguttman/react-pivot/blob/master/example/basic.jsx)
 
+### Optional Arguments ###
+parameter | type | description | default
+--------- | ---- | ----------- | -------
+compact | boolean | compact rows | false
+csvDownloadFileName | string | assign name of document created when user clicks to 'Export CSV' | 'table.csv'
+csvTemplateFormat | boolean | apply template formatting to data before csv export | false
+defaultStyles | boolean | apply default styles from style.css | true
+hiddenColumns | array | columns that should not display | []
+nPaginateRows | number | items per page setting | 25
+solo | object | active solo filters by dimension | {}
+sortBy | string | name of column to use for record sort | null
+sortDir | string | sort direction, either 'asc' or 'desc' | 'asc'
+tableClassName | string | assign css class to table containing react-pivot elements | ''
+hideDimensionFilter | boolean | do not render the dimension filter | false
+hideRows | function | if provided, rows that are passed to the function will not render unless the return value is true | null
 
 ### TODO ###
 

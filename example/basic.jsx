@@ -1,7 +1,9 @@
-var React = require('react')
-var ReactPivot = require('..')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
+import ReactPivot from '../index.jsx'
 
-var rows = require('./data.json')
+import rows from './data.json'
 
 // These are your "groups"
 // "title" is the title of the column
@@ -48,11 +50,13 @@ var calculations = [
   }
 ]
 
-React.render(
+const container = document.getElementById('root')
+const root = createRoot(container)
+
+root.render(
   <ReactPivot rows={rows}
     dimensions={dimensions}
     reduce={reduce}
     calculations={calculations}
-    activeDimensions={['Transaction Type']} />,
-  document.body
+    activeDimensions={['Transaction Type']} />
 )
