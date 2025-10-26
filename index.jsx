@@ -146,7 +146,7 @@ export default createReactClass({
 
             <SoloControl
               solo={this.state.solo}
-              onClear={this.clearSolo}
+              onToggle={this.setSolo}
             />
 
             <div className="reactPivot-csvExport">
@@ -267,27 +267,6 @@ export default createReactClass({
     var updated = Object.assign({}, valueMap)
     delete updated[key]
     return Object.keys(updated).length > 0 ? updated : null
-  },
-
-  clearSolo: function(payload) {
-    if (!payload) return
-
-    // If clearing a specific value, just toggle it
-    if (typeof payload === 'object' && Object.prototype.hasOwnProperty.call(payload, 'value')) {
-      this.setSolo({title: payload.title, value: payload.value})
-      return
-    }
-
-    // Otherwise, clear the entire dimension
-    var dimension = typeof payload === 'string' ? payload : payload.title
-    if (!dimension) return
-
-    var newSolo = Object.assign({}, this.state.solo)
-    if (!Object.prototype.hasOwnProperty.call(newSolo, dimension)) return
-
-    delete newSolo[dimension]
-    this.props.eventBus.emit('solo', newSolo)
-    this.setState({solo: newSolo}, this.updateRows)
   },
 
   hideColumn: function(cTitle) {
