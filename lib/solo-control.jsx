@@ -1,5 +1,19 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
+import { soloEntries, safeParseSoloPayload } from './solo-utils.js'
+
+function formatSoloValue(value) {
+  if (value === null) return 'null'
+  if (typeof value === 'object') {
+    try {
+      return JSON.stringify(value)
+    } catch (err) {
+      return '[object]'
+    }
+  }
+
+  return String(value)
+}
 
 export default createReactClass({
   getDefaultProps: function () {
@@ -10,7 +24,7 @@ export default createReactClass({
   },
 
   render: function () {
-    var entries = Object.keys(this.props.solo)
+    var entries = soloEntries(this.props.solo)
 
     if (!entries.length) {
       return (
@@ -18,14 +32,25 @@ export default createReactClass({
       )
     }
 
-    var options = entries.map(function(title) {
-      var value = this.props.solo[title]
-      var labelValue = typeof value === 'object' && value !== null
-        ? JSON.stringify(value)
-        : String(value)
-      var label = title + ': ' + labelValue
-      return <option key={title} value={title}>{label}</option>
-    }, this)
+    var options = entries.map(function(entry) {
+      var valueLabel = formatSoloValue(entry.value)
+      var label = entry.title + ': ' + valueLabel
+
+      var payload
+      try {
+        payload = JSON.stringify({title: entry.title, value: entry.value})
+      } catch (err) {
+        return null
+      }
+
+      return <option key={entry.title + '::' + entry.key} value={payload}>{label}</option>
+    }).filter(Boolean)
+
+    if (!options.length) {
+      return (
+        <div className='reactPivot-soloControl'></div>
+      )
+    }
 
     return (
       <div className='reactPivot-soloControl'>
@@ -38,9 +63,10 @@ export default createReactClass({
   },
 
   handleClear: function (evt) {
-    var title = evt.target.value
-    if (!title) return
+    var payload = safeParseSoloPayload(evt.target.value)
+    if (!payload) return
 
-    this.props.onClear(title)
+    evt.target.value = ''
+    this.props.onClear(payload)
   }
 })

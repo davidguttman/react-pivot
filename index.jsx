@@ -13,6 +13,10 @@ import PivotTable from './lib/pivot-table.jsx'
 import Dimensions from './lib/dimensions.jsx'
 import ColumnControl from './lib/column-control.jsx'
 import SoloControl from './lib/solo-control.jsx'
+import {
+  serializeSoloValue,
+  createSoloFilter
+} from './lib/solo-utils.js'
 
 const _ = { filter, map, find }
 
@@ -88,6 +92,10 @@ export default createReactClass({
       })
 
       this.updateRows()
+    }
+
+    if (this.props.solo !== prevProps.solo) {
+      this.setState({solo: this.props.solo}, this.updateRows)
     }
   },
 
@@ -185,20 +193,15 @@ export default createReactClass({
       compact: this.props.compact
     }
 
-    var filter = this.state.solo
-    if (filter) {
-      calcOpts.filter = function(dVals) {
-        var pass = true
-        Object.keys(filter).forEach(function (title) {
-          if (dVals[title] !== filter[title]) pass = false
-        })
-        return pass
-      }
+    var soloFilter = createSoloFilter(this.state.solo, this.state.dimensions)
+    if (soloFilter) {
+      calcOpts.filter = soloFilter
     }
 
     var rows = this.dataFrame
       .calculate(calcOpts)
       .filter(function (row) { return hideRows ? !hideRows(row) : true })
+
     this.setState({rows: rows})
     this.props.onData(rows)
   },
@@ -232,21 +235,59 @@ export default createReactClass({
   },
 
   setSolo: function(solo) {
+    if (!solo || typeof solo !== 'object') return
+
+    var dimension = solo.title
+    if (!dimension) return
+
+    var valueKey = serializeSoloValue(solo.value)
+    if (!valueKey) return
+
     var newSolo = Object.assign({}, this.state.solo)
-    newSolo[solo.title] = solo.value
+    var valueMap = newSolo[dimension] || {}
+
+    if (Object.prototype.hasOwnProperty.call(valueMap, valueKey)) {
+      newSolo[dimension] = this.removeSoloValue(valueMap, valueKey)
+      if (!newSolo[dimension]) delete newSolo[dimension]
+    } else {
+      newSolo[dimension] = this.addSoloValue(valueMap, valueKey)
+    }
+
     this.props.eventBus.emit('solo', newSolo)
-    this.setState({solo: newSolo })
-    setTimeout(this.updateRows, 0)
+    this.setState({solo: newSolo}, this.updateRows)
   },
 
-  clearSolo: function(title) {
-    if (typeof title === 'undefined' || title === null) return
+  addSoloValue: function(valueMap, key) {
+    var updated = Object.assign({}, valueMap)
+    updated[key] = true
+    return updated
+  },
+
+  removeSoloValue: function(valueMap, key) {
+    var updated = Object.assign({}, valueMap)
+    delete updated[key]
+    return Object.keys(updated).length > 0 ? updated : null
+  },
+
+  clearSolo: function(payload) {
+    if (!payload) return
+
+    // If clearing a specific value, just toggle it
+    if (typeof payload === 'object' && Object.prototype.hasOwnProperty.call(payload, 'value')) {
+      this.setSolo({title: payload.title, value: payload.value})
+      return
+    }
+
+    // Otherwise, clear the entire dimension
+    var dimension = typeof payload === 'string' ? payload : payload.title
+    if (!dimension) return
 
     var newSolo = Object.assign({}, this.state.solo)
-    delete newSolo[title]
+    if (!Object.prototype.hasOwnProperty.call(newSolo, dimension)) return
+
+    delete newSolo[dimension]
     this.props.eventBus.emit('solo', newSolo)
-    this.setState({solo: newSolo})
-    setTimeout(this.updateRows, 0)
+    this.setState({solo: newSolo}, this.updateRows)
   },
 
   hideColumn: function(cTitle) {

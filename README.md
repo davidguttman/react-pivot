@@ -154,7 +154,7 @@ csvTemplateFormat | boolean | apply template formatting to data before csv expor
 defaultStyles | boolean | apply default styles from style.css | true
 hiddenColumns | array | columns that should not display | []
 nPaginateRows | number | items per page setting | 25
-solo | object | item that should be displayed solo | null
+solo | object | active solo filters by dimension | {}
 sortBy | string | name of column to use for record sort | null
 sortDir | string | sort direction, either 'asc' or 'desc' | 'asc'
 tableClassName | string | assign css class to table containing react-pivot elements | ''
