@@ -61,6 +61,7 @@
     "example-basic": "vite example/basic.html --port ${PORT:-9966}",
     "example-persist": "vite example/persist.html --port ${PORT:-9966}",
     "build": "vite build",
+    "build:demo": "vite build --config vite.config.demo.mjs",
     "preview": "vite preview",
     "prepublishOnly": "npm run build"
   }
