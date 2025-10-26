@@ -15,7 +15,8 @@ import ColumnControl from './lib/column-control.jsx'
 import SoloControl from './lib/solo-control.jsx'
 import {
   serializeSoloValue,
-  createSoloFilter
+  createSoloFilter,
+  soloEntries
 } from './lib/solo-utils.js'
 
 const _ = { filter, map, find }
@@ -62,6 +63,7 @@ export default createReactClass({
       sortDir: this.props.sortDir,
       hiddenColumns: this.props.hiddenColumns,
       solo: this.props.solo,
+      filtersPaused: false,
       hideRows: this.props.hideRows,
       rows: []
     }
@@ -126,6 +128,20 @@ export default createReactClass({
     return columns
   },
 
+  renderFiltersToggle: function() {
+    if (soloEntries(this.state.solo).length === 0) return null
+
+    var buttonText = this.state.filtersPaused ? 'Resume Filters' : 'Pause Filters'
+
+    return (
+      <div className='reactPivot-filtersToggle'>
+        <button onClick={this.toggleFilters}>
+          {buttonText}
+        </button>
+      </div>
+    )
+  },
+
   render: function() {
     var html = (
       <div className='reactPivot'>
@@ -148,6 +164,8 @@ export default createReactClass({
               solo={this.state.solo}
               onToggle={this.setSolo}
             />
+
+            {this.renderFiltersToggle()}
 
             <div className="reactPivot-csvExport">
               <button onClick={partial(this.downloadCSV, this.state.rows)}>
@@ -193,9 +211,8 @@ export default createReactClass({
       compact: this.props.compact
     }
 
-    var soloFilter = createSoloFilter(this.state.solo, this.state.dimensions)
-    if (soloFilter) {
-      calcOpts.filter = soloFilter
+    if (!this.state.filtersPaused) {
+      calcOpts.filter = createSoloFilter(this.state.solo, this.state.dimensions)
     }
 
     var rows = this.dataFrame
@@ -254,7 +271,9 @@ export default createReactClass({
     }
 
     this.props.eventBus.emit('solo', newSolo)
-    this.setState({solo: newSolo}, this.updateRows)
+
+    // Auto-resume filters when adding or removing a solo value
+    this.setState({solo: newSolo, filtersPaused: false}, this.updateRows)
   },
 
   addSoloValue: function(valueMap, key) {
@@ -267,6 +286,10 @@ export default createReactClass({
     var updated = Object.assign({}, valueMap)
     delete updated[key]
     return Object.keys(updated).length > 0 ? updated : null
+  },
+
+  toggleFilters: function() {
+    this.setState({filtersPaused: !this.state.filtersPaused}, this.updateRows)
   },
 
   hideColumn: function(cTitle) {
@@ -410,6 +433,25 @@ td:hover .reactPivot-solo {opacity: 0.5}
 }
 
 .reactPivot-csvExport button {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  height: 28px;
+  color: #555;
+  cursor: pointer;
+  padding: 0 12px;
+  border-radius: 0;
+  margin-top: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.reactPivot-filtersToggle {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.reactPivot-filtersToggle button {
   background-color: #FFF;
   border: 1px solid #CCC;
   height: 28px;
