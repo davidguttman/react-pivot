@@ -7,7 +7,6 @@ import createReactClass from 'create-react-class'
 import Emitter from 'wildemitter'
 import ReactPivot from '../index.jsx'
 
-import gh from './gh.jsx'
 import data from './data.json'
 
 const STORAGE_KEY = 'reactPivotDemoState'
@@ -163,8 +162,6 @@ var Demo = createReactClass({
           <a className={this.state.showInput ? 'strong' : ''}
              onClick={this.toggleShow}>Input Data</a>
         </p>
-
-        {gh}
       </div>
     )
   }
