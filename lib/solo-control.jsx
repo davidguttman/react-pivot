@@ -19,7 +19,7 @@ export default createReactClass({
   getDefaultProps: function () {
     return {
       solo: {},
-      onClear: function () {}
+      onToggle: function () {}
     }
   },
 
@@ -54,7 +54,7 @@ export default createReactClass({
 
     return (
       <div className='reactPivot-soloControl'>
-        <select value={''} onChange={this.handleClear}>
+        <select value={''} onChange={this.handleToggle}>
           <option value={''}>Solo Filters</option>
           {options}
         </select>
@@ -62,11 +62,11 @@ export default createReactClass({
     )
   },
 
-  handleClear: function (evt) {
+  handleToggle: function (evt) {
     var payload = safeParseSoloPayload(evt.target.value)
     if (!payload) return
 
     evt.target.value = ''
-    this.props.onClear(payload)
+    this.props.onToggle(payload)
   }
 })
