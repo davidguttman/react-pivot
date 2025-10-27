@@ -146,7 +146,9 @@ var Demo = createReactClass({
                       solo={persistedState.solo}
                       hiddenColumns={persistedState.hiddenColumns}
                       eventBus={eventBus}
-                      nPaginateRows={20} />
+                      nPaginateRows={20}
+                      soloText="🔍"
+                      unsoloText="↩️" />
         </div>
 
         <div className={this.state.showInput ? '' : 'hide'}>
