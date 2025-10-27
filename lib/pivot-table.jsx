@@ -3,6 +3,7 @@ import React from 'react'
 import createReactClass from 'create-react-class'
 import partial from './partial'
 import getValue from './get-value'
+import { isSoloValueActive } from './solo-utils.js'
 
 const _ = { range }
 
@@ -17,7 +18,9 @@ export default createReactClass({
       onSort: function () {},
       onSolo: function () {},
       onColumnHide: function () {},
-      soloText: "solo"
+      soloText: "solo",
+      unsoloText: "unsolo",
+      solo: {}
     }
   },
 
@@ -117,13 +120,15 @@ export default createReactClass({
     }
 
     if (dimensionExists) {
+      var isActive = isSoloValueActive(this.props.solo, col.title, val)
+      var soloText = isActive ? this.props.unsoloText : this.props.soloText
       var solo = (
         <span className='reactPivot-solo'>
           <a style={{cursor: 'pointer'}}
              onClick={partial(this.props.onSolo, {
                 title: col.title,
                 value: val
-              })}>{this.props.soloText}</a>
+              })}>{soloText}</a>
         </span>
       )
     }
