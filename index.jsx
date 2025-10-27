@@ -44,6 +44,7 @@ export default createReactClass({
       excludeSummaryFromExport: false,
       onData: function () {},
       soloText: "solo",
+      unsoloText: "unsolo",
       subDimensionText: "Sub Dimension..."
     }
   },
@@ -186,6 +187,8 @@ export default createReactClass({
           tableClassName={this.props.tableClassName}
           onSolo={this.setSolo}
           soloText={this.props.soloText}
+          unsoloText={this.props.unsoloText}
+          solo={this.state.solo}
         />
       </div>
     )
@@ -391,6 +394,10 @@ function loadStyles() {
 .reactPivot-solo {
   opacity: 0;
   margin-left: 6px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .reactPivot-solo:hover {font-weight: bold}
