@@ -122,9 +122,12 @@ export default createReactClass({
     this.props.calculations.forEach(function(c) {
       if (self.state.hiddenColumns.indexOf(c.title) >= 0) return
 
+      var className = 'reactPivot-calculation'
+      if (c.className) className += ' ' + c.className
+
       columns.push({
         type:'calculation', title: c.title, template: c.template,
-        value: c.value, className: c.className, sortBy: c.sortBy
+        value: c.value, className: className, sortBy: c.sortBy
       })
     })
 
@@ -392,6 +395,11 @@ function loadStyles() {
 .reactPivot-results td {
   border-top: 1px solid #ddd;
   padding: 8px;
+}
+
+.reactPivot-results td.reactPivot-calculation,
+.reactPivot-results th.reactPivot-calculation {
+  text-align: right;
 }
 
 .reactPivot-results td.reactPivot-indent {

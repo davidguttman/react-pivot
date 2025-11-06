@@ -36,6 +36,11 @@
   padding: 8px;
 }
 
+.reactPivot-results td.reactPivot-calculation,
+.reactPivot-results th.reactPivot-calculation {
+  text-align: right;
+}
+
 .reactPivot-results td.reactPivot-indent {
   border: none;
 }
