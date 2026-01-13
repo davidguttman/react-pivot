@@ -148,7 +148,9 @@ var Demo = createReactClass({
                       eventBus={eventBus}
                       nPaginateRows={20}
                       soloText="🔍"
-                      unsoloText="↩️" />
+                      unsoloText="↩️"
+                      showClearFilters={true}
+                      clearFiltersText="Clear Filters" />
         </div>
 
         <div className={this.state.showInput ? '' : 'hide'}>

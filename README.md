@@ -145,6 +145,23 @@ React.render(
 
 See it all together in [example/basic.jsx](https://github.com/davidguttman/react-pivot/blob/master/example/basic.jsx)
 
+### Solo Filters ###
+
+ReactPivot supports "solo" filtering, which allows users to click on values in the table to filter the data to only show rows matching that value. When solo filters are active, you can optionally display a "Clear Filters" button to remove all filters at once.
+
+```jsx
+<ReactPivot 
+  rows={rows}
+  dimensions={dimensions}
+  reduce={reduce}
+  calculations={calculations}
+  showClearFilters={true}
+  clearFiltersText="Reset Filters"
+/>
+```
+
+The `clearFiltersText` prop is optional and defaults to `"Clear Filters"`. When `showClearFilters` is set to `true`, a Clear button appears in the same toolbar row as the solo filter dropdown and Pause Filters whenever filters are active, allowing users to clear all filters with a single click.
+
 ### Optional Arguments ###
 parameter | type | description | default
 --------- | ---- | ----------- | -------
@@ -160,6 +177,8 @@ sortDir | string | sort direction, either 'asc' or 'desc' | 'asc'
 tableClassName | string | assign css class to table containing react-pivot elements | ''
 hideDimensionFilter | boolean | do not render the dimension filter | false
 hideRows | function | if provided, rows that are passed to the function will not render unless the return value is true | null
+showClearFilters | boolean | display Clear Filters button when solo filters are active | false
+clearFiltersText | string | customizable text for the clear filters button | 'Clear Filters'
 
 ### TODO ###
 

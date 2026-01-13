@@ -45,7 +45,9 @@ export default createReactClass({
       onData: function () {},
       soloText: "solo",
       unsoloText: "unsolo",
-      subDimensionText: "Sub Dimension..."
+      subDimensionText: "Sub Dimension...",
+      showClearFilters: false,
+      clearFiltersText: "Clear Filters"
     }
   },
 
@@ -129,13 +131,26 @@ export default createReactClass({
     return columns
   },
 
-  renderFiltersToggle: function() {
-    if (soloEntries(this.state.solo).length === 0) return null
+  renderFilterActions: function() {
+    var hasFilters = soloEntries(this.state.solo).length > 0
+
+    if (!hasFilters) {
+      return <SoloControl solo={this.state.solo} onToggle={this.setSolo} />
+    }
 
     var buttonText = this.state.filtersPaused ? 'Resume Filters' : 'Pause Filters'
 
     return (
-      <div className='reactPivot-filtersToggle'>
+      <div className='reactPivot-filterActions'>
+        <SoloControl solo={this.state.solo} onToggle={this.setSolo} />
+        {this.props.showClearFilters && (
+          <button
+            className='reactPivot-clearFilters'
+            onClick={this.clearSolo}
+          >
+            {this.props.clearFiltersText}
+          </button>
+        )}
         <button onClick={this.toggleFilters}>
           {buttonText}
         </button>
@@ -161,12 +176,7 @@ export default createReactClass({
               hiddenColumns={this.state.hiddenColumns}
               onChange={this.setHiddenColumns} />
 
-            <SoloControl
-              solo={this.state.solo}
-              onToggle={this.setSolo}
-            />
-
-            {this.renderFiltersToggle()}
+            {this.renderFilterActions()}
 
             <div className="reactPivot-csvExport">
               <button onClick={partial(this.downloadCSV, this.state.rows)}>
@@ -277,6 +287,11 @@ export default createReactClass({
 
     // Auto-resume filters when adding or removing a solo value
     this.setState({solo: newSolo, filtersPaused: false}, this.updateRows)
+  },
+
+  clearSolo: function() {
+    this.props.eventBus.emit('solo', {})
+    this.setState({solo: {}, filtersPaused: false}, this.updateRows)
   },
 
   addSoloValue: function(valueMap, key) {
@@ -452,13 +467,14 @@ td:hover .reactPivot-solo {opacity: 0.5}
   flex-shrink: 0;
 }
 
-.reactPivot-filtersToggle {
+.reactPivot-filterActions {
   display: flex;
+  gap: 5px;
   align-items: flex-start;
   flex: 0 0 auto;
 }
 
-.reactPivot-filtersToggle button {
+.reactPivot-filterActions button {
   background-color: #FFF;
   border: 1px solid #CCC;
   height: 28px;
@@ -469,6 +485,12 @@ td:hover .reactPivot-solo {opacity: 0.5}
   margin-top: 0;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.reactPivot-soloControl {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
 }
 
 .reactPivot-dimensions {
